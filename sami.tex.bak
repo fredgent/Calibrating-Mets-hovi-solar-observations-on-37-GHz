@@ -1,0 +1,526 @@
+%                                                                 aa.dem
+% AA vers. 9.1, LaTeX class for Astronomy & Astrophysics
+% demonstration file
+%                                                       (c) EDP Sciences
+%-----------------------------------------------------------------------
+%
+%\documentclass[referee]{aa} % for a referee version
+%\documentclass[onecolumn]{aa} % for a paper on 1 column  
+%\documentclass[longauth]{aa} % for the long lists of affiliations 
+%\documentclass[letter]{aa} % for the letters 
+%\documentclass[bibyear]{aa} % if the references are not structured 
+%                              according to the author-year natbib style
+
+%
+\documentclass{aa}  
+
+%
+\usepackage{graphicx,bm,amsmath,dsfont}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{txfonts}
+\usepackage{color}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\usepackage[options]{hyperref}
+% To add links in your PDF file, use the package "hyperref"
+% with options according to your LaTeX or PDFLaTeX drivers.
+%
+\newcommand{\eqnl}[2]{\begin{equation}\label{#1}#2\end{equation}}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\dd}[0]{\mathrm{d}}
+\definecolor{midpurple}{rgb}{0.7,0.1,0.7}
+\newcommand{\fg}[1]{\textcolor{midpurple}{[FAG: #1]}}
+
+\begin{document} 
+
+
+   \title{Calibrating Metsähovi solar observations on 37 GHz}
+
+   \subtitle{I. Determining bias for Earth's atmosphere, solar limb brightning, and antenna beam convolution}
+
+   \author{S. Kivistö
+          \inst{1,2}
+          \and
+          M. Tornikoski\inst{1}\fnmsep\thanks{Contributions to antenna beam definition}
+          \and
+          J. Tammi
+          \and
+          J. Kallunki
+          \and
+          M. Käpylä
+          \and
+          F. Gent\inst{1}
+          }
+
+   \institute{Mets\"ahovi Radio Observatory (MRO), Aalto University,
+              Mets\"aovintie 114, 02540 Kylm\"al\"a, Finland
+         \and
+              ReSoLVE Centre of Excellence, Aalto University, Department of Computer Science, PO Box 15400, 00076 Aalto, Finland \\
+              \email{sami.k.kivisto@aalto.fi}
+             }
+
+   \date{Received \today; accepted \today}
+
+% \abstract{}{}{}{}{} 
+% 5 {} token are mandatory
+ 
+  \abstract
+  % context heading (optional)
+  % {} leave it empty if necessary  
+   {Solar research in Metsähovi is dedicated to identifying radio brightenings and dimmings. Such information is subject to systematic effects from solar limb brightening and antenna convolution. Also, observations are done at varying altitude. The systematic effect of the altitude is important, since daytime observations in winter are taken in low altitude.}
+  % aims heading (mandatory)
+   {Tackling these effects will significantly improve data quality}
+  % methods heading (mandatory)
+   {Polynomial fitting $f:\; \mathds{R}^4 \mapsto \mathds{R}$ is optimized over the observational set which contains at least one solar cycle.}
+  % results heading (mandatory)
+   {We obtained an idealized model for the famous butterfly diagram, as represented as a two-dimensional polynomial $f(\theta, t) = \sum c_{i} \theta^{a(i)} t^{b(i)}$ with suitable number of optimized coefficients. In addition, we obtain a model for radial brightness profile of a visible solar disk. When this is deconvoluted for the MRO antenna (diameter $14\,\mathrm{m}$), we obtain a limb brightnening profile for $37\,\mathrm{GHz}$. We also obtain a model how the beam convolution changes due to atmospheric effects, since the Sun is monitored at variable altitude.}
+  % conclusions heading (optional), leave it empty if necessary 
+   {Least squares method is very practical tool for calibrating observational data sets.}
+
+   \keywords{Solar physics, radio brightenings, butterfly diagram}
+
+   \maketitle
+%
+%-------------------------------------------------------------------
+
+\section{Introduction}
+
+   The famous \emph{butterfly diagram} describes a typical solar cycle \cite{DUMMY:1}.
+
+%--------------------------------------------------------------------
+\section{Methods}
+
+During a typical measurement, the antenna beam makes a sweep across the visible solar disk (Fig. \ref{typicalmap}). 
+Until the end of May, 2015, the maps have been scanned in equatorial direction, so that declination is shifted between 
+adjacent sweeps. Since June, 2015, the sweeps have been horizontal, with shifting altitude between sweeps. The samples 
+follow the true path of the antenna, while previously they were interpolated on a rectangular grid aligned 
+on equatorial coordinate system. 
+
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{nea1467696874.png}
+\caption{Typical Mets\"ahovi solar observation on $37\,\mathrm{GHz}$. White dots: samples not used for disk fitting. Red dots: samples used for disk fitting, radial offset calculated based on limb model. Green dots: samples corrected for radial offset, which constitute the target set for circle fitting. Color map: each pixel is mapped to the nearest observational sample.}
+\label{typicalmap}
+\end{figure}
+
+We intend to estimate the brightness ($v$) based on time ($t$), heliographic latitude ($\theta$), angular distance from the 
+center of solar disk as seen at the time of observation ($r$), and the altitude above the horizon ($\varphi$). The model 
+will contain polynomials of high degree, so that numerical stability is a concern. We need to carefully select the 
+domains for each parameter. Radians are a natural choice of units for $\theta, \varphi \in \left( 0, \frac{\pi}{2} 
+\right)$. For time, $t = \frac{a - 2005}{10}$, where $a$ is a real number $a = 1970 + 
+\frac{\mathrm{unixtime}}{60\cdot60\cdot24\cdot365.25}$. Radius $r$ is represented as relative to the visual solar radius, which can 
+either be calculated from our astronomical model or fitted to the data as a circle.
+
+The model will be:
+\eqnl{the_model}{
+v(t,\theta,r,\varphi) = P_n \left[ t, \theta \right] \, Q_m \left[ \rho(r), \varphi \right] \text{,}
+}
+where
+\eqnl{limb_polynomials}{
+P_n(t,\theta) = \sum \limits_{(a,b)} p_{(a,b)} t^a \theta^b
+\quad \text{and} \quad 
+Q_m(\rho,\varphi) = \sum \limits_{(c,d)} q_{(c,d)} \rho^c \varphi^d \text{.}
+}
+We will expect an abrubt change in intensity at $r \approx 1$, while $v \approx 0$ for $r > 1.15$ and $v \approx 1$ for 
+$0 \le r < 0.85$. In order to catch the detail in the transition region (c.a. $0.85 \le r \le 1.15$), we use mapping:
+\begin{equation}
+\rho(r) = \operatorname{arctan} \left( \kappa \left( r - 1 \right) \right)
+\end{equation}
+Selecting too small $\kappa$ will produce ringing artefacts, as the high degree polynomial is unable to produce near 
+constant behaviour outside the transition region. With large $\kappa$ however, the transition in $r \approx 1$ will became 
+too sharp in the domain of $\rho$. An experimentally suitable value was found as $\kappa = 8.9$, using trial and error and 
+manual binary search approach. 
+
+The sums in $P_n$ and $Q_m$ (Eq. \ref{limb_polynomials}) run for all pairs of integers, $(a,b)$ and $(c,d)$, for which 
+$a,b,c,d \ge 0$, $a+b \le n$, and $c+d \le m$. The polynomials $P_n$ and $Q_m$ will have $\tau(n+1)$ and $\tau(m+1)$ 
+coefficients, respectively, with $\tau(g)$ being the $g$:th triangle number:
+\eqnl{triangle_number}{
+\tau(g) = \frac{g \cdot (g+1)}{2} \text{.}
+}
+
+The inverse of $\tau$ is only defined for triangle numbers, but we can extend the domain to all non-negative integers 
+($\mathds{Z}_+$) by defining $\floor{\tau^{-1}(\cdot)}: \mathds{Z}_+ \mapsto \mathds{Z}_+$ such that:
+\eqnl{triangle_pseudoinverse}{
+\floor{\tau^{-1}(h)} = g \; \text{such that} \; \tau(g) \le h < \tau(g+1) \text{.} 
+}
+We will denote the greatest triangle number, which is at most $h$, as:
+\eqnl{floor_triangle_number}{
+\upsilon(h) = \tau \left( \floor{\tau^{-1}(h)} \right) \text{.}
+}
+We need a system for ordering the coefficients $\left\{ 
+p_{(a,b)} \right\}_{(a,b)}$ and $\left\{ q_{(c,d)} \right\}_{(c,d)}$ in Eq. \ref{limb_polynomials}. For this we will use the 
+mapping $\mu:\; \mathds{Z}_+ \mapsto \mathds{Z}_+^{2}$, where:
+\eqnl{coeff_mapping}{
+\mu(h) = \left( h - \upsilon(h), \floor{\tau^{-1}(h)} + \upsilon(h) - h \right)
+}
+and
+\eqnl{coeff_inverse}{
+\mu^{-1}(e,f) = \tau(e+f) + e
+}
+The coefficients in $Q_m$ will be arranged after the coefficients in $P_n$ as a vector $\bm{x} \in \mathds{R}^{N}$, where $N := \tau(n+1)+\tau(m+1)$. The vector will be:
+\eqnl{coeff_vector}{
+\bm{x} = \left[ p_{\mu(0)}, p_{\mu(1)}, ..., p_{\mu \left( \tau(n+1)-1 \right)}, q_{\mu(0)}, q_{\mu(1)}, ..., q_{\mu \left( \tau(m+1)-1 \right)} \right]^T \text{.}
+}
+Thus $\bm{x}$ will be one of the parameters in our model:
+\eqnl{vectormodel}{
+v \left( t,\theta,r,\varphi,\bm{x} \right) = P_n \left[ t, \theta, \bm{x} \right] Q_m \left[ \rho(r), \varphi, \bm{x} \right] \quad \text{, where}
+}
+\eqnl{vectormodel_P_n}{
+P_n \left( t, \theta, \bm{x} \right) = \sum \limits_{j=1}^{\tau(n+1)} x_j t^{\mu(j)_1} \theta^{\mu(j)_2} \quad \text{and}
+}
+\eqnl{vectormodel_Q_m}{
+Q_m \left( \rho, \varphi, \bm{x} \right) = \sum \limits_{k=1}^{\tau(m+1)} x_{\tau(n+1)+k} \rho^{\mu(k)_1} \varphi^{\mu(k)_2} \text{.}
+}
+
+The solar map is a collection of intensity values $\left\{ v_i \right\}_i$ sampled by the antenna. These are linearly scaled so that $1$ represents the Quiet Sun Level (QSL) and $0$ represents the background. Each intensity value 
+$v_i$ is accompanied with right ascension $\delta \mathrm{RA}_i$ and declination $\delta 
+\mathrm{dec}_i$ relative to the center of the solar disk, $\left( \mathrm{RA}_{\mathrm{sun}}(t_i), 
+\mathrm{dec}_{\mathrm{sun}}(t_i) \right)$, at the time of observation, $t_i$.
+
+For each antenna sample, we study the line of sight from the observer $\bm{o} = \bm{o}(t)$ into direction $\bm{d}$, where:
+\eqnl{equatorial_direction}{
+\bm{d} = d_x \bm{i} + d_y \bm{j} + d_z \bm{k} \quad \text{with}
+}
+\eqnl{equatorial_direction_x}{
+d_x = \cos \left( \mathrm{dec}_{\mathrm{sun}}(t_i) + \delta \mathrm{dec}_i \right) \cos \left( \mathrm{RA}_{\mathrm{sun}}(t_i) + \delta \mathrm{RA}_i \right) \text{,}
+}
+\eqnl{equatorial_direction_y}{
+d_y = \cos \left( \mathrm{dec}_{\mathrm{sun}}(t_i) + \delta \mathrm{dec}_i \right) \sin \left( \mathrm{RA}_{\mathrm{sun}}(t_i) + \delta \mathrm{RA}_i \right) \text{, and}
+}
+\eqnl{equatorial_direction_z}{
+d_z = \sin \left( \mathrm{dec}_{\mathrm{sun}}(t_i) + \delta \mathrm{dec}_i \right) \text{.}
+}
+The vectors $\left\{ \bm{i}, \bm{j}, \bm{k} \right\}$ are the orthonormal basis of our equatorial coordinate system, with $\bm{i} \times \bm{j} = \bm{k}$. The sun is assumed to be centered at the origin an have radius $R_{\mathrm{sun}}$.
+
+We will solve this quadratic equation for $\alpha$ in order to determine where the line of sight coincides with the solar surface:
+\eqnl{solarsurface_hit}{
+\left| \bm{o} + \alpha \bm{d} \right|^2 = R_{\mathrm{sun}}^2 \text{.}
+}
+When there are two solutions for Eq. \ref{solarsurface_hit}, we call them $\alpha_1$ and $\alpha_2$.
+Otherwise the line of sight does not hit the surface, and we are interested in the point on the line of sight with closest distance to the origin:
+\eqnl{solarsurface_miss}{
+\frac{\dd}{\dd \alpha} \left| \bm{o} + \alpha \bm{d} \right|^2 = 0 \quad \Leftrightarrow \quad \alpha = \alpha_0 \text{.}
+}
+Thus we assign point $\bm{p}$ as:
+\eqnl{solarsurface_select}{
+\bm{p} := \begin{cases}
+\bm{o} + \operatorname{min} \left\{ \alpha_1, \alpha_2 \right\} \bm{d} & \; \text{when allowed by Eq. \ref{solarsurface_hit})} \\
+\bm{o} + \alpha_0 \bm{d}                                               & \; \text{otherwise, by Eq. \ref{solarsurface_miss})}
+\end{cases}
+}
+
+There is another orthonormal basis $\left\{ \bm{i}^{\prime\prime}, \bm{j}^{\prime\prime}, \bm{k}^{\prime} \right\}$ with 
+$\bm{i}^{\prime\prime} \times \bm{j}^{\prime\prime} = \bm{k}^{\prime}$. The solar north is $\bm{k}^{\prime}$, while the orientation 
+of $\bm{j}^{\prime\prime}$ defines the solar zero meridian. Our heliographic basis $\left\{ \bm{i}^{\prime}, \bm{j}^{\prime}, \bm{k}^{\prime} \right\}$ rotates with period $\omega_{\mathrm{sun}}$ as:
+\eqnl{solar_basis}{
+\begin{cases}
+\bm{i}^{\prime} &= +\cos \left( \omega_{\mathrm{sun}} t \right) \bm{i}^{\prime\prime} + \sin \left( \omega_{\mathrm{sun}} t \right) \bm{j}^{\prime\prime} \\
+\bm{j}^{\prime} &= -\sin \left( \omega_{\mathrm{sun}} t \right) \bm{i}^{\prime\prime} + \cos \left( \omega_{\mathrm{sun}} t \right) \bm{j}^{\prime\prime}
+\end{cases} \text{.}
+}
+We will now calculate the heliographic latitude $\theta_i$ and longitude $\phi_i$ using the sample information $\left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i \right)$ as:
+\eqnl{carrington_lat}{
+\theta_i := \arcsin \left( \frac{\bm{k}^{\prime} \cdot \bm{p}}{\left| \bm{p} \right|} \right) \text{, and}
+}
+\eqnl{carrington_lon}{
+\phi_i := \Im \ln \left( \bm{i}^{\prime} \cdot \bm{p} + \bm{j}^{\prime} \cdot \bm{p} \imath \right) \text{.}
+}
+The longitude formula (Eq. \ref{carrington_lon}) follows from Euler's formula:
+\eqnl{longitude_euler}{
+e^{\imath \phi_i} = \cos \left( \phi_i \right) + \imath \sin \left( \phi_i \right) \text{.}
+}
+
+Moreover, $\varphi_i$ will be the altitude of the solar center at the time of observation, relative 
+to observers horizon. It is measured in radians, and in practice samples will have the range:
+\eqnl{altitude_range}{
+\varphi_i \in \left[ \frac{5}{180} \pi, \frac{53}{180} \pi \right] \text{.}
+}
+Each sample also has weight $w_i$, which is set as to balance the target set. 
+There are more 
+observations starting from year $2015$, while only a few maps for year $1989$. Thus we will put more weight on the old 
+maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
+Also, as the density of samples is constant on the visible solar disk, more weight should be put into the samples 
+near the center as to have a fair contribution over the radial range. The weight of a sample will be a product of four factors:
+\eqnl{weight_formula}{
+w_i = w^{(\mathrm{d})}_i w^{(\mathrm{a})}_i w^{(\mathrm{r})}_i w^{(\mathrm{c})}_i \text{.}
+}
+
+We ensure that each observational day comes with an equal contribution to the model. Let $M = \left\{ i_1, i_2, ..., 
+i_{\left| M \right|} \right\}$ be the set of sample indices that belong to a particular observation event and thus 
+constitute a solar map. The set cardinality is then $\left| M \right|$. Let $D = \left\{ M_1, ..., M_{\left| D \right|} 
+\right\}$ be the set of maps that are produce during a particular observational day. We assign:
+\eqnl{observational_day}{
+\forall M \in D \;:\; \forall i \in M \;:\; w^{(\mathrm{d})}_i = \frac{1}{\left| D \right|} \text{.}
+}
+so that:
+\eqnl{observational_day_check}{
+\sum \limits_{M \in D} \sum \limits_{i \in M} \left| M \right|^{-1} w^{(\mathrm{d})}_i = 1 \text{.}
+}
+In here we are giving a larger contribution to such maps which have more samples, but we will deal with this problem using the $w^{(r)}$ factor later.
+
+Individual years have different numbers of observational days. Let $A = \left\{ D_1, D_2, ..., D_{\left| A \right|} \right\}$ be the set of observational days in a particular year. We set:
+\eqnl{observational_year}{
+\forall D \in A \;:\; \forall M \in D \;:\; \forall i \in M \;:\; w^{(\mathrm{a})}_i = \frac{1}{\left| A \right|} \text{.}
+}
+so that:
+\eqnl{observational_year_check}{
+\sum \limits_{D \in A} \sum \limits_{M \in D} \sum \limits_{i \in M} \left| M \right|^{-1} w^{(\mathrm{d})}_i w^{(\mathrm{a})}_i = 1 \text{.}
+}
+
+The unit of $r$ is the radius of the solar disk on the map. For a particular map $M$, we include the samples inside the solar disk in set $S_M$:
+\eqnl{inner_samples}{
+i \in S_M \quad \Leftrightarrow \quad r_i < 1 \; \text{and} \; i \in M
+}
+As the maps use the apparent solar disk as the unit length, the effective sample radius for $M$ is then:
+\eqnl{effective_sample_radius}{
+r^{(\mathrm{s})}_M = \left| S_M \right|^{-1/2} \text{.}
+}
+We compare each sample $i \in M$ to the other samples $S_{i} \subset M$, which are within similar radius from the center of the disk. This zone contains the radii:
+\eqnl{similar_radii}{
+j \in S_{i} \quad \Leftrightarrow \quad r_j \in \left[ \operatorname{max} \left\{ 0, r_i - r^{(\mathrm{s})}_M \right\}, r_i + r^{(\mathrm{s})}_M \right] \text{.}
+}
+The zone will have area $A_{i}$:
+\eqnl{similar_area}{
+\frac{A_{i}}{\pi} = \begin{cases}
+\left( r_i + r^{(\mathrm{s})}_M \right)^{2} \; & \text{when} \; r_i \le r^{(\mathrm{s})}_M \\
+\left( r_i + r^{(\mathrm{s})}_M \right)^{2} - \left( r_i - r^{(\mathrm{s})}_M \right)^{2} = 4 r_i r^{(\mathrm{s})}_M \; & \text{otherwise}
+\end{cases} \text{.}
+}
+We can now estimate the size of $S_{i}$ as:
+\eqnl{similar_area}{
+\left| S_i \right| \approx \frac{A_i}{\pi r^{(\mathrm{s}) 2}_M} \text{.}
+}
+To ensure equal contribution to the model from all zones, we set the radial weight factor as:
+\eqnl{radial_weight_approx}{
+w^{(\mathrm{rm})}_i = \frac{\pi r^{(\mathrm{s}) 2}_M}{A_i} \approx \left| S_i \right|^{-1} \text{,}
+}
+so that:
+\eqnl{radial_weight}{
+w^{(\mathrm{rm})}_i = \begin{cases}
+\frac{r^{(\mathrm{s}) 2}_M}{\left( r_i + r^{(\mathrm{s})}_M \right)^{2}} \; & \text{when} \; r_i \le r^{(\mathrm{s})}_M \\
+\frac{r^{(\mathrm{s})}_M}{4 r_i}                                         \; & \text{otherwise}
+\end{cases} \text{.}
+}
+Substituting Eq. \ref{effective_sample_radius} yields:
+\eqnl{radial_weight_abs}{
+w^{(\mathrm{rm})}_i = \begin{cases}
+\frac{r^{(\mathrm{s}) 2}_M}{\left( r_i + r^{(\mathrm{s})}_M \right)^{2}} = \frac{1}{\left( r_i + r^{(\mathrm{s})}_M \right)^{2} \left| S_M \right|} \; & \text{when} \; r_i \le r^{(\mathrm{s})}_M \\
+\frac{r^{(\mathrm{s})}_M}{4 r_i}                                         = \frac{1}{4 r_i \left| S_M \right|^{1/2}}                                 \; & \text{otherwise}
+\end{cases} \text{.}
+}
+The rationale for Eq. \ref{radial_weight} is that amount of samples within a radius interval $r_i \pm 
+r^{(\mathrm{s})}_M$ is proportional to $r_i$, when $r_i \gg r^{(\mathrm{s})}_M$. The contribution to any radial interval 
+should be as equal as possible, since otherwise that polynomial fitting will favour either samples of high or low radius end and leave 
+oscillations in the other end. We also want the map contribution to be independent of $\left| S_M \right|$ at samples of large radius, so we set:
+\eqnl{radial_weight_scaled}{
+w^{(\mathrm{r})}_i := \left| S_M \right|^{-1/2} w^{(\mathrm{rm})}_i = \begin{cases}
+\frac{r^{(\mathrm{s}) 3}_M}{\left( r_i + r^{(\mathrm{s})}_M \right)^{2}} \; & \text{when} \; r_i \le r^{(\mathrm{s})}_M \\
+\frac{r^{(\mathrm{s}) 2}_M}{4 r_i}                                       \; & \text{otherwise}
+\end{cases} \text{.}
+}
+
+We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
+compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
+from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
+Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
+separate polynomials $P_n$ and $Q_m$ should reduce these risks. I suggest testing the optimization code with simulated 
+data.
+
+We seek such elements in vector $\bm{x}$ as to minimize our target function $T:\; \mathds{R}^{N} \mapsto \mathds{R}_+$:
+\eqnl{limb_target}{
+T \left( \bm{x} \right) = \sum \limits_{i \in \mathcal{I}} w_i \left[ v_i - v \left( t_i, \theta_i, r_i, \varphi_i ,\bm{x} \right) \right]^2 \text{.}
+}
+The optimization code can be configured to include all the samples in the target set as:
+\eqnl{limb_target1}{
+\mathcal{I} := \mathcal{N} \; \text{with} \; \mathcal{N} = \left\{ 1, 2, ..., N \right\} \text{.}
+}
+Another option is to have a threshold for neglecting outlier points, thus setting:
+\eqnl{limb_target2}{
+i \in \mathcal{I} \quad \Leftrightarrow \quad i \in \mathcal{N} \; \text{and} \; \left| v_i - v \left( t_i, \theta_i, r_i, \varphi_i ,\bm{x} \right) \right|
+}
+This will cause the target function to be discontinuous as now the target set is a function of $\bm{x}$ in Eq. \ref{limb_target}, as $\mathcal{I} = \mathcal{I}(\bm{x})$. Quadratic 
+optimization is then essentially impossible. Subsequent iterations still typically converge after dozens of iterations, but we may as well end up with subsequent 
+iterations oscillating within the surroudings of the true minimum. The oscillations should be small as to signal that the 
+true optimum is very near.
+
+In order to find the optimum, we begin with $\bm{x}^{(0)}$ where all coefficients are zero, except $x_1^{(0)} = 
+x_{\tau(n+1)}^{(0)} := 1$. The first optimization loop is $l=0$. For each loop $l$, we calculate the gradient 
+$\bm{g}^{\prime(l)} := \nabla T \left( \bm{x}^{(l)} \right)$ and Hessian $H^{(l)\prime} := H \left( \bm{x}^{(l)} 
+\right)$:
+\eqnl{hessian}{
+H_{i,j} \left( \bm{x} \right) = \frac{\partial^2 T \left( \bm{x} \right)}{\partial x_i \partial x_j} \text{.}
+}
+
+We want the limb polynomial $Q_m \left( \rho(r), \varphi \right)$ to have zero derivative at $r = 0$:
+\eqnl{zeroderivative}{
+\frac{\partial Q_m \left( \rho(r), \varphi \right)}{\partial r} \Big|_{r = 0} = 0 \text{.}
+}
+This is to avoid an abrubt change in intensity at the center of disk, where the profile should be flat. We need to 
+exclude certain components of the parameter space using at appropriate projection matrix in the problem and operate in a 
+subspace of $\mathds{R}^{N}$. Referring to Eq. \ref{limb_polynomials}, we thus require that for any $d = 0,...,m-1$:
+\eqnl{forbidden_vector}{
+\sum \limits_{c=1}^{m-d} c q_{c,d} \rho(0)^{c-1} = 0 \text{.}
+}
+The forbidden subspace is spanned with vectors $\bm{f}^{(d)} \in \mathds{R}^{N}$:
+\eqnl{forbidden_subspace}{
+f_h^{(d)} = \begin{cases} c \rho(0)^{c-1} & \text{when} \; h = \tau(n+1) + \mu^{-1} \left( c, d \right) \vspace{-1mm} \\ & \text{for some} \; c = 1, ..., m-d \\ 0 & \text{otherwise} \end{cases} \text{.}
+}
+We perform the Gram-Schmidt orthonormalization to vectors $\left\{ \bm{f}^{(d)} \right\}_d$. We operate for $d=0,1,...,m-1$, respectively to get a set of orthogonal vectors $\left\{ \bm{f}^{\prime(d)} \right\}_d$ and a set of orthonormal vectors $\left\{ \bm{f}^{\prime\prime(d)} \right\}_d$:
+\eqnl{gram_schmidt}{
+\bm{f}^{\prime(d)} := \bm{f}^{(d)} - \sum \limits_{j=0}^{d-1} \bm{f}^{\prime\prime(j)T} \cdot \bm{f}^{(d)} \; \bm{f}^{(j)} \text{,}
+}
+and:
+\eqnl{gram_schmidt_norm}{
+\bm{f}^{\prime\prime(d)} := \frac{\bm{f}^{\prime(d)}}{\left| \bm{f}^{\prime(d)} \right|} \text{.}
+}
+
+We will collect the orthonormal column vectors into matrix $F$ as:
+\eqnl{forbidden_matrix}{
+F := \left[ \bm{f}^{\prime\prime(0)}, \bm{f}^{\prime\prime(1)}, ..., \bm{f}^{\prime\prime(m-1)} \right]^T
+}
+The projection matrix $P := I - F^T F$ will eliminate any forbidden component from $\bm{x}^{(l)}$ by setting:
+\eqnl{project_off}{
+\bm{x}^{(l)} := P \bm{x}^{(l)} \text{.}
+}
+Self-substitution in \ref{project_off} has to be performed regularly in order to avoid the solution migrating into the 
+forbidden subspace. The allowed subspace is spanned with orthonormal column vectors $\bm{s}^{(j)}$:
+\eqnl{subspace}{
+S = \left[ \bm{s}^{(1)}, \bm{s}^{(2)}, ..., \bm{s}^{(N-m)} \right]^T
+}
+The subspace can be constructed using the Gram-Schmidt process, starting from $P$.
+
+During loop $l$, we represent the gradient and Hessian in the subspace:
+\eqnl{represent_in_subspace}{
+H^{(l)} := S H^{\prime(l)} S^T \qquad g^{(l)} := S^T g^{\prime(l)}
+}
+We will diagonalize the Hessian as:
+\eqnl{hessian_diag}{
+H^{(l)} = \left[ \bm{e}^{(l,1)}, ..., \bm{e}^{(l,N)} \right] D^{(l)} \left[ \bm{e}^{(l,1)}, ..., \bm{e}^{(l,N)} \right]^T \text{,}
+}
+where $\bm{e}^{(l,i)}$ is the $i$:th column eigenvector. $D^{(l)}$ is a diagonal matrix with $D^{(l)}_{i,i}$ being the 
+eigenvalue associated with eigenvector $\bm{e}^{(l,i)}$. The eigenvectors are of unit length: $\left| \bm{e}^{(l,i)} 
+\right| = 1$.
+
+Each optimization step offers a set of mutually orthogonal steps $\bm{s}^{(l,i)}$, which are calculated as:
+\eqnl{hessian_step}{
+\bm{s}^{(l,i)} = -\frac{\bm{g}^{(l)T} \cdot \bm{e}^{(l,i)}}{\left| D^{(l)}_{i,i} \right|} \bm{e}^{(l,i)} \text{.}
+}
+The next iterative optimum is set as:
+\eqnl{hessian_next}{
+\bm{x}^{(l+1)} := \bm{x}^{(l)} + \sum \limits_{i=1}^{N} \alpha^{(l,i)} \bm{s}^{(l,i)} \text{,}
+}
+where care must be taken to set suitable coefficients $\alpha^{(l,i)} \in [0,1]$. For a negative eigenvalues, we will 
+travel away from the optimum, and hope to reach a region where $T(\bm{x})$ is convex. When in convex region, setting $\alpha^{(l,i)} = 
+1$ for all $i = 1,...,N$ would ideally bring us closer to the global optimum. 
+In practise, we can often accept only some of the eigenvalues for optimization, and by trial and error try to find such $\bm{x}^{(l,i}$ as to improve the solution:
+\eqnl{improve}{
+T\left( \bm{x}^{(l+1)} \right) < T \left( \bm{x}^{(l)} \right) \text{.}
+}
+During each iteration, we will first try with $\alpha^{(l,i)} := 1$ for all $i = 1,...,N$. Once we have checked for Eq. 
+\ref{improve}, we will limit the step length $\left| \sum \limits_{i=1}^{N} \alpha^{(l,i)} \bm{s}^{(l,i)} \right|^2$. 
+The eigenvectors will be processed in a random order, and we will stop adding more components to the step once it 
+reaches a certain limit.
+
+The goal is to find such a $\kappa$ which minimizes the target function in 
+Eq. \ref{targetfunction} once the iteration for $\bm{x}$ has converged.
+In the future, we can also optimize $\kappa$ as one of the parameters of the model, but this 
+is not expected to be useful compared to the work required for coding.
+
+The iteration usually converges after c.a. $30$ steps. We can exclude outlier samples by requiring that:
+\eqnl{outliers}{
+\left| v_i - v(t_i, \theta_i, \rho(r_i), \varphi_i, \bm{x}^{(l)} \right| \le 0.05 \text{.}
+}
+Neglecting outliers temporarily set $w_i := 0$ into those samples which deviate significantly for the previously 
+optimized model. Again, we could set the weight $w_i$ for each sample to be an analytical function instead of a 
+coefficient. For example we could set:
+\eqnl{analytic_weight}{
+w_i \propto \exp \left[ \frac{1}{2 \sigma^2} \left( v_i - v(t_i, \theta_i, \rho(r_i), \varphi_i, \bm{x}^{(l)} \right)^2 \right] \text{,}
+}
+with $\sigma := 0.025$. Then we would smoothly neglect any outliers and maintain convexivity of the problem. This will require more 
+coding and is most propably unneccessary.
+
+The limb profile will be:
+\eqnl{limb_brightening_model}{
+L(r, \varphi) = \frac{Q_m(\rho(r), \varphi)}{Q_m \left( \rho \left( \frac{30}{180} \pi \right), \frac{1}{3} \right)} \text{.}
+}
+This will force the intensity to by unity at one third of the visual radius when seen at $30^{\circ}$ above the horizon. 
+
+Some of the limb profiles are plotted in Fig. \ref{limb_brightning1} and \ref{limb_brightning2}. 
+
+We also obtain an idealized model for the butterfly diagram, with:
+\eqnl{butterfly_model}{
+B(t, \theta) = P_n(t, \theta) Q_m \left( \rho \left( \frac{30}{180} \pi \right), \frac{1}{3} \right) \text{.}
+}
+
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{limbmodel_profiles1.png}
+\caption{Limb intensity profiles showing brightning. When observed at low altitudes, the profiles are significantly blurred.}
+\label{limb_brightning1}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{limbmodel_profiles2.png}
+\caption{Limb intensity profiles with convolution effects.}
+\label{limb_brightning2}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{limbmodel_butterfly1.png}
+\caption{Idealized butterfly diagram showing cyclic behaviour at high latitudes.}
+\label{limb_butterfly1}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{limbmodel_butterfly2.png}
+\caption{Idealized butterfly diagram with emphasis on the low latitudes.}
+\label{limb_butterfly2}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{butterfly_bins_simple_small.png}
+\caption{Butterfly diagram corrected for limb brightening and convolution and samples utilized when $r_i \le 0.9$.
+\fg{Please include both axes labels and ranges. Do we recover an increased useful range of latitdue?}
+}
+\label{butterfly_simple}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{butterfly_bins_limbcorr_small.png}
+\caption{Butterfly diagram corrected for limb brightening and convolution and samples utilized up to $r_i \le 1$.
+\fg{Please include both axes labels and ranges. Do we recover an increased useful range of latitdue?}
+}\label{butterfly_limbcorr}
+\end{figure}
+
+
+
+
+
+%-------------------------------------- Two column figure (place early!)
+
+
+
+
+\section{Results}
+
+\section{Discussion}
+
+
+\begin{acknowledgements}
+\end{acknowledgements}
+
+% WARNING
+%-------------------------------------------------------------------
+% Please note that we have included the references to the file aa.dem in
+% order to compile it, but we ask you to:
+%
+% - use BibTeX with the regular commands:
+%   \bibliographystyle{aa} % style aa.bst
+%   \bibliography{Yourfile} % your references Yourfile.bib
+%
+% - join the .bib files when you upload your source files
+%---------------------------
