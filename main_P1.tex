@@ -13,7 +13,7 @@
 %
 \usepackage{graphicx,svg,bm,amsmath,dsfont,siunitx,wasysym,tikz,color,scalerel}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\usepackage{txfonts}
+\usepackage{comment}
 \usetikzlibrary{arrows,positioning,decorations.pathmorphing,backgrounds,calc,shadows}
 \tikzset{
     ashadow/.style={opacity=.25, shadow xshift=0.1, shadow yshift=-0.1, color=red!50!black},
@@ -90,11 +90,6 @@
          %FAG adding
          School of Mathematics, Statistics and Physics, Newcastle University, NE1 7RU, UK 
               }
-<<<<<<< HEAD
-
-=======
-%
->>>>>>> 25dda520b85a2eb2a25d27db4263e306d0b404c3
    \date{Received \today; accepted \today}
 
 % \abstract{}{}{}{}{} 
@@ -299,20 +294,16 @@ sample rate along the equator as in Figure
 
 \begin{figure}
 \centering
+\includegraphics[width=8.5cm]{nea1311582408.png}
 \includegraphics[width=8.5cm]{nea1467696874.png}
-\caption{Typical Mets\"ahovi solar observation on $\SI{37}{GHz}$. This data format has been in use since June 2015. White dots: samples not used for disk fitting. Red 
+\caption{Maps that originate May on 2015 or earlier have sweeps along the equator. Samples are assumed on a rectangular grid.
+Typical Mets\"ahovi solar observation on $\SI{37}{GHz}$. This data format has been in use since June 2015. White dots: samples not used for disk fitting. Red 
 dots: samples used for disk fitting, radial offset calculated based on limb model. Green dots: samples corrected for 
 radial offset, which constitute the target set for circle fitting. Color map: each pixel is mapped to the nearest 
-observational sample. Comment: This is an original uncalibrated map. Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.}
-\label{typicalmap}
+observational sample. Comment: This is an original uncalibrated map. Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.
+\label{oldmap}\label{typicalmap}}
 \end{figure}
 
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{nea1311582408.png}
-\caption{Maps that originate May on 2015 or earlier have sweeps along the equator. Samples are assumed on a rectangular grid.}
-\label{oldmap}
-\end{figure}
 
 \subsection{Heliographic coordinates from radio data}
 
@@ -573,7 +564,6 @@ separate polynomials $P_n$ and $Q_m$ should reduce these risks.
 \begin{figure}
 \centering
 \includegraphics[width=8.5cm]{limbmodel_profiles1.png}
-<<<<<<< HEAD
 %MJK Here the axis labels now have huge (even too big) a font, while the label ticks still have quite a small font. Also, the legend box in the upper right corner overlaps with the data; can it be placed, e.g., in the upper left corner?
 \caption{Limb intensity profiles showing brightening. When observed at low altitudes, the profiles are significantly blurred. Comment: fix font sizes.}
 \label{limb_brightening1}
@@ -587,12 +577,12 @@ separate polynomials $P_n$ and $Q_m$ should reduce these risks.
 \label{limb_brightening2}
 \end{figure}
 
-\begin{figure}
+\begin{figure*}
 \centering
-\includegraphics[width=8.8cm]{maptrack1.png}
+\includegraphics[width=\textwidth]{maptrack1.png}
 \caption{Two active regions passing the visible disk as the Sun rotates.}
 \label{maptrack1}
-\end{figure}
+\end{figure*}
 
 \begin{figure} \centering \includegraphics[width=8.8cm]{maptrack2.png} \caption{Tracked regions are shown with red 
 ellipses for bright regions and with blue ellipses for dim regions. Based on earlier and later sunmaps, we can often 
