@@ -14,6 +14,7 @@
 \usepackage{graphicx,svg,bm,amsmath,dsfont,siunitx,wasysym,tikz,color,scalerel}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{comment}
+\usepackage{hyperref}
 %\usetikzlibrary{arrows,positioning,decorations.pathmorphing,backgrounds,calc,shadows}
 %\tikzset{
 %    ashadow/.style={opacity=.25, shadow xshift=0.1, shadow yshift=-0.1, color=red!50!black},
@@ -219,68 +220,98 @@
   %an axial dipole, after which various activity on the visible surface of the Sun will first increase, 
   %then reach maximum and again decrease to a minimum, while it migrates from high latitudes towards the equator. This is 
   %FAG reword the Sun --> Sun NASA capitalization convention
-  Each sunspot cycle emerges from the Quiet Sun of an axial dipole as
-  activity on the visible surface of Sun, typically near mid-latitudes.
+  Each sunspot cycle emerges from the quiet Sun of an axial dipole as
+  activity on the visible surface of Sun, typically near mid-latitudes
+  %FAG Moved from below
+  ($\pm20^{\circ}$ to $\pm 30^{\circ}$).
   While the frequency and coverage of the sunspots increases towards a maximum
   the location of the activity drifts equatorward. 
   This migration continues after the maximum with decreasing activity
   closer to the equator bringing the sunspot cycle to an end.
   This was first recorded in the Maunder butterfly diagram by Edward Maunder
   in 1904.
-  Since sunspots are a feature of Sun's magnetic field, similar butterfly 
+  %FAG: moved from below
+  Since sunspots are a feature of Sun's magnetic field and as the solar
+  magnetic field is mostly axisymmetric, the longitudinal location of the
+  activity can reasonably be neglected.
+  Considering this two-dimensional time-latitude histogram of sunspot activity
+  or magnetic field intensity, similar butterfly 
   diagrams are also recovered from solar magnetograms \citep{GHHZ83,VLMCS12}
   and \citep[][and references therein]{LUSDADM17}.
-  It is also reported for radio brightenings of the 17 and $\SI{37}{GHz}$ band
+  It is also reported for radio brightenings of the 17 and $\SI{34}{GHz}$ band
   \citep{Shibasaki13,SCGVPS14} and of $\SI{37}{GHz}$ \citep{metsahovi40}.
+ 
+  %FAG comment below duplication
+  %%MJK I think the toroidal field is evolving all the time; maybe better is to say during the dominance of the toroidal field?
+  %
+  %During the time of evolving azimuthal field, we observe various types of activity, such as sunspots, magnetic regions as well as radio brightenings. These features appear first in the middle latitudes ($\pm 
+  %20^{\circ}$ to $\pm 30^{\circ}$) on both hemispheres. 
+  %
+  %%MJK Now the impression is that the distribution is bimodal; only at high and then only at low. Maybe to add 'progressively closer'
+  %
+  %Later in the cycle, they appear closer to the equator. 
+  %%MJK I would say something on the lines: '
+  %
+  %%FAG moving this into the previous paragraph above
+  %As the solar magnetic field is mainly axisymmetric, a longitudinal average is suitable. Taking such an average, resulting in a two-dimensional time-latitude histogram, reveals the preferred locations of magnetic activity on patterns that resemble butterfly wings...
+  %The 
+  %density of a preferred activity will be integrated into a two-dimensional histogram, which show the average density as a 
+  %function of time and heliographic latitude. This is known as a butterfly diagram, and was first constructed for 
+  %%MJK Kallunki papers are most likely not sufficient reference for the magnetic butterfly diagrams, only for radio brightenings. 
+  %sunspots and later for magnetic regions and radio brightenings \cite{metsahovi40}.
+ 
+  %FAG adding addition context
+  From sunspots and magnetograms of the photosphere we have relatively rich
+  well resolved data about the 2D evolution of the solar surface magnetic 
+  field, but observation of the 3D structure of the field is limited by the 
+  weakness of magnetic measurements from the solar atmosphere relative to the
+  surface.
+  %FAG reworded and expanded 
+  Mets\"ahovi radio observatory (MRO)\footnote{
+  \href{https://www.aalto.fi/en/metsahovi-radio-observatory/solar-research}{
+       https://www.aalto.fi/en/metsahovi-radio-observatory/solar-research}}
+  is observing emissions, primarily in
+  $\SI{37}{GHz}$ frequency band, dating back over forty years.
+  This is in the frequency range suitable for detecting non-thermal emissions
+  from high energy electrons associated with active-region magnetic fields, so
+  is a good proxy for the intensity of the magnetic field.
+  These are also well suited to observing the thermal emissions from the quiet
+  Sun.
+  Comparing and contrasting the maps from these emissions with other
+  observations can help to reveal more about the structure of the magnetic
+  field in plasma of varying temperature and by inference height.
+  Furthermore, the data incorporates almost four magnetic cycles, yielding
+  a valuable resource to investigate long-term variation within and bewteen 
+  cycles, alongside and in contrast to other sources.
+  %Metsähovi radio observatory (MRO) has collected solar maps since 1978. Most of these maps are recorded on 
+  %%MJK Fred is better with the language, but I make the following notions:
+  %%MJK 'in 37 GHz frequency band', 'a valuable', 'long-term'
+  %$\SI{37}{GHz}$, which is valuable resource for analyzing long term solar evolution.
+  %%MJK What kind of solar activity does 37GHz trace? This is an important point to clarify.
+  %FAG added new para break
 
-
-
-
-%MJK I think the toroidal field is evolving all the time; maybe better is to say during the dominance of the toroidal field?
-
-During the time of evolving azimuthal field, we observe various types of activity, such as sunspots, magnetic regions as well as radio brightenings. These features appear first in the middle latitudes ($\pm 
-20^{\circ}$ to $\pm 30^{\circ}$) on both hemispheres. 
-
-%MJK Now the impression is that the distribution is bimodal; only at high and then only at low. Maybe to add 'progressively closer'
-
-Later in the cycle, they appear closer to the equator. 
-%MJK I would say something on the lines: '
-
-A
-s the solar magnetic field is mainly axisymmetric, a longitudinal average is suitable. Taking such an average, resulting in a two-dimensional time-latitude histogram, reveals the preferred locations of magnetic activity on patterns that resemble butterfly wings...
-The 
-density of a preferred activity will be integrated into a two-dimensional histogram, which show the average density as a 
-function of time and heliographic latitude. This is known as a butterfly diagram, and was first constructed for 
-%MJK Kallunki papers are most likely not sufficient reference for the magnetic butterfly diagrams, only for radio brightenings. 
-sunspots and later for magnetic regions and radio brightenings \cite{metsahovi40}.
-
-Metsähovi radio observatory (MRO) has collected solar maps since 1978. Most of these maps are recorded on 
-%MJK Fred is better with the language, but I make the following notions:
-%MJK 'in 37 GHz frequency band', 'a valuable', 'long-term'
-$\SI{37}{GHz}$, which is valuable resource for analyzing long term solar evolution.
-%MJK What kind of solar activity does 37GHz trace? This is an important point to clarify.
-%MJK One should explain in more detail what Kallunki has already published from this data.
-During the 40 years, the equipment 
-has experienced several upgrades and there has also been changes in the data format. The data requires careful 
-normalization procedures, after which the butterfly diagram can be constructed from the solar maps. The solar maps from 
-1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
-mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
-%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
-these plots.
-%MJK or rather pattern recognition?
-Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
-numerical form. For these prepared contour maps, 
-%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
-the solar disk was already available, while for the later maps from 
-1989 to present the disk 
-has to be detected using automatic image recognition. 
-%MJK To make it more clear:
-%MJK The purpose of this paper is to present two methods () for detecting the disk and ....
-We present two methods (1: S-curve and 
-center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
-statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
-zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
-%MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
+  %MJK One should explain in more detail what Kallunki has already published from this data.
+  During the 40 years, the equipment 
+  has experienced several upgrades and there has also been changes in the data format. The data requires careful 
+  normalization procedures, after which the butterfly diagram can be constructed from the solar maps. The solar maps from 
+  1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
+  mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
+  %MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
+  these plots.
+  %MJK or rather pattern recognition?
+  Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
+  numerical form. For these prepared contour maps, 
+  %MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
+  the solar disk was already available, while for the later maps from 
+  1989 to present the disk 
+  has to be detected using automatic image recognition. 
+  %MJK To make it more clear:
+  %MJK The purpose of this paper is to present two methods () for detecting the disk and ....
+  We present two methods (1: S-curve and 
+  center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
+  statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
+  zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
+  %MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
 
 %MJK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
 When the disk fitting is done, every radio sample can be projected into rotating heliographic surface. We use the 
