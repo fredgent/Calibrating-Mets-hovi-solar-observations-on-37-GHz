@@ -14,22 +14,22 @@
 \usepackage{graphicx,svg,bm,amsmath,dsfont,siunitx,wasysym,tikz,color,scalerel}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{comment}
-\usetikzlibrary{arrows,positioning,decorations.pathmorphing,backgrounds,calc,shadows}
-\tikzset{
-    ashadow/.style={opacity=.25, shadow xshift=0.1, shadow yshift=-0.1, color=red!50!black},
-    block/.style={rectangle, draw=black, left color=black!20, right color=green!60!, very thick, inner sep=1, outer sep=0, minimum width=25mm, text width=25mm, minimum height=20mm, text centered, drop shadow={ashadow}, rounded corners=2mm},
-    largeblock/.style={rectangle, draw=black, left color=black!20, right color=green!60!, very thick, inner sep=1, outer sep=0, minimum width=40mm, text width=40mm, minimum height=20mm, text centered, drop shadow={ashadow}, rounded corners=2mm},
-    largeblock2/.style={rectangle, draw=black, left color=black!20, right color=green!60!, very thick, inner sep=1, outer sep=0, minimum width=50mm, text width=50mm, minimum height=20mm, text centered, drop shadow={ashadow}, rounded corners=2mm},
-    textarea/.style={rectangle, draw=black, top color=cyan!30, bottom color=cyan, very thick, inner sep=1, outer sep=0, minimum width=25mm, text width=25mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
-    textarea2/.style={rectangle, draw=black, top color=cyan!30, bottom color=blue!50, very thick, inner sep=1, outer sep=0, minimum width=25mm, text width=25mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
-    textarea3/.style={rectangle, draw=black, top color=green!30, bottom color=cyan, very thick, inner sep=1, outer sep=0, minimum width=25mm, text width=25mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
-    largetextarea/.style={rectangle, draw=black, top color=blue!30, bottom color=magenta, very thick, inner sep=1, outer sep=0, minimum width=50mm, text width=50mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
-    largetextarea2/.style={rectangle, draw=black, top color=blue!30, bottom color=green!50, very thick, inner sep=1, outer sep=0, minimum width=50mm, text width=50mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
-    picframe/.style={rectangle, draw=black, thick, inner sep=0, outer sep=0},
-    dummy/.style={inner sep=0, outer sep=0, minimum width=0, minimum height=0},
-    myarrow/.style={->, >=latex', shorten >=1pt, very thick},
-    arrow/.style={=>, >=open triangle 90, very thick}
-}
+%\usetikzlibrary{arrows,positioning,decorations.pathmorphing,backgrounds,calc,shadows}
+%\tikzset{
+%    ashadow/.style={opacity=.25, shadow xshift=0.1, shadow yshift=-0.1, color=red!50!black},
+%    block/.style={rectangle, draw=black, left color=black!20, right color=green!60!, very thick, inner sep=1, outer sep=0, minimum width=25mm, text width=25mm, minimum height=20mm, text centered, drop shadow={ashadow}, rounded corners=2mm},
+%    largeblock/.style={rectangle, draw=black, left color=black!20, right color=green!60!, very thick, inner sep=1, outer sep=0, minimum width=40mm, text width=40mm, minimum height=20mm, text centered, drop shadow={ashadow}, rounded corners=2mm},
+%    largeblock2/.style={rectangle, draw=black, left color=black!20, right color=green!60!, very thick, inner sep=1, outer sep=0, minimum width=50mm, text width=50mm, minimum height=20mm, text centered, drop shadow={ashadow}, rounded corners=2mm},
+%    textarea/.style={rectangle, draw=black, top color=cyan!30, bottom color=cyan, very thick, inner sep=1, outer sep=0, minimum width=25mm, text width=25mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
+%    textarea2/.style={rectangle, draw=black, top color=cyan!30, bottom color=blue!50, very thick, inner sep=1, outer sep=0, minimum width=25mm, text width=25mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
+%    textarea3/.style={rectangle, draw=black, top color=green!30, bottom color=cyan, very thick, inner sep=1, outer sep=0, minimum width=25mm, text width=25mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
+%    largetextarea/.style={rectangle, draw=black, top color=blue!30, bottom color=magenta, very thick, inner sep=1, outer sep=0, minimum width=50mm, text width=50mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
+%    largetextarea2/.style={rectangle, draw=black, top color=blue!30, bottom color=green!50, very thick, inner sep=1, outer sep=0, minimum width=50mm, text width=50mm, minimum height=15mm, text centered, drop shadow={ashadow}, rounded corners=1mm},
+%    picframe/.style={rectangle, draw=black, thick, inner sep=0, outer sep=0},
+%    dummy/.style={inner sep=0, outer sep=0, minimum width=0, minimum height=0},
+%    myarrow/.style={->, >=latex', shorten >=1pt, very thick},
+%    arrow/.style={=>, >=open triangle 90, very thick}
+%}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\usepackage[options]{hyperref}
@@ -53,44 +53,45 @@
 
 %MJK I would reform to "Forty years of Metsähovi radio observatory data of the Sun in the 37 GHz band"
 %SKK There already is a paper of almost identical name
-   \title{Radio butterfly diagram from 40 years of Metsähovi solar observations on 37 GHz}
+  \title{Radio butterfly diagram from 40 years of Metsähovi solar observations
+         on 37 GHz}
+ 
+  \subtitle{I. Determining bias for Earth's atmosphere, solar limb brightening,
+            and antenna beam convolution}
+ 
+  \author{
+    Sami Kivistö \inst{1,2}
+    \and
+    Merja Tornikoski \inst{1}\fnmsep
+      \thanks{Contributions to antenna beam definition}
+    \and
+    Joni Tammi\inst{1}
+    \and
+    Juha Kallunki\inst{1}
+    \and\\
+    Maarit Käpylä\inst{2,3,4}
+    \and
+    Frederick Gent\inst{2,5}
+  }
 
-   \subtitle{I. Determining bias for Earth's atmosphere, solar limb brightening, and antenna beam convolution}
-
-   \author{Sami Kivistö
-          \inst{1,2}
-          \and
-          Merja Tornikoski\inst{1}\fnmsep\thanks{Contributions to antenna beam definition}
-          \and
-          Joni Tammi\inst{1}
-          \and
-          Juha Kallunki\inst{1}
-          \and
-          %MJK Adding MPS and Nordita affiliations
-          Maarit Käpylä\inst{2,3,4}
-          \and
-          Frederick Gent\inst{2,5}
-          }
-
-   \institute{Mets\"ahovi Radio Observatory (MRO), Aalto University,
-              Mets\"aovintie 114, 02540 Kylm\"al\"a, Finland
-         \and
-         %MJK ReSoLVE has ended, so modifying here
-         %$ReSoLVE Centre of Excellence, 
-         %Aalto University, 
-         Department of Computer Science, 
-         %MJK
-         Aalto University, PO Box 15400, 00076 Aalto, Finland
-              \email{sami.k.kivisto@aalto.fi}
-              %MJK Adding
-              \and
-         Max Planck Institute for Solar System Research, Justus-von-Liebig-Weg 3, 37077 G\"ottingen, Germany
-         \and 
-         Nordic Institute for Theoretical Physics ,... 
-         %FAG adding
-         School of Mathematics, Statistics and Physics, Newcastle University, NE1 7RU, UK 
-              }
-   \date{Received \today; accepted \today}
+  \institute{
+    Mets\"ahovi Radio Observatory (MRO), Aalto University,
+      Mets\"aovintie 114, 02540 Kylm\"al\"a, Finland
+    \and
+    Department of Computer Science, 
+    Aalto University, PO Box 15400, 00076, Finland
+         \email{sami.k.kivisto@aalto.fi}
+    \and
+    Max Planck Institute for Solar System Research,
+      Justus-von-Liebig-Weg 3, 37077 G\"ottingen, Germany
+    \and 
+    Nordic Institute for Theoretical Physics,
+      Roslagstullsbacken 23, 106 91 Stockholm, Sweden 
+    \and 
+    School of Mathematics, Statistics and Physics,
+      Newcastle University, NE1 7RU, UK 
+  }
+  \date{Received \today; accepted \today}
 
 % \abstract{}{}{}{}{} 
 % 5 {} token are mandatory
@@ -98,100 +99,142 @@
   \abstract
   % context heading (optional)
   % {} leave it empty if necessary  
-   {Mets\"ahovi Radio Observatory has collected solar intensity maps for over $40$ years. Most data coverage is on $\SI{37}{GHz}$
-   %MJK add
-   frequency band.
-   %MJK Quantify wealth
-   %This wealth of 
-   This
-   data allows 
-   %detailed solar cycle analysis and feature identification.
-   for analysis and identification of features over nearly four sunspot cycles, constituting roughly two solar magnetic cycles.
-   }
+  {
+    Mets\"ahovi Radio Observatory has collected solar intensity maps for
+    over $40$ years.
+    Most data coverage is on $\SI{37}{GHz}$ frequency band.
+    This data allows for analysis and identification of features over nearly
+    four sunspot cycles, constituting roughly two solar magnetic cycles.
+  }
   % aims heading (mandatory)
   %MJK Method paper: the aim should be to develop a method to extract some information from the data. Butterfly diagram is, as I understand, the only end product that we want to mention. That should perhaps be in the Results section of the abstract, right?
-   {Analyze Metsähovi solar maps for years 1978 to present. Investigate for any features that would correlate with magnetic and sunspot activity.}
+  {
+    Analyze Metsähovi solar maps for years 1978 to present.
+    Investigate for any features that would correlate with magnetic and
+    sunspot activity.
+  }
   % methods heading (mandatory)
   %MJK Method oriented paper: Detect HOW, Collapse HOW, Quantify HOW, Compare HOW
-   {Determine the solar disk position and size from each map as well as normalize the measured background intensity for 
-   zero and the Quiet Sun Level (QSL) for unity. This can be done using a binary combination of two disk methods (1 and 
-   2) and three normalization methods (a, b, and c). The methods are: (1) intentionally weighted center of mass of the 
-   radio sample coordinates, (2) fitting a circle for those sample coordinates which we, by geometry, expect to belong 
-   to the solar limb, (a) sort the intensity samples and detect the point of zero curvature from the index vs. intensity 
-   dependency, the S-curve, (b) iteratively calculate the statistical mean and standard deviation of the intensity of 
-   those points which are located within the solar disk and not too close to the limb, (c) detect two significant peaks 
-   from the intensity histogram, the lower intensity peak being the background and the higher the QSL.
+  %FAG The methods abstract needs to be compressed and most of this detail 
+  %moved to the main text. Fred TODO
+  {
+    Determine the solar disk position and size from each map as well as
+    normalize the measured background intensity for zero and the Quiet Sun
+    Level (QSL) for unity.
+    This can be done using a binary combination of two disk methods (1 and 
+    2) and three normalization methods (a, b, and c).
+    The methods are: (1) intentionally weighted center of mass of the radio
+    sample coordinates, (2) fitting a circle for those sample coordinates
+    which we, by geometry, expect to belong to the solar limb, (a) sort the
+    intensity samples and detect the point of zero curvature from the index vs.     intensity dependency, the S-curve, (b) iteratively calculate the
+    statistical mean and standard deviation of the intensity of 
+    those points which are located within the solar disk and not too close
+    to the limb, (c) detect two significant peaks from the intensity histogram,
+    the lower intensity peak being the background and the higher the QSL.
 
-   The method (2) can be augmented using two additional sets of information. When we observe exactly at the limb, we 
-   would expect $0.5$ QSL intensity due the the beam mixing disk and background signal. If one particular sample has 
-   intensity $0.4$ QSL, we would expect the sample to be slightly more away from the center. Collecting a large set of 
-   observations on different conditions, we can estimate how quickly the intensity drops as the beam passes the limb 
-   from disk to background. Utilizing this limb profile, we can fine tune the position of each limb sample in the target 
-   set of (2) and proceed iteratively to obtain more accurate circle fitting.
+    The method (2) can be augmented using two additional sets of information.
+    When we observe exactly at the limb, we would expect $0.5$ QSL intensity
+    due the the beam mixing disk and background signal.
+    If one particular sample has intensity $0.4$ QSL, we would expect the
+    sample to be slightly more away from the center.
+    Collecting a large set of observations on different conditions, we can
+    estimate how quickly the intensity drops as the beam passes the limb 
+    from disk to background.
+    Utilizing this limb profile, we can fine tune the position of each limb
+    sample in the target set of (2) and proceed iteratively to obtain more
+    accurate circle fitting.
 
-   Any exceptional bright or dim features near the limb will affect the apparent shape of the solar disk in the map. 
-   They will affect the outcome of the disk center position when we run the circle fitting algorithm. Bright features 
-   favour center fitting towards the feature, while dim features repel the center. We should thus exclude a sample from 
-   the target set of the circle fitting by proximity of any pre-determined bright or dim radio feature, since these 
-   features affect the apparent shape of the disk.
+    Any exceptional bright or dim features near the limb will affect the
+    apparent shape of the solar disk in the map. 
+    They will affect the outcome of the disk center position when we run the
+    circle fitting algorithm.
+    Bright features favour center fitting towards the feature,
+    while dim features repel the center.
+    We should thus exclude a sample from the target set of the circle fitting
+    by proximity of any pre-determined bright or dim radio feature, since these
+    features affect the apparent shape of the disk.
    
-   Each radio sample is given heliographic coordinates as well as time of observation. We collect a two-dimensional 
-   histogram where each rectangular slot has a time range as well as a range of heliographic latitude. Integrating all 
-   the radio data, we aim to obtain a diagram analoguous to the famous butterfly diagram of sunspot activity. Assuming 
-   the diagram will have similar wing patterns as the sunspot butterfly, we will apply a feature detection for wing 
-   elements. We apply the same algorithm for the sunspot butterfly and compare the shape and duration of each wing.}
+    Each radio sample is given heliographic coordinates as well as time of
+    observation.
+    We collect a two-dimensional histogram where each rectangular slot has a
+    time range as well as a range of heliographic latitude.
+    Integrating all the radio data, we aim to obtain a diagram analoguous to
+    the famous butterfly diagram of sunspot activity.
+    Assuming the diagram will have similar wing patterns as the sunspot
+    butterfly, we will apply a feature detection for wing elements.
+    We apply the same algorithm for the sunspot butterfly and compare the shape
+    and duration of each wing.
+  }
   % results heading (mandatory)
-   {Radio butterfly diagram on $\SI{37}{GHz}$ frequency band. Identified solar cycles 21 to 24. Wing parameters from both the radio butterfly and the sunspot butterfly.}
+  {
+    Radio butterfly diagram on $\SI{37}{GHz}$ frequency band.
+    Identified solar cycles 21 to 24.
+    Wing parameters from both the radio butterfly and the sunspot butterfly.
+  }
   % conclusions heading (optional), leave it empty if necessary 
   %MJK This part sounds very good
-   {We have developed a method for automatic feature detection from butterfly diagrams. This allows systematic comparisons between individual wings as well as different observational and simulated datasets showing butterfly a pattern.}
+  {
+    We have developed a method for automatic feature detection from butterfly
+    diagrams.
+    This allows systematic comparisons between individual wings as well as
+    different observational and simulated datasets showing butterfly a pattern.
+  }
 
-   \keywords{Solar physics, radioastronomy, butterfly diagram, solar cycle}
+  \keywords{Solar physics, radioastronomy, butterfly diagram, solar cycle}
 
-   \maketitle
-%
+  \maketitle
 %-------------------------------------------------------------------
 
 \section{Introduction}
 
 %MJK better to be clearer: cycle -> sunspot cycle; also, maybe to explain further, that the amount of sunspots and active regions reaches a maximum during each half-cycle.
 
-The solar magnetic field is known to switch polarity in a full cycle of ca. $22$ years, which consists of two sunspot 
-cycles. In the beginning of each sunspot cycle, the solar magnetic field is an axial dipole. Due to differential 
-rotation, this field, being dominantly axisymmetric and running mainly in meridional planes, hence being dominantly 
-poloidal, is transformed into an azimuthal field with the azimuthal direction being opposite between opposite 
-hemispheres. In the presence of convection and the Coriolis force due to solar rotation, this azimuthal field will be 
-further distorted by the $\alpha$-effect. After ca. $11$ years, this has resulted in dipolar field of opposite polarity, 
-and the next sunspot cycle begins.
+  The solar magnetic field is known to switch polarity in a full cycle of 
+  approximately % ca. FAG abbr. -->  full word convention
+  22 years, which consists of two sunspot cycles.
+  At %In FAG In --> AT
+  the beginning of each sunspot cycle, the solar magnetic field is an axial
+  dipole.
+  %FAG reworded
+  %Due to differential rotation, this field, being dominantly axisymmetric and running mainly in meridional planes, hence being dominantly 
+  %poloidal, is transformed into an azimuthal field with the azimuthal direction being opposite between opposite hemispheres.
+  Solar differential rotation transforms the predominantly axisymmetric
+  poloidal magnetic field into an azimuthal field with a tendancy for opposite
+  polarity between hemispheres.
+  In the presence of convection and the Coriolis force due to solar rotation,
+  %FAG consistent tense
+  %this azimuthal field will be further distorted by the $\alpha$-effect.
+  this azimuthal field is further distorted by the $\alpha$-effect.
+  %After ca. $11$ years, this has resulted in dipolar field of opposite polarity, 
+  %FAG ca. --> appr, and tense
+  After approximately 11 years this evolves into a dipolar field with
+  polarity reversed from its original sign
+  and the next sunspot cycle begins.
+  %FAG remove paragraph break and reword
+  The full 22 year cycle comprises two such sunspot cycles.
+  %The full magnetic cycle is ca. $22$ years and consists of two sunspot cycles.
+
+  %FAG insert paragraph break
+  %Each sunspot cycle begins with 
+  %an axial dipole, after which various activity on the visible surface of the Sun will first increase, 
+  %then reach maximum and again decrease to a minimum, while it migrates from high latitudes towards the equator. This is 
+  %FAG reword the Sun --> Sun NASA capitalization convention
+  Each sunspot cycle emerges from the Quiet Sun of an axial dipole as
+  activity on the visible surface of Sun, typically near mid-latitudes.
+  While the frequency and coverage of the sunspots increases towards a maximum
+  the location of the activity drifts equatorward. 
+  This migration continues after the maximum with decreasing activity
+  closer to the equator bringing the sunspot cycle to an end.
+  This was first recorded in the Maunder butterfly diagram by Edward Maunder
+  in 1904.
+  Since sunspots are a feature of Sun's magnetic field, similar butterfly 
+  diagrams are also recovered from solar magnetograms \citep{GHHZ83}.
+  It is also reported for radio brightenings of the $\SI{37}{GHz}$ band
+  inc \citet{Shibasaki13,metsahovi40}.
 
 
 
 
- and back into an axial dipole of opposite 
-polarity,
-
-
-The full magnetic cycle is ca. $22$ years and consists of two sunspot cycles. Each sunspot cycle begins with 
-an axial dipole, after which various activity on the visible surface of the Sun will first increase, 
-then reach maximum and again decrease to a minimum, while it migrates from high latitudes towards the equator. This is 
-seen for sunspots in \citet{hathaway} and for magnetic regions in \citet{magregion}. It is also reported for radio 
-brightenings of the $\SI{37}{GHz}$ band inc \citet{metsahovi40}.
-
-
-
-
-
-%MJK you mean dipolar? Or axial dipole? 
-bipolar.
-
-%MJK 
-this bipolar field is transformed into a
-%MJK explanation of toroidal is appropriate also: -> toroidal (azimuthal) one,
-toroidal field 
-
-
-%MJK to use the term 'cycle' is a bit ambiguous; maybe say 'new sunspot cycle begins' (see also my comment above)
-and a new cycle begins. 
 %MJK I think the toroidal field is evolving all the time; maybe better is to say during the dominance of the toroidal field?
 
 During the time of evolving azimuthal field, we observe various types of activity, such as sunspots, magnetic regions as well as radio brightenings. These features appear first in the middle latitudes ($\pm 
