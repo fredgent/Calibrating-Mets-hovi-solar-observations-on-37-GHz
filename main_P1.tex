@@ -240,6 +240,7 @@
   and \citep[][and references therein]{LUSDADM17}.
   It is also reported for radio brightenings of the 17 and $\SI{34}{GHz}$ band
   \citep{Shibasaki13,SCGVPS14} and of $\SI{37}{GHz}$ \citep{metsahovi40}.
+  \fag{add additional references in radio and visible data into above paragraph}
  
   %FAG comment below duplication
   %%MJK I think the toroidal field is evolving all the time; maybe better is to say during the dominance of the toroidal field?
@@ -290,9 +291,106 @@
   %%MJK What kind of solar activity does 37GHz trace? This is an important point to clarify.
   %FAG added new para break
 
+  \fag{add paragraph reviewing previous Mets\"ahovi publications and references}
   %MJK One should explain in more detail what Kallunki has already published from this data.
+
+  %FAG I have summarised the rest of the introduction to keep it concise and
+  % have copied the rest to the methods section, where it is better suited.
+  Across the lifetime of the MRO the equipment has experienced several upgrades
+  and evolution of the data format.
+  This article shall describe the pipeline of data processing to transform the
+  raw data into a time series of solar radio maps, normalised, corrected for
+  instrumental bias, atmospheric noise and effects, time of day and seasonal
+  effects and solar lim dimming effects.
+  We present two methods for correctly detecting the position of the solar disc
+  in each map and three methods for normalizing the signal levels, such that
+  the background \emph{black sky} is has value zero and the 
+  Quiet Sun Level (QSL) value unity.
+  The maps are then projected from RA and Dec onto their rotating heliographic
+  surface coordinates.
+  We also introduce tools we have prepared for automatic tracking of active 
+  regions, which are suitable for any magnetograms or similar maps, and which
+  we shall apply in detail in future publication.
+  This is decribed in Section\,\ref{sect:methods}.
+
+   
+  From this we present a time-latitude histogram of the radio intensity,
+  including previously inaccessible machine-drawn maps from 1978 -- 1989 and
+  up to 2020.
+  This yields the most complete time series thus far available from MRO, 
+  spanning almost completely the last four sunspot cycles.
+  We compare our butterfly diagram with one constructed from the sunspot 
+  counts during the same epoch.
+  The are presented in Section\,\ref{sect:results} together with some 
+  examples of our active region tracking.
+  Finally, we discuss in Section\,\ref{sect:discussion} some how the radio 
+  observations differ from other solar observations, consistent with the 
+  results of \citet{Shibasaki13}. 
+
+  %FAG the residual text has been copied to Methods 
+  %During the 40 years, the equipment 
+  %has experienced several upgrades and there has also been changes in the data format.
+  %he data requires careful 
+  %normalization procedures, after which the butterfly diagram can be constructed from the solar maps. The solar maps from 
+  %1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
+  %mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
+  %%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
+  %these plots.
+  %%MJK or rather pattern recognition?
+  %Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
+  %numerical form. For these prepared contour maps, 
+  %%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
+  %the solar disk was already available, while for the later maps from 
+  %1989 to present the disk 
+  %has to be detected using automatic image recognition. 
+  %%MJK To make it more clear:
+  %%MJK The purpose of this paper is to present two methods () for detecting the disk and ....
+  %We present two methods (1: S-curve and 
+  %center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
+  %statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
+  %zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
+  %%MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
+  %
+  %%MJK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
+  %When the disk fitting is done, every radio sample can be projected into rotating heliographic surface. We use the 
+  %Carrington coordinates for this. As every sample now has time, heliographic latitude, and intensity relative to QSL, we 
+  %can average them on a two-dimensional grid in order to obtain a butterfly diagram. The sunspot data is already in a 
+  %format that has latitude and time bins, so simple interpolation is needed to convert it into the same domain as our 
+  %butterfly. For radio data, the measurable quantity is the intensity, while for the sunspot data it is the fraction of 
+  %area covered by sunspot, between two arcs of constant latitude.
+  %
+  %Having obtained the butterfly 
+  %%MJK diagram?
+  %diagrams, we 
+  %%MJK We should imply that more analysis is to come later.
+  %%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Section BLAA2."
+  %perform feature detection in order to get quantified information on the wing 
+  %shapes. 
+  %%MJK Again, introduction might not be the best place to describe the workflow, but the methods section.
+  %This is done iteratively, starting with the each hemisphere and predefined solar cycle start and end times 
+  %(later: wing). For each wing, we give the high intensity cells a considerable weight and fit a polynomial of a desired 
+  %degree to the time-latitude domain. This gives the wing shape and root. Statistical variance with respect to the root 
+  %gives us the wing thickness, which can be assumed a constant or a polynomial function of desired degree. We fit the 
+  %third polynomial in the time,intensity domain, where the intensity is averaged over the wing latitudes for each time 
+  %cell. The relevant roots or local minima of this intensity polynomial give the begin and end times for each wing. Having 
+  %now quantified the shape and dimensions of each wing, we can neglect any outlier cells from the grid and perform several 
+  %iteration steps to refine the shape. In the last stage, all the wings will coexist in the same grid, which now contains 
+  %all the 40 years of data from both hemispheres. We will set the weights to zero for those cells which would have 
+  %overlapping wings, in order to encourage the algorithm to produce non-overlapping wings. We tried several sets of 
+  %parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
+  %intensity profile.
+  %
+  %%MJK So, to summarize my comments to the intro: expand significantly on Kallunki earlier paper(s), and pinpoint in detail what was there, and what is new in here, and why this work was necessary. Expand on the relevance of the dataset: what does 37GHz data describe, why is it relevant, what else has been done before in the frequency band? Move the parts describing the workflow to Section 2.
+  %
+%--------------------------------------------------------------------
+\section{Methods}\label{sect:methods}
+\fag{Add the equation for calculating the best fit and variance and iteration to exclude outliers.}\\
+\fag{Describe in outline the procedure for deriving butterfly fits.
+}
+
   During the 40 years, the equipment 
-  has experienced several upgrades and there has also been changes in the data format. The data requires careful 
+  has experienced several upgrades and there has also been changes in the data format.
+ The data requires careful 
   normalization procedures, after which the butterfly diagram can be constructed from the solar maps. The solar maps from 
   1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
   mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
@@ -341,14 +439,6 @@ all the 40 years of data from both hemispheres. We will set the weights to zero 
 overlapping wings, in order to encourage the algorithm to produce non-overlapping wings. We tried several sets of 
 parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
 intensity profile.
-
-%MJK So, to summarize my comments to the intro: expand significantly on Kallunki earlier paper(s), and pinpoint in detail what was there, and what is new in here, and why this work was necessary. Expand on the relevance of the dataset: what does 37GHz data describe, why is it relevant, what else has been done before in the frequency band? Move the parts describing the workflow to Section 2.
-
-%--------------------------------------------------------------------
-\section{Methods}
-\fag{Add the equation for calculating the best fit and variance and iteration to exclude outliers.}\\
-\fag{Describe in outline the procedure for deriving butterfly fits.
-}
 
 %MJK I think it would be best to put figures 1 and 2 into one single figure, and maybe add there also the planned figure of the final map in solar coordinates (Fig 1 caption). Also, the older map should become before the more recent map. 
 During a typical measurement, the antenna beam makes a sweep across the visible solar disk (Figure \ref{typicalmap}). 
