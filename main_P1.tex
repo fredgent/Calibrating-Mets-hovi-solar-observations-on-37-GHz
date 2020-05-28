@@ -302,7 +302,7 @@
   raw data into a time series of solar radio maps, normalised, corrected for
   instrumental bias, atmospheric noise and effects, time of day and seasonal
   effects and solar lim dimming effects.
-  We present two methods for correctly detecting the position of the solar disc
+  We present two methods for correctly detecting the position of the solar disk
   in each map and three methods for normalizing the signal levels, such that
   the background \emph{black sky} is has value zero and the 
   Quiet Sun Level (QSL) value unity.
@@ -315,7 +315,7 @@
 
    
   From this we present a time-latitude histogram of the radio intensity,
-  including previously inaccessible machine-drawn maps from 1978 -- 1989 and
+  including previously inaccessible machine-drawn maps from 1978 -- 1987 and
   up to 2020.
   This yields the most complete time series thus far available from MRO, 
   spanning almost completely the last four sunspot cycles.
@@ -383,91 +383,89 @@
   %%MJK So, to summarize my comments to the intro: expand significantly on Kallunki earlier paper(s), and pinpoint in detail what was there, and what is new in here, and why this work was necessary. Expand on the relevance of the dataset: what does 37GHz data describe, why is it relevant, what else has been done before in the frequency band? Move the parts describing the workflow to Section 2.
   %
 %--------------------------------------------------------------------
+
+  \begin{figure}
+  \centering
+  \includegraphics[trim=0cm 3cm 0cm 1.2cm,clip=True,width=\columnwidth]{nea1311582408.png}
+  \includegraphics[trim=0cm 0cm 0cm 1.2cm,clip=True,width=\columnwidth]{nea1467696874.png}
+  \caption{
+    Typical Mets\"ahovi solar observations on $\SI{37}{GHz}$ {\bf(a)}
+    25.07.2011 and {\bf(b)} 05.07.2016.
+    Prior to May 2015 the observation beam scans along the equator, with
+    samples mapped onto a rectangular grid.
+    Since June 2015 a more accurate fit to the beam path was used.
+    %Maps that originate May on 2015 or earlier have
+    %sweeps along the equator. Samples are assumed on a rectan-
+    %gular grid. Typical Metsähovi solar observation on 37 GHz.
+    %This data format has been in use since June 2015. White
+    %dots: samples not used for disk fitting. Red dots: sam-
+    %ples used for disk fitting, radial offset calculated based on
+    %limb model. Green dots: samples corrected for radial offset,
+    %which constitute the target set for circle fitting. Color map:
+    %each pixel is mapped to the nearest observational sample.
+    %Comment: This is an original uncalibrated map. Explain
+    %what is added up as part of calibration. Include another
+    %plot with the final version in Solar coordinates.
+  \label{oldmap}\label{typicalmap}}
+  \end{figure}
 \section{Methods}\label{sect:methods}
-\fag{Add the equation for calculating the best fit and variance and iteration to exclude outliers.}\\
-\fag{Describe in outline the procedure for deriving butterfly fits.
-}
 
-  During the 40 years, the equipment 
-  has experienced several upgrades and there has also been changes in the data format.
- The data requires careful 
-  normalization procedures, after which the butterfly diagram can be constructed from the solar maps. The solar maps from 
-  1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
-  mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
-  %MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
-  these plots.
-  %MJK or rather pattern recognition?
-  Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
-  numerical form. For these prepared contour maps, 
-  %MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
-  the solar disk was already available, while for the later maps from 
-  1989 to present the disk 
-  has to be detected using automatic image recognition. 
-  %MJK To make it more clear:
-  %MJK The purpose of this paper is to present two methods () for detecting the disk and ....
-  We present two methods (1: S-curve and 
-  center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
-  statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
-  zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
-  %MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
+\subsection{Data sources}\label{sect:source}
 
-%MJK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
-When the disk fitting is done, every radio sample can be projected into rotating heliographic surface. We use the 
-Carrington coordinates for this. As every sample now has time, heliographic latitude, and intensity relative to QSL, we 
-can average them on a two-dimensional grid in order to obtain a butterfly diagram. The sunspot data is already in a 
-format that has latitude and time bins, so simple interpolation is needed to convert it into the same domain as our 
-butterfly. For radio data, the measurable quantity is the intensity, while for the sunspot data it is the fraction of 
-area covered by sunspot, between two arcs of constant latitude.
+  During a typical measurement, the antenna beam makes a sweep across the
+  visible solar disk (Figure \ref{typicalmap}).
+  The data comprises three sources:
+  \begin{enumerate}[A]
+    \item
+    The solar maps from 1978 to 1987 were originally recorded on magnetic
+    tapes, from which the data was rendered onto paper contour maps using a
+    mechanical plotter.
+    Subsequently the magnetic tapes were lost, so that only the printed maps
+    were only available. 
+    Applying pattern recognition techniques developed by
+    \cite{masterthesis}, the scans of the paper contour maps were converted
+    back into a numerical form, consistent with that of the later 
+    digital format.
+    The solar disk position was already marked on these paper maps.
+    \item
+    Until the end of May 2015 the maps were scanned in the equatorial direction,
+    so that declination is shifted between adjacent sweeps, as displayed in
+    Figure\,\ref{typicalmap}{\bf(a)}.
+    The maps assume linear antenna tracks with constant speed and sample rate.
+    \item
+    After June 2015 the sweeps have been horizontal, with shifting altitude
+    between sweeps, as shown in Figure\,\ref{typicalmap}{\bf(b)}.
+    These modern maps respect the true path of the antenna, typically recorded
+    with $25$ samples per second for two minutes.
+    %MJK The final map in solar coordinates is presented in Figure 1(c)...
+  \end{enumerate}
 
-Having obtained the butterfly 
-%MJK diagram?
-diagrams, we 
-%MJK We should imply that more analysis is to come later.
-%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Section BLAA2."
-perform feature detection in order to get quantified information on the wing 
-shapes. 
-%MJK Again, introduction might not be the best place to describe the workflow, but the methods section.
-This is done iteratively, starting with the each hemisphere and predefined solar cycle start and end times 
-(later: wing). For each wing, we give the high intensity cells a considerable weight and fit a polynomial of a desired 
-degree to the time-latitude domain. This gives the wing shape and root. Statistical variance with respect to the root 
-gives us the wing thickness, which can be assumed a constant or a polynomial function of desired degree. We fit the 
-third polynomial in the time,intensity domain, where the intensity is averaged over the wing latitudes for each time 
-cell. The relevant roots or local minima of this intensity polynomial give the begin and end times for each wing. Having 
-now quantified the shape and dimensions of each wing, we can neglect any outlier cells from the grid and perform several 
-iteration steps to refine the shape. In the last stage, all the wings will coexist in the same grid, which now contains 
-all the 40 years of data from both hemispheres. We will set the weights to zero for those cells which would have 
-overlapping wings, in order to encourage the algorithm to produce non-overlapping wings. We tried several sets of 
-parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
-intensity profile.
+  The digital maps do not include the location of the solar disk.
+  The disk markings in Figure\,\ref{typicalmap}, are identified by the 
+  disk fitting method(s), described in Section\,\ref{sect:disk}.
+  The intensity ranges shown in Figure\,\ref{typicalmap} are the original
+  uncalibrated levels.
+  For these, as well as those recovered from the earlier paper prints, the 
+  signal levels need to be normalised, to correctly identify the QSL and the
+  black sky, also explained in Section\,\ref{sect:disk}.
 
-%MJK I think it would be best to put figures 1 and 2 into one single figure, and maybe add there also the planned figure of the final map in solar coordinates (Fig 1 caption). Also, the older map should become before the more recent map. 
-During a typical measurement, the antenna beam makes a sweep across the visible solar disk (Figure \ref{typicalmap}). 
-Until the end of May on 2015, the maps have been scanned in equatorial direction, so that declination is shifted between
-%MJK This would become Figure 1(a).
-adjacent sweeps. Since June, 2015, the sweeps have been horizontal, with shifting altitude between sweeps. 
-%MJK This would become Figure 1(b).
-These modern 
-maps respect the true path of the antenna, while the older maps have assumed linear antenna tracks with constant speed 
-%MJK typo
-and 
-%samplerate 
-sample rate along the equator as in Figure
-%MJK Figure 1(b).
-\ref{oldmap}. The new maps typically recorded with $25$ samples per second for two minutes.
-%MJK The final map in solar coordinates is presented in Figure 1(c)...
-%MJK Horizontal row/vertical column of panels, up to Sami to decide...
-
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{nea1311582408.png}
-\includegraphics[width=8.5cm]{nea1467696874.png}
-\caption{Maps that originate May on 2015 or earlier have sweeps along the equator. Samples are assumed on a rectangular grid.
-Typical Mets\"ahovi solar observation on $\SI{37}{GHz}$. This data format has been in use since June 2015. White dots: samples not used for disk fitting. Red 
-dots: samples used for disk fitting, radial offset calculated based on limb model. Green dots: samples corrected for 
-radial offset, which constitute the target set for circle fitting. Color map: each pixel is mapped to the nearest 
-observational sample. Comment: This is an original uncalibrated map. Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.
-\label{oldmap}\label{typicalmap}}
-\end{figure}
+  %
+  %%MJK I think it would be best to put figures 1 and 2 into one single figure, and maybe add there also the planned figure of the final map in solar coordinates (Fig 1 caption). Also, the older map should become before the more recent map. 
+  %During a typical measurement, the antenna beam makes a sweep across the visible solar disk (Figure \ref{typicalmap}). 
+  %Until the end of May on 2015, the maps have been scanned in equatorial direction, so that declination is shifted between
+  %%MJK This would become Figure 1(a).
+  %adjacent sweeps. Since June, 2015, the sweeps have been horizontal, with shifting altitude between sweeps. 
+  %%MJK This would become Figure 1(b).
+  %These modern 
+  %maps respect the true path of the antenna, while the older maps have assumed linear antenna tracks with constant speed 
+  %%MJK typo
+  %and 
+  %%samplerate 
+  %sample rate along the equator as in Figure
+  %%MJK Figure 1(b).
+  %\ref{oldmap}. The new maps typically recorded with $25$ samples per second for two minutes.
+  %%MJK The final map in solar coordinates is presented in Figure 1(c)...
+  %%MJK Horizontal row/vertical column of panels, up to Sami to decide...
 
 
 \subsection{Heliographic coordinates from radio data}
@@ -503,7 +501,7 @@ Our solar maps are not sensitive to small systematic pointing errors or inter ma
 %MJK not to confuse the reader, refer already forward
 We apply algorithm $F_j$,
 %MJK
-defined in detail in Sect.~\ref{Sect:DiskFitting},
+defined in detail in Sect.~\ref{sect:disk},
 %MJK
 for the scan $S$ in order to produce a disk model:
 \eqnl{disk_model}{
@@ -558,8 +556,67 @@ reasonable model.
 %Only a very large inaccuracy in $A$ would appear as incorrect location of the solar pole in the visible 
 %solar disk and thus as inaccurate heliographic coordinates.
 
+  \fag{Add the equation for calculating the best fit and variance and iteration to exclude outliers.}\\
+  \fag{Describe in outline the procedure for deriving butterfly fits.
+  }
+    White dots: samples not used for disk fitting. Red 
+  dots: samples used for disk fitting, radial offset calculated based on limb model. Green dots: samples corrected for 
+  radial offset, which constitute the target set for circle fitting. Color map: each pixel is mapped to the nearest 
+  observational sample. Comment: This is an original uncalibrated map. Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.
+  %During the 40 years, the equipment 
+  %has experienced several upgrades and there has also been changes in the data format.
+  %The data requires careful 
+  %normalization procedures, after which the butterfly diagram can be constructed from the solar maps.
+  %The solar maps from 
+  %1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
+  %mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
+  %%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
+  %these plots.
+  %%MJK or rather pattern recognition?
+  %Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
+  %numerical form. For these prepared contour maps, 
+  %%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
+  the solar disk was already available, while for the later maps from 
+  1989 to present the disk 
+  has to be detected using automatic image recognition. 
+  %MJK To make it more clear:
+  %MJK The purpose of this paper is to present two methods () for detecting the disk and ....
+  We present two methods (1: S-curve and 
+  center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
+  statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
+  zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
+  %MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
+
+%MJK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
+When the disk fitting is done, every radio sample can be projected into rotating heliographic surface. We use the 
+Carrington coordinates for this. As every sample now has time, heliographic latitude, and intensity relative to QSL, we 
+can average them on a two-dimensional grid in order to obtain a butterfly diagram. The sunspot data is already in a 
+format that has latitude and time bins, so simple interpolation is needed to convert it into the same domain as our 
+butterfly. For radio data, the measurable quantity is the intensity, while for the sunspot data it is the fraction of 
+area covered by sunspot, between two arcs of constant latitude.
+
+Having obtained the butterfly 
+%MJK diagram?
+diagrams, we 
+%MJK We should imply that more analysis is to come later.
+%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Section BLAA2."
+perform feature detection in order to get quantified information on the wing 
+shapes. 
+%MJK Again, introduction might not be the best place to describe the workflow, but the methods section.
+This is done iteratively, starting with the each hemisphere and predefined solar cycle start and end times 
+(later: wing). For each wing, we give the high intensity cells a considerable weight and fit a polynomial of a desired 
+degree to the time-latitude domain. This gives the wing shape and root. Statistical variance with respect to the root 
+gives us the wing thickness, which can be assumed a constant or a polynomial function of desired degree. We fit the 
+third polynomial in the time,intensity domain, where the intensity is averaged over the wing latitudes for each time 
+cell. The relevant roots or local minima of this intensity polynomial give the begin and end times for each wing. Having 
+now quantified the shape and dimensions of each wing, we can neglect any outlier cells from the grid and perform several 
+iteration steps to refine the shape. In the last stage, all the wings will coexist in the same grid, which now contains 
+all the 40 years of data from both hemispheres. We will set the weights to zero for those cells which would have 
+overlapping wings, in order to encourage the algorithm to produce non-overlapping wings. We tried several sets of 
+parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
+intensity profile.
 %MJK Adding label
-\subsection{Disk fitting and signal levels} \label{Sect:DiskFitting}Limb intensity profiles showing brightening. 
+\subsection{Disk fitting and signal levels} \label{sect:disk}Limb intensity profiles showing brightening. 
 
 We recognize six suitable combinations of options for the disk model $F_j$ in 
 %MJK A&A style
