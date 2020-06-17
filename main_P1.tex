@@ -13,7 +13,7 @@
 %
 \usepackage{graphicx,svg,bm,amsmath,dsfont,siunitx,wasysym,tikz,color,scalerel}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\usepackage{comment}
+%\usepackage{comment}
 \usepackage{hyperref}
 %\usetikzlibrary{arrows,positioning,decorations.pathmorphing,backgrounds,calc,shadows}
 %\tikzset{
@@ -231,6 +231,7 @@
   and the next sunspot cycle begins.
   %FAG remove paragraph break and reword
   The full 22 year cycle comprises two such sunspot cycles.
+  
   %The full magnetic cycle is ca. $22$ years and consists of two sunspot cycles.
 
   %FAG insert paragraph break
@@ -264,6 +265,7 @@
   %\citep{GHHZ83,VLMCS12}
   %and \citep[][and references therein]{LUSDADM17}.
   \citep{GHHZ83,VLMCS12,LUSDADM17}.
+All our HPCE3 visitors from the spring period were paused an
   It is also reported for radio brightenings of the 17 and $\SI{34}{GHz}$ band
   \citep{Shibasaki13,SCGVPS14} and of $\SI{37}{GHz}$ \citep{metsahovi40}.
   \fag{add additional references in radio and visible data into above paragraph}
@@ -336,19 +338,25 @@
   This article shall describe the pipeline of data processing to transform the
   raw data into a time series of solar radio maps, normalised, corrected for
   instrumental bias, atmospheric noise and effects, time of day and seasonal
-  effects and solar lim dimming effects.
+  effects and solar 
+  %MJK lim typo
+  limb dimming effects.
   We present two methods for correctly detecting the position of the solar disk
   in each map and three methods for normalizing the signal levels, such that
-  the background \emph{black sky} is has value zero and the 
+  the background \emph{black sky} 
+  %MJK is 
+  has value zero and the 
   Quiet Sun Level (QSL) value unity.
   The maps are then projected from RA and Dec onto their rotating heliographic
   surface coordinates.
   We also introduce tools we have prepared for automatic tracking of active 
   regions, which are suitable for any magnetograms or similar maps, and which
   we shall apply in detail in future publication.
-  This is decribed in Section\,\ref{sect:methods}.
+  This is 
+  %decribed 
+  described in Section\,\ref{sect:methods}.
 
-   
+  %MJK 'From this' does not sound understandable. 
   From this we present a time-latitude histogram of the radio intensity,
   including previously inaccessible machine-drawn maps from 1978 -- 1987 and
   up to 2020.
@@ -358,8 +366,12 @@
   counts during the same epoch.
   The are presented in Section\,\ref{sect:results} together with some 
   examples of our active region tracking.
-  Finally, we discuss in Section\,\ref{sect:discussion} some how the radio 
-  observations differ from other solar observations, consistent with the 
+  Finally, we discuss in Section\,\ref{sect:discussion} 
+  %MJK some 
+  how the radio 
+  observations differ from other solar observations, 
+  %MJK Consistency with Shibasaki could be left to be said later.
+  consistent with the 
   results of \citet{Shibasaki13}. 
 
   %FAG the residual text has been copied to Methods 
@@ -457,11 +469,15 @@
     tapes, from which the data was rendered onto paper contour maps using a
     mechanical plotter.
     Subsequently the magnetic tapes were lost, so that only the printed maps
-    were only available. 
+    were 
+    %MJK one too many 'only's
+    %only 
+    available. 
     Applying pattern recognition techniques developed by
     \cite{masterthesis}, the scans of the paper contour maps were converted
-    back into a numerical form, consistent with that of the later 
-    digital format.
+    back into a numerical form, consistent with that of 
+    %MJK This might not be understandable stand alone. One could add smthg like "the digital format currently used for reconrding new maps".
+    the later digital format.
     The solar disk position was already marked on these paper maps.
     \item
     Until the end of May 2015 the maps were scanned in the equatorial direction,
@@ -482,7 +498,10 @@
   The intensity ranges shown in Figure\,\ref{typicalmap} are the original
   uncalibrated levels.
   For these, as well as those recovered from the earlier paper prints, the 
-  signal levels need to be normalised, to correctly identify the QSL and the
+  signal levels need to be normalised, to correctly identify the 
+  %MJK Quiet Sun level? Has this been introduced earlier?
+  %MJK It was introduced later, now swapped.
+  quiet Sun level (hereafter QSL) and the
   black sky, also explained in Section\,\ref{sect:disk}.
 
   %
@@ -544,7 +563,10 @@ for the scan $S$ in order to produce a disk model:
 F_j(S) = \left( \delta \mathrm{RA}_S, \delta \mathrm{dec}_S, R_S, \s{u}{background}(S), \s{u}{QSL}(S) \right) \text{.}
 }
 %The disk fitting model in $F_j$ is used for correcting small tracking errors and calibrating the intensity levels.
-We then obtain calibrated position and intensity for each sample. Signal levels are scaled so that zero is for the background and unity for the Quiet Sun Level (QSL):
+We then obtain calibrated position and intensity for each sample. Signal levels are scaled so that zero is for the background and unity for the 
+%MJK OK, defined here, hence:
+%Quiet Sun Level (QSL):
+QSL:
 %\eqnl{calibrated_samples}{
 %c_i = F(S)(s_i) = \left( t_i, x_i, y_i, v_i \right) \text{,}
 %}
@@ -723,9 +745,7 @@ There are odd number of such roots, so we choose the one in the middle: $u_0 := 
 \begin{figure}
 \centering
 \includegraphics[width=8.5cm]{Scurve_example.png}
-\caption{Radio samples of a typical solar scan sorted according to intensity. Comment: mark the d2y/dx2 = 0 as a cross. 
-%MJK Yes, agree that the grids are not needed and the second y-axis is spurious.
-Remove grids and second differential/axis.}
+\caption{Radio samples of a typical solar scan sorted according to intensity. a) All samples. Between the dashed lines are the mixed samples which have contribution from the solar limb as well as the background. b) Only the mixed samples, into which a polynomial is fitted. A point of zero curvature (cross) provides a pivot point for signal level normalization.}
 \label{S-curve_example}
 \end{figure}
 
