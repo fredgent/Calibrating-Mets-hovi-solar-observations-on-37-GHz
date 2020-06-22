@@ -48,6 +48,8 @@
 \newcommand{\dd}[0]{\mathrm{d}}
 \definecolor{midpurple}{rgb}{0.7,0.1,0.7}
 \newcommand{\s}[2]{{#1}_{\mathrm{#2}}}
+\newcommand{\RA}{{\mathsf{RA}}}
+\newcommand{\Dec}{{\mathsf{Dec}}}
 
 
 \begin{document} 
@@ -529,8 +531,18 @@
   %MJK Adding label
   \subsection{Disk fitting and signal levels} \label{sect:disk}
 
+    Each sample observation yields an intensity map with respect to right 
+    ascension, $\RA$, and declination, $\Dec$, coordinates.
+    We consider two disk methods to determine the solar disk position and size
+    from each map:
+    \begin{enumerate}
+    \item intentionally weighting the center of mass of the radio sample
+    coordinates.
+    \item fitting a circle for those sample coordinates which we, by geometry,
+    expect to belong to the solar limb.
+    \end{enumerate}
    %FAG reordered text, but still edit TODO
-    Determine the solar disk position and size from each map as well as
+    %Determine the solar disk position and size from each map as well as
     normalize the measured background intensity for zero and the Quiet Sun
     Level (QSL) for unity.
     This can be done using a binary combination of two disk methods (1 and 
