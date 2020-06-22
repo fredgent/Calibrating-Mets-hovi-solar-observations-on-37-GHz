@@ -745,6 +745,7 @@ There are odd number of such roots, so we choose the one in the middle: $u_0 := 
 \begin{figure}
 \centering
 \includegraphics[width=8.5cm]{Scurve_example.png}
+\begin{picture}(0,0)(0,0) \put(-215,315){\begin{huge}a\end{huge}} \put(-215,158){\begin{huge}b\end{huge}} \end{picture}
 \caption{Radio samples of a typical solar scan sorted according to intensity. a) All samples. Between the dashed lines are the mixed samples which have contribution from the solar limb as well as the background. b) Only the mixed samples, into which a polynomial is fitted. A point of zero curvature (cross) provides a pivot point for signal level normalization.}
 \label{S-curve_example}
 \end{figure}
@@ -841,18 +842,12 @@ separate polynomials $P_n$ and $Q_m$ should reduce these risks.
 Limb intensity profiles showing brightening. 
 \begin{figure}
 \centering
-\includegraphics[width=8.5cm]{limbmodel_profiles1.png}
-%MJK Here the axis labels now have huge (even too big) a font, while the label ticks still have quite a small font. Also, the legend box in the upper right corner overlaps with the data; can it be placed, e.g., in the upper left corner?
-\caption{Limb intensity profiles showing brightening. When observed at low altitudes, the profiles are significantly blurred. Comment: fix font sizes.}
-\label{limb_brightening1}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{limbmodel_profiles2.png}
-%MJK Too small axis labels and ticks.
-\caption{Limb intensity profiles with convolution effects. Comment: Fix font sizes.}
-\label{limb_brightening2}
+\includegraphics[width=8.5cm]{limbmodel_profiles.png}
+\begin{picture}(0,0)(0,0) \put(-220,315){\begin{huge}a\end{huge}} \put(-220,158){\begin{huge}b\end{huge}} \end{picture}
+\caption{Average quiet Sun intensity as a function of radial distance from the visual center, normalized for the center 
+intensity. a) Limb brightening is observed when line of sight is almost tangential to the solar surface. b) The beam 
+size of $2.4 \prime$ mixes the solar limb with the dark background, resulting in a convolution pattern. On both plots, we observe more blurring when the altitude of observation is low, due to atmospheric effects.}
+\label{limb_brightening}
 \end{figure}
 
 \begin{figure*}
