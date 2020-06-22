@@ -121,31 +121,32 @@
   %moved to the main text. Fred TODO
   %MJK Yes. It is good to bear in mind that the arXiv abstract field allows for 1920 chars... As we will submit there anyways, then it will be an additional pain, so better to conform to the char limits already now.
   {
-    Determine the solar disk position and size from each map as well as
-    normalize the measured background intensity for zero and the Quiet Sun
-    Level (QSL) for unity.
-    This can be done using a binary combination of two disk methods (1 and 
-    2) and three normalization methods (a, b, and c).
-    The methods are: (1) intentionally weighted center of mass of the radio
-    sample coordinates, (2) fitting a circle for those sample coordinates
-    which we, by geometry, expect to belong to the solar limb, (a) sort the
-    intensity samples and detect the point of zero curvature from the index vs.     intensity dependency, the S-curve, (b) iteratively calculate the
-    statistical mean and standard deviation of the intensity of 
-    those points which are located within the solar disk and not too close
-    to the limb, (c) detect two significant peaks from the intensity histogram,
-    the lower intensity peak being the background and the higher the QSL.
+   %FAG moved section to disk fitting
+    %Determine the solar disk position and size from each map as well as
+    %normalize the measured background intensity for zero and the Quiet Sun
+    %Level (QSL) for unity.
+    %This can be done using a binary combination of two disk methods (1 and 
+    %2) and three normalization methods (a, b, and c).
+    %The methods are: (1) intentionally weighted center of mass of the radio
+    %sample coordinates, (2) fitting a circle for those sample coordinates
+    %which we, by geometry, expect to belong to the solar limb, (a) sort the
+    %intensity samples and detect the point of zero curvature from the index vs.     intensity dependency, the S-curve, (b) iteratively calculate the
+    %statistical mean and standard deviation of the intensity of 
+    %those points which are located within the solar disk and not too close
+    %to the limb, (c) detect two significant peaks from the intensity histogram,
+    %the lower intensity peak being the background and the higher the QSL.
 
-    The method (2) can be augmented using two additional sets of information.
-    When we observe exactly at the limb, we would expect $0.5$ QSL intensity
-    due the the beam mixing disk and background signal.
-    If one particular sample has intensity $0.4$ QSL, we would expect the
-    sample to be slightly more away from the center.
-    Collecting a large set of observations on different conditions, we can
-    estimate how quickly the intensity drops as the beam passes the limb 
-    from disk to background.
-    Utilizing this limb profile, we can fine tune the position of each limb
-    sample in the target set of (2) and proceed iteratively to obtain more
-    accurate circle fitting.
+    %The method (2) can be augmented using two additional sets of information.
+    %When we observe exactly at the limb, we would expect $0.5$ QSL intensity
+    %due the the beam mixing disk and background signal.
+    %If one particular sample has intensity $0.4$ QSL, we would expect the
+    %sample to be slightly more away from the center.
+    %Collecting a large set of observations on different conditions, we can
+    %estimate how quickly the intensity drops as the beam passes the limb 
+    %from disk to background.
+    %Utilizing this limb profile, we can fine tune the position of each limb
+    %sample in the target set of (2) and proceed iteratively to obtain more
+    %accurate circle fitting.
 
     Any exceptional bright or dim features near the limb will affect the
     apparent shape of the solar disk in the map. 
@@ -194,7 +195,7 @@
   The solar magnetic field is known to switch polarity in a full cycle of 
   approximately % ca. FAG abbr. -->  full word convention
   22 years, which consists of two sunspot cycles \citep{HEN19,Babcock61}.
-  At %In FAG In --> AT
+  At %In FAG In --> At
   the beginning of each sunspot cycle, the solar magnetic field is an axial
   dipole.
   %FAG reworded
@@ -265,7 +266,6 @@
   %\citep{GHHZ83,VLMCS12}
   %and \citep[][and references therein]{LUSDADM17}.
   \citep{GHHZ83,VLMCS12,LUSDADM17}.
-All our HPCE3 visitors from the spring period were paused an
   It is also reported for radio brightenings of the 17 and $\SI{34}{GHz}$ band
   \citep{Shibasaki13,SCGVPS14} and of $\SI{37}{GHz}$ \citep{metsahovi40}.
   \fag{add additional references in radio and visible data into above paragraph}
@@ -294,7 +294,7 @@ All our HPCE3 visitors from the spring period were paused an
   From sunspots and magnetograms of the photosphere we have relatively rich
   %MJK hyphen ?
   %well resolved 
-  well--resolved
+  well-resolved
   data about the 
   %MJK should perhaps be written out, when used for the first time, same for 3D.
   %FAG: OK done
@@ -338,41 +338,45 @@ All our HPCE3 visitors from the spring period were paused an
   This article shall describe the pipeline of data processing to transform the
   raw data into a time series of solar radio maps, normalised, corrected for
   instrumental bias, atmospheric noise and effects, time of day and seasonal
-  effects and solar 
-  %MJK lim typo
-  limb dimming effects.
+  effects and solar limb dimming effects.
   We present two methods for correctly detecting the position of the solar disk
   in each map and three methods for normalizing the signal levels, such that
-  the background \emph{black sky} 
-  %MJK is 
-  has value zero and the 
-  Quiet Sun Level (QSL) value unity.
+  the background \emph{black sky} has value zero and the 
+  %FAG: expanded definitiion in response to MJK later query
+  %Quiet Sun Level (QSL) value unity.
+  Quiet Sun Level (hereafter QSL),
+  the solar intensity in the absence of surface magnetic activity, has
+  value unity.
   The maps are then projected from RA and Dec onto their rotating heliographic
   surface coordinates.
   We also introduce tools we have prepared for automatic tracking of active 
   regions, which are suitable for any magnetograms or similar maps, and which
   we shall apply in detail in future publication.
-  This is 
-  %decribed 
-  described in Section\,\ref{sect:methods}.
+  This is described in Section\,\ref{sect:methods}.
 
   %MJK 'From this' does not sound understandable. 
-  From this we present a time-latitude histogram of the radio intensity,
+  %From this we present a time-latitude histogram of the radio intensity,
+  %FAG: reduced
+  We present a time-latitude histogram of the radio intensity,
   including previously inaccessible machine-drawn maps from 1978 -- 1987 and
   up to 2020.
   This yields the most complete time series thus far available from MRO, 
   spanning almost completely the last four sunspot cycles.
   We compare our butterfly diagram with one constructed from the sunspot 
   counts during the same epoch.
-  The are presented in Section\,\ref{sect:results} together with some 
+  These are presented in Section\,\ref{sect:results} together with some 
   examples of our active region tracking.
   Finally, we discuss in Section\,\ref{sect:discussion} 
-  %MJK some 
-  how the radio 
-  observations differ from other solar observations, 
+  %%MJK some 
+  %how the radio 
+  %observations differ from other solar observations, 
+  %%MJK Consistency with Shibasaki could be left to be said later.
+  %consistent with the 
+  %results of \citet{Shibasaki13}. 
+  %FAG: response to MJK 
+  how MRO observations differ from some other solar observations, 
   %MJK Consistency with Shibasaki could be left to be said later.
-  consistent with the 
-  results of \citet{Shibasaki13}. 
+  and also compare with the results of \citet{Shibasaki13}. 
 
   %FAG the residual text has been copied to Methods 
   %During the 40 years, the equipment 
@@ -469,15 +473,13 @@ All our HPCE3 visitors from the spring period were paused an
     tapes, from which the data was rendered onto paper contour maps using a
     mechanical plotter.
     Subsequently the magnetic tapes were lost, so that only the printed maps
-    were 
-    %MJK one too many 'only's
-    %only 
-    available. 
+    were available. 
     Applying pattern recognition techniques developed by
     \cite{masterthesis}, the scans of the paper contour maps were converted
     back into a numerical form, consistent with that of 
     %MJK This might not be understandable stand alone. One could add smthg like "the digital format currently used for reconrding new maps".
-    the later digital format.
+    %FAG: reworded as suggested
+    the digital format used to record maps of the current observations.
     The solar disk position was already marked on these paper maps.
     \item
     Until the end of May 2015 the maps were scanned in the equatorial direction,
@@ -498,10 +500,12 @@ All our HPCE3 visitors from the spring period were paused an
   The intensity ranges shown in Figure\,\ref{typicalmap} are the original
   uncalibrated levels.
   For these, as well as those recovered from the earlier paper prints, the 
-  signal levels need to be normalised, to correctly identify the 
+  %signal levels need to be normalised, to correctly identify the 
   %MJK Quiet Sun level? Has this been introduced earlier?
   %MJK It was introduced later, now swapped.
-  quiet Sun level (hereafter QSL) and the
+  %FAG introduced in introduction, but now added definition and hereafter
+  %quiet Sun level (hereafter QSL) and the
+  signal levels need to be normalised, to correctly identify QSL and the
   black sky, also explained in Section\,\ref{sect:disk}.
 
   %
@@ -522,6 +526,94 @@ All our HPCE3 visitors from the spring period were paused an
   %%MJK The final map in solar coordinates is presented in Figure 1(c)...
   %%MJK Horizontal row/vertical column of panels, up to Sami to decide...
 
+  %MJK Adding label
+  \subsection{Disk fitting and signal levels} \label{sect:disk}
+
+   %FAG reordered text, but still edit TODO
+    Determine the solar disk position and size from each map as well as
+    normalize the measured background intensity for zero and the Quiet Sun
+    Level (QSL) for unity.
+    This can be done using a binary combination of two disk methods (1 and 
+    2) and three normalization methods (a, b, and c).
+    The methods are: (1) intentionally weighted center of mass of the radio
+    sample coordinates, (2) fitting a circle for those sample coordinates
+    which we, by geometry, expect to belong to the solar limb, (a) sort the
+    intensity samples and detect the point of zero curvature from the index vs.     intensity dependency, the S-curve, (b) iteratively calculate the
+    statistical mean and standard deviation of the intensity of 
+    those points which are located within the solar disk and not too close
+    to the limb, (c) detect two significant peaks from the intensity histogram,
+    the lower intensity peak being the background and the higher the QSL.
+
+    The method (2) can be augmented using two additional sets of information.
+    When we observe exactly at the limb, we would expect $0.5$ QSL intensity
+    due the the beam mixing disk and background signal.
+    If one particular sample has intensity $0.4$ QSL, we would expect the
+    sample to be slightly more away from the center.
+    Collecting a large set of observations on different conditions, we can
+    estimate how quickly the intensity drops as the beam passes the limb 
+    from disk to background.
+    Utilizing this limb profile, we can fine tune the position of each limb
+    sample in the target set of (2) and proceed iteratively to obtain more
+    accurate circle fitting.
+  
+    White dots: samples not used for disk fitting. Red 
+  dots: samples used for disk fitting, radial offset calculated based on limb model. Green dots: samples corrected for 
+  radial offset, which constitute the target set for circle fitting. Color map: each pixel is mapped to the nearest 
+  observational sample. Comment: This is an original uncalibrated map. Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.
+  %During the 40 years, the equipment 
+  %has experienced several upgrades and there has also been changes in the data format.
+  %The data requires careful 
+  %normalization procedures, after which the butterfly diagram can be constructed from the solar maps.
+  %The solar maps from 
+  %1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
+  %mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
+  %%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
+  %these plots.
+  %%MJK or rather pattern recognition?
+  %Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
+  %numerical form. For these prepared contour maps, 
+  %%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
+  the solar disk was already available, while for the later maps from 
+  1989 to present the disk 
+  has to be detected using automatic image recognition. 
+  %MJK To make it more clear:
+  %MJK The purpose of this paper is to present two methods () for detecting the disk and ....
+  We present two methods (1: S-curve and 
+  center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
+  statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
+  zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
+  %MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
+
+%MJK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
+  We recognize six suitable combinations of options for the disk model $F_j$ in 
+  %MJK A&A style
+  %Equation \ref{disk_model}. 
+  Eq.~\ref{disk_model}. 
+  We can 
+  determine the disk size and position using either (1) histogram S-curve (2) convex hull based approach. Furthermore, the 
+  signal levels within the disk can be calibrated by (a) using constant histogram fractions, (b) iteratively calculating 
+  standard deviation, outliers excluded, or (c) interpolating between two slots in a histogram peak. In this study, we have compared the method 
+  combinations $j = \mathrm{1a}, \mathrm{2b}, \mathrm{2c}$.
+  %MJK I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.
+  
+  To compare these calibration methods, we arbitrarily choose an interval which contains $n$ solar maps within a 
+  reasonable time span $[\s{t}{min},\s{t}{max}]$. We process all these maps using each method $j$, and produce a list of 
+  trackable radio features $F_j$. Due to differences in the operation of each calibration method, we do not expect the 
+  contents of $F_j$ to be identical for each $j$. Nevertheless, we can pick $m$ features which visually appear to be in 
+  the same location in all $F_j$.
+  
+  Arbitrary selected active regions $\left\{ \right\}_{k=1}^{5}$ are expected to be detected on maps produced in each of 
+  %MJK please select one notation, either with or without brackets. I like the bracketed version more.
+  the fitting models (1a), (2b), and (2c). When seen from Earth, the active region makes a steady progress from 
+  %MJK No 'the', Fred?
+  the east 
+  to west. When these observations on relative $(\mathrm{RA}, \mathrm{dec}$ coordinates are plotted on heliographic 
+  surface, we expect them to fit on a great
+  %MJK commas required
+  circle. The quality of the fitting algorithm $F_j$ can thus be measured as the 
+  inverse of standard deviation from the best agreeing isocircle obtained using the 
+  %MJK hyphen
+  least squares method.
 
 \subsection{Heliographic coordinates from radio data}
 
@@ -617,35 +709,6 @@ reasonable model.
   \fag{Add the equation for calculating the best fit and variance and iteration to exclude outliers.}\\
   \fag{Describe in outline the procedure for deriving butterfly fits.
   }
-    White dots: samples not used for disk fitting. Red 
-  dots: samples used for disk fitting, radial offset calculated based on limb model. Green dots: samples corrected for 
-  radial offset, which constitute the target set for circle fitting. Color map: each pixel is mapped to the nearest 
-  observational sample. Comment: This is an original uncalibrated map. Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.
-  %During the 40 years, the equipment 
-  %has experienced several upgrades and there has also been changes in the data format.
-  %The data requires careful 
-  %normalization procedures, after which the butterfly diagram can be constructed from the solar maps.
-  %The solar maps from 
-  %1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
-  %mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
-  %%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
-  %these plots.
-  %%MJK or rather pattern recognition?
-  %Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
-  %numerical form. For these prepared contour maps, 
-  %%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
-  the solar disk was already available, while for the later maps from 
-  1989 to present the disk 
-  has to be detected using automatic image recognition. 
-  %MJK To make it more clear:
-  %MJK The purpose of this paper is to present two methods () for detecting the disk and ....
-  We present two methods (1: S-curve and 
-  center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
-  statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
-  zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
-  %MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
-
-%MJK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
 When the disk fitting is done, every radio sample can be projected into rotating heliographic surface. We use the 
 Carrington coordinates for this. As every sample now has time, heliographic latitude, and intensity relative to QSL, we 
 can average them on a two-dimensional grid in order to obtain a butterfly diagram. The sunspot data is already in a 
@@ -673,38 +736,6 @@ all the 40 years of data from both hemispheres. We will set the weights to zero 
 overlapping wings, in order to encourage the algorithm to produce non-overlapping wings. We tried several sets of 
 parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
 intensity profile.
-%MJK Adding label
-\subsection{Disk fitting and signal levels} \label{sect:disk}Limb intensity profiles showing brightening. 
-
-We recognize six suitable combinations of options for the disk model $F_j$ in 
-%MJK A&A style
-%Equation \ref{disk_model}. 
-Eq.~\ref{disk_model}. 
-We can 
-determine the disk size and position using either (1) histogram S-curve (2) convex hull based approach. Furthermore, the 
-signal levels within the disk can be calibrated by (a) using constant histogram fractions, (b) iteratively calculating 
-standard deviation, outliers excluded, or (c) interpolating between two slots in a histogram peak. In this study, we have compared the method 
-combinations $j = \mathrm{1a}, \mathrm{2b}, \mathrm{2c}$.
-%MJK I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.
-
-To compare these calibration methods, we arbitrarily choose an interval which contains $n$ solar maps within a 
-reasonable time span $[\s{t}{min},\s{t}{max}]$. We process all these maps using each method $j$, and produce a list of 
-trackable radio features $F_j$. Due to differences in the operation of each calibration method, we do not expect the 
-contents of $F_j$ to be identical for each $j$. Nevertheless, we can pick $m$ features which visually appear to be in 
-the same location in all $F_j$.
-
-Arbitrary selected active regions $\left\{ \right\}_{k=1}^{5}$ are expected to be detected on maps produced in each of 
-%MJK please select one notation, either with or without brackets. I like the bracketed version more.
-the fitting models (1a), (2b), and (2c). When seen from Earth, the active region makes a steady progress from 
-%MJK No 'the', Fred?
-the east 
-to west. When these observations on relative $(\mathrm{RA}, \mathrm{dec}$ coordinates are plotted on heliographic 
-surface, we expect them to fit on a great
-%MJK commas required
-circle. The quality of the fitting algorithm $F_j$ can thus be measured as the 
-inverse of standard deviation from the best agreeing isocircle obtained using the 
-%MJK hyphen
-least squares method.
 
 %MJK Is there supposed to be a section about the convex hull method?
 \subsubsection{Histogram S-curve}
