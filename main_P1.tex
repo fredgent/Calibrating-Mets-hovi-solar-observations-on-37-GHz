@@ -50,6 +50,8 @@
 \newcommand{\s}[2]{{#1}_{\mathrm{#2}}}
 \newcommand{\RA}{{\mathsf{RA}}}
 \newcommand{\Dec}{{\mathsf{Dec}}}
+\newcommand{\dR}{{\mathsf{\delta RA}}}
+\newcommand{\dD}{{\mathsf{\delta Dec}}}
 
 
 \begin{document} 
@@ -537,7 +539,7 @@
   samples,  $s_i \in S$
   \eqnl{radio_sample}{
   s_i &=& 
-  \left( t_i, \RA_i, \Dec_i, u_i \right) %\\ \nonumber
+  \left( t_i, \dR_i, \dD_i, u_i \right) %\\ \nonumber
   %&=& \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{,}
   }
   where $t_i$ is the time at which the intensity $u_i$ is observed and 
@@ -546,8 +548,8 @@
   the central point of Sun at $t_i$ and are cosine corrected to have unit
   aspect ratio:
   \eqnl{relative_radec}{
-  \RA_i  &=& \frac{\RA - \RA_{\astrosun}(t_i)}{\cos \left( \Dec_{\astrosun}(t_i) \right)} \\
-  \Dec_i &=& \Dec - \Dec_{\astrosun}(t_i)\text{.}
+  \dR_i  &=& \frac{\RA(s_i) - \RA_{\astrosun}(t_i)}{\cos \left( \Dec_{\astrosun}(t_i) \right)} \\
+  \dD_i &=& \Dec(s_i) - \Dec_{\astrosun}(t_i)\text{.}
   }
   We consider two disk methods to determine the solar disk position and size
   from each map:
@@ -656,6 +658,97 @@
   inverse of standard deviation from the best agreeing isocircle obtained using the 
   %MJK hyphen
   least squares method.
+%MJK Is there supposed to be a section about the convex hull method?
+\subsubsection{Histogram S-curve}
+
+%central position. The data flow begins with radio intensity values $v_i$ measured on $\SI{37}{GHz}$ on time $t_i$ , 
+%right ascension $\mathrm{RA}_i$ and declination $\mathrm{dec}_i$. These equatorial coordinates are reported with respect 
+%to the known location of the Sun during the observation. Any analysis of the data is sensitive to the positioning of the 
+%solar disk, so instead of using the reported coordinates, they are first converted into a fitted coordinate system. Thus 
+%the size and location of the solar disk are determined from the data. Two complementary methods are used for measuring 
+%the center and size of the disk.
+
+This method first sorts the samples according to their intensity. This produces a bijective mapping:
+\eqnl{scurve-mapping1}{
+f_S:\; \left\{ 1, 2, 3, ..., |S| \right\} \mapsto S \text{,}
+}
+such that:
+\eqnl{scurve-mapping2}{
+i \le j \; \Leftrightarrow \; u \left( f_S(i) \right) \le u \left( f_S(j) \right) \text{,} 
+}
+and $w^{-1}(j) = u(f_S(j))$ is now a monotonous function defined for integers. The inverse, $w(u)$, is plotted for a typical scan in 
+%MJK A&A style
+%Figure \ref{S-curve_example}. 
+Fig.~\ref{S-curve_example}. 
+Most samples belong either to the background or inner disk, while the samples consisting of the limb will produce a plateau in $w$.
+%MJK Limb samples only are shown in the lower panel, right? Please refer to the different panels appropriately.
+We fit a polynomial $P$ such that:
+\eqnl{scurve-approx}{
+P(u) = \sum \limits_{i=0}^{n} a_i u^i \approx w(u) \text{,}
+}
+where the degree should be odd and at least three in order to catch the shape of $w(u)$. We then solve the real roots of $P^{\prime\prime}(u)$.
+
+\fag{Let's use consistent notation: in the text $u$ is used, while in the plot legend $v$. MJK: well pointed Fred; agreed.}
+
+\eqnl{scurve-roots}{
+u_1 < ... < u_{n-2} \quad \text{, for which} \quad P^{\prime\prime}(u_j) = 0 \text{.}
+}
+There are odd number of such roots, so we choose the one in the middle: $u_0 := u_{\frac{n-1}{2}}$.
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{Scurve_example.png}
+\begin{picture}(0,0)(0,0) \put(-215,315){\begin{huge}a\end{huge}} \put(-215,158){\begin{huge}b\end{huge}} \end{picture}
+\caption{Radio samples of a typical solar scan sorted according to intensity. a) All samples. Between the dashed lines are the mixed samples which have contribution from the solar limb as well as the background. b) Only the mixed samples, into which a polynomial is fitted. A point of zero curvature (cross) provides a pivot point for signal level normalization.}
+\label{S-curve_example}
+\end{figure}
+
+\fag{Suggestions: In general fonts in the plots are too small. They should at least be as large as the figure caption text. In figure\ref{S-curve_example}, make two plots stacked vertically with shared x-axis, so we can take advantage of the full column width.
+Omit plot titles, these can be described in the captions. MJK: To me the labels look ok now. Perhaps you have already modified them according to Fred's suggestions. I am not so disturbed by the plot titles, but what is plotted in the different panels should be also explained in the figure caption. }
+
+The sample $f_S(i_0)$ with index $i_0 := \floor{w(u_0)+0.5}$ is essentially in the middle of the disk boundary and provides pivot for signal level references. We set:
+\eqnl{scurve-pivots}{
+i_1 = \floor{\frac{i_0 + 1 + 1}{3} + 0.5} \quad \text{and} \quad i_2 = \floor{\frac{i_0 + |S|}{2} + 0.5} \text{.}
+}
+The intensity $w(i_1)$ then represents the background and $w(i_2)$ the quiet sun level (QSL). We then redo the polynomial fitting only for those samples which have intensity in the dynamic range of disk boundary, $10 .. 90 \%$ of QSL.
+\eqnl{scurve-approx1}{
+%MJK One line
+%P^{(1)}(u) \approx w(u) \quad \text{for} \quad \frac{9 w(i_1) + w(i_2)}{10} \le u \le \frac{w(i_1) + 9 w(i_2)}{10} \text{.}
+P^{(1)}(u) &\approx& w(u) \quad \text{for}\\ \quad \frac{9 w(i_1) + w(i_2)}{10} &\le& u \le \frac{w(i_1) + 9 w(i_2)}{10} \text{.} \nonumber
+}
+The result of this second fitting in shown in Figure \ref{S-curve_example}. We We find the roots:
+\eqnl{scurve-roots1}{
+%MJK One line
+%u_1^{(1)} < ... < u_{n-2}^{(1)} 
+&u_1^{(1)}& < ... < u_{n-2}^{(1)} \text{, for which} \quad \\
+%MJK to remove space
+%\quad 
+%\text{, for which} \quad
+&P^{(1)\prime\prime}(u_j^{(1)})& = 0 \text{, and} \quad 
+u_0^{(1)} := u_{\frac{n-1}{2}}^{(1)} \nonumber 
+}
+%MJK indices?
+and set pivot index
+%MJK
+as
+%:
+\eqnl{scurve-pivots1}{
+%MJK One line
+&i_0^{(1)}& := \floor{w(u_0^{(1)})+0.5}
+%MJK comma
+\text{,}
+\quad i_1^{(1)} = \floor{\frac{i_0^{(1)} + 1 + 1}{3} + 0.5} 
+%\quad 
+%MJK comma
+\text{,} 
+%and} 
+\nonumber \\
+%\quad 
+&i_2^{(1)}& = \floor{\frac{i_0^{(1)} + |S|}{2} + 0.5} \text{.}
+}
+We can now calibrate the intensity using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$ for QSL:
+\eqnl{scurve-calibration}{
+s \in S \implies v(s) = \frac{u(s) - w(i_1^{(1)})}{w(i_2^{(1)}) - w(i_1^{(1)})} \text{.}
+}
 
 \subsection{Heliographic coordinates from radio data}
 
@@ -779,97 +872,6 @@ overlapping wings, in order to encourage the algorithm to produce non-overlappin
 parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
 intensity profile.
 
-%MJK Is there supposed to be a section about the convex hull method?
-\subsubsection{Histogram S-curve}
-
-%central position. The data flow begins with radio intensity values $v_i$ measured on $\SI{37}{GHz}$ on time $t_i$ , 
-%right ascension $\mathrm{RA}_i$ and declination $\mathrm{dec}_i$. These equatorial coordinates are reported with respect 
-%to the known location of the Sun during the observation. Any analysis of the data is sensitive to the positioning of the 
-%solar disk, so instead of using the reported coordinates, they are first converted into a fitted coordinate system. Thus 
-%the size and location of the solar disk are determined from the data. Two complementary methods are used for measuring 
-%the center and size of the disk.
-
-This method first sorts the samples according to their intensity. This produces a bijective mapping:
-\eqnl{scurve-mapping1}{
-f_S:\; \left\{ 1, 2, 3, ..., |S| \right\} \mapsto S \text{,}
-}
-such that:
-\eqnl{scurve-mapping2}{
-i \le j \; \Leftrightarrow \; u \left( f_S(i) \right) \le u \left( f_S(j) \right) \text{,} 
-}
-and $w^{-1}(j) = u(f_S(j))$ is now a monotonous function defined for integers. The inverse, $w(u)$, is plotted for a typical scan in 
-%MJK A&A style
-%Figure \ref{S-curve_example}. 
-Fig.~\ref{S-curve_example}. 
-Most samples belong either to the background or inner disk, while the samples consisting of the limb will produce a plateau in $w$.
-%MJK Limb samples only are shown in the lower panel, right? Please refer to the different panels appropriately.
-We fit a polynomial $P$ such that:
-\eqnl{scurve-approx}{
-P(u) = \sum \limits_{i=0}^{n} a_i u^i \approx w(u) \text{,}
-}
-where the degree should be odd and at least three in order to catch the shape of $w(u)$. We then solve the real roots of $P^{\prime\prime}(u)$.
-
-\fag{Let's use consistent notation: in the text $u$ is used, while in the plot legend $v$. MJK: well pointed Fred; agreed.}
-
-\eqnl{scurve-roots}{
-u_1 < ... < u_{n-2} \quad \text{, for which} \quad P^{\prime\prime}(u_j) = 0 \text{.}
-}
-There are odd number of such roots, so we choose the one in the middle: $u_0 := u_{\frac{n-1}{2}}$.
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{Scurve_example.png}
-\begin{picture}(0,0)(0,0) \put(-215,315){\begin{huge}a\end{huge}} \put(-215,158){\begin{huge}b\end{huge}} \end{picture}
-\caption{Radio samples of a typical solar scan sorted according to intensity. a) All samples. Between the dashed lines are the mixed samples which have contribution from the solar limb as well as the background. b) Only the mixed samples, into which a polynomial is fitted. A point of zero curvature (cross) provides a pivot point for signal level normalization.}
-\label{S-curve_example}
-\end{figure}
-
-\fag{Suggestions: In general fonts in the plots are too small. They should at least be as large as the figure caption text. In figure\ref{S-curve_example}, make two plots stacked vertically with shared x-axis, so we can take advantage of the full column width.
-Omit plot titles, these can be described in the captions. MJK: To me the labels look ok now. Perhaps you have already modified them according to Fred's suggestions. I am not so disturbed by the plot titles, but what is plotted in the different panels should be also explained in the figure caption. }
-
-The sample $f_S(i_0)$ with index $i_0 := \floor{w(u_0)+0.5}$ is essentially in the middle of the disk boundary and provides pivot for signal level references. We set:
-\eqnl{scurve-pivots}{
-i_1 = \floor{\frac{i_0 + 1 + 1}{3} + 0.5} \quad \text{and} \quad i_2 = \floor{\frac{i_0 + |S|}{2} + 0.5} \text{.}
-}
-The intensity $w(i_1)$ then represents the background and $w(i_2)$ the quiet sun level (QSL). We then redo the polynomial fitting only for those samples which have intensity in the dynamic range of disk boundary, $10 .. 90 \%$ of QSL.
-\eqnl{scurve-approx1}{
-%MJK One line
-%P^{(1)}(u) \approx w(u) \quad \text{for} \quad \frac{9 w(i_1) + w(i_2)}{10} \le u \le \frac{w(i_1) + 9 w(i_2)}{10} \text{.}
-P^{(1)}(u) &\approx& w(u) \quad \text{for}\\ \quad \frac{9 w(i_1) + w(i_2)}{10} &\le& u \le \frac{w(i_1) + 9 w(i_2)}{10} \text{.} \nonumber
-}
-The result of this second fitting in shown in Figure \ref{S-curve_example}. We We find the roots:
-\eqnl{scurve-roots1}{
-%MJK One line
-%u_1^{(1)} < ... < u_{n-2}^{(1)} 
-&u_1^{(1)}& < ... < u_{n-2}^{(1)} \text{, for which} \quad \\
-%MJK to remove space
-%\quad 
-%\text{, for which} \quad
-&P^{(1)\prime\prime}(u_j^{(1)})& = 0 \text{, and} \quad 
-u_0^{(1)} := u_{\frac{n-1}{2}}^{(1)} \nonumber 
-}
-%MJK indices?
-and set pivot index
-%MJK
-as
-%:
-\eqnl{scurve-pivots1}{
-%MJK One line
-&i_0^{(1)}& := \floor{w(u_0^{(1)})+0.5}
-%MJK comma
-\text{,}
-\quad i_1^{(1)} = \floor{\frac{i_0^{(1)} + 1 + 1}{3} + 0.5} 
-%\quad 
-%MJK comma
-\text{,} 
-%and} 
-\nonumber \\
-%\quad 
-&i_2^{(1)}& = \floor{\frac{i_0^{(1)} + |S|}{2} + 0.5} \text{.}
-}
-We can now calibrate the intensity using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$ for QSL:
-\eqnl{scurve-calibration}{
-s \in S \implies v(s) = \frac{u(s) - w(i_1^{(1)})}{w(i_2^{(1)}) - w(i_1^{(1)})} \text{.}
-}
 
 \subsection{Limb correction model}
 
