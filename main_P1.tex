@@ -531,43 +531,73 @@
   %MJK Adding label
   \subsection{Disk fitting and signal levels} \label{sect:disk}
 
-    Each sample observation yields an intensity map with respect to right 
-    ascension, $\RA$, and declination, $\Dec$, coordinates.
-    We consider two disk methods to determine the solar disk position and size
-    from each map:
-    \begin{enumerate}
+  Each sample observation yields an intensity map with respect to right 
+  ascension, $\RA$, and declination, $\Dec$, coordinates.
+  Each scan, denoted $S$ and spanning a couple of minutes, comprises a set of
+  samples,  $s_i \in S$
+  \eqnl{radio_sample}{
+  s_i &=& 
+  \left( t_i, \RA_i, \Dec_i, u_i \right) %\\ \nonumber
+  %&=& \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{,}
+  }
+  where $t_i$ is the time at which the intensity $u_i$ is observed and 
+  $\s{t}{min}(S) \le s_i \le \s{t}{max}(S)$.
+  The equatorial coordinates used are relative to the expected position of
+  the central point of Sun at $t_i$ and are cosine corrected to have unit
+  aspect ratio:
+  \eqnl{relative_radec}{
+  \RA_i  &=& \frac{\RA - \RA_{\astrosun}(t_i)}{\cos \left( \Dec_{\astrosun}(t_i) \right)} \\
+  \Dec_i &=& \Dec - \Dec_{\astrosun}(t_i)\text{.}
+  }
+  We consider two disk methods to determine the solar disk position and size
+  from each map:
+  \begin{enumerate}
     \item intentionally weighting the center of mass of the radio sample
     coordinates.
     \item fitting a circle for those sample coordinates which we, by geometry,
     expect to belong to the solar limb.
-    \end{enumerate}
-   %FAG reordered text, but still edit TODO
-    %Determine the solar disk position and size from each map as well as
-    normalize the measured background intensity for zero and the Quiet Sun
-    Level (QSL) for unity.
-    This can be done using a binary combination of two disk methods (1 and 
-    2) and three normalization methods (a, b, and c).
-    The methods are: (1) intentionally weighted center of mass of the radio
-    sample coordinates, (2) fitting a circle for those sample coordinates
-    which we, by geometry, expect to belong to the solar limb, (a) sort the
-    intensity samples and detect the point of zero curvature from the index vs.     intensity dependency, the S-curve, (b) iteratively calculate the
+  \end{enumerate}
+  We also consider three methods of signal level normalisation to identify
+  consistently between observations QSL and black sky:
+  \begin{enumerate}[a]
+    \item  sort the intensity samples and detect the point of zero curvature from the
+    index vs. intensity dependency, the $S$-curve, 
+    \item iteratively calculate the
     statistical mean and standard deviation of the intensity of 
     those points which are located within the solar disk and not too close
-    to the limb, (c) detect two significant peaks from the intensity histogram,
+    to the limb
+    \item  detect two significant peaks from the intensity histogram,
     the lower intensity peak being the background and the higher the QSL.
+  \end{enumerate}
 
-    The method (2) can be augmented using two additional sets of information.
-    When we observe exactly at the limb, we would expect $0.5$ QSL intensity
-    due the the beam mixing disk and background signal.
-    If one particular sample has intensity $0.4$ QSL, we would expect the
-    sample to be slightly more away from the center.
-    Collecting a large set of observations on different conditions, we can
-    estimate how quickly the intensity drops as the beam passes the limb 
-    from disk to background.
-    Utilizing this limb profile, we can fine tune the position of each limb
-    sample in the target set of (2) and proceed iteratively to obtain more
-    accurate circle fitting.
+  %FAG reordered text, but still edit TODO
+  %Determine the solar disk position and size from each map as well as
+  %normalize the measured background intensity for zero and the Quiet Sun
+  %Level (QSL) for unity.
+  %This can be done using a binary combination of two disk methods (1 and 
+  %2) and three normalization methods (a, b, and c).
+  %The methods are: (1) intentionally weighted center of mass of the radio
+  %sample coordinates, (2) fitting a circle for those sample coordinates
+  %which we, by geometry, expect to belong to the solar limb, (a) sort the
+  %intensity samples and detect the point of zero curvature from the index vs.     intensity dependency, the S-curve, (b) iteratively calculate the
+  %statistical mean and standard deviation of the intensity of 
+  %those points which are located within the solar disk and not too close
+  %to the limb, (c) detect two significant peaks from the intensity histogram,
+  %the lower intensity peak being the background and the higher the QSL.
+
+  Method (2) can be augmented using two additional sets of information.
+  When we observe exactly at the limb, we would expect $0.5$ QSL intensity
+  due the the beam mixing disk and background signal.
+  If one particular sample has intensity $0.4$ QSL, we would expect the
+  sample to be slightly more away from the center.
+  Collecting a large set of observations on different conditions, we can
+  estimate how quickly the intensity drops as the beam passes the limb 
+  from disk to background.
+  Utilizing this limb profile, we can fine tune the position of each limb
+  sample in the target set and proceed iteratively to obtain more
+  accurate circle fitting.
   
+  %FAG: edits to here TO Continue...
     White dots: samples not used for disk fitting. Red 
   dots: samples used for disk fitting, radial offset calculated based on limb model. Green dots: samples corrected for 
   radial offset, which constitute the target set for circle fitting. Color map: each pixel is mapped to the nearest 
@@ -629,30 +659,30 @@
 
 \subsection{Heliographic coordinates from radio data}
 
-A particular radio data sample $s_i$ contains time $t_i$, relative position on the sky $(\delta \mathrm{RA}_i, \delta 
-\mathrm{dec}_i$), and measured intensity $u_i$ in arbitrary linear units. For convenience, we use two equivalent 
-conventions for sample notation:
-
-%MJK Introducing line break to fit the equations on a single line
+%A particular radio data sample $s_i$ contains time $t_i$, relative position on the sky $(\delta \mathrm{RA}_i, \delta 
+%\mathrm{dec}_i$), and measured intensity $u_i$ in arbitrary linear units. For convenience, we use two equivalent 
+%conventions for sample notation:
+%
+%%MJK Introducing line break to fit the equations on a single line
+%%\eqnl{radio_sample}{
+%%s_i = \left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) = \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
+%%}
 %\eqnl{radio_sample}{
-%s_i = \left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) = \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
+%s_i &=& 
+%\left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) \\ \nonumber
+%&=& \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
 %}
-\eqnl{radio_sample}{
-s_i &=& 
-\left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) \\ \nonumber
-&=& \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
-}
-%Observation is done at time $t_i$ and from geographic location 
-%$(\phi_{\earth}, \lambda_{\earth}) = \left( +60.217797339^{\circ}, +24.393084663 \right)$, which is 
-%Metsähovi Radio Observatory.
-Each scan $S = \left\{ s_i \right\}_{i=\s{i}{min}}^{\s{i}{max}}$ consists of maps taken 
-during $\s{t}{min}(S) \le s_i \le \s{t}{max}(S), \; s_i \in S$.
-The equatorial coordinates used are relative to the expected position of the central point
-of the Sun at $t_i$ and they are cosine corrected to have unit aspect ratio:
-\eqnl{relative_radec}{
-\delta \mathrm{RA}_i  &=& \frac{\mathrm{RA}_i - \mathrm{RA}^{\astrosun}(t_i)}{\cos \left( \mathrm{dec}^{\astrosun}(t_i) \right)} \\
-\delta \mathrm{dec}_i &=& \mathrm{dec}_i - \mathrm{dec}^{\astrosun}(t_i) \text{.}
-}
+%%Observation is done at time $t_i$ and from geographic location 
+%%$(\phi_{\earth}, \lambda_{\earth}) = \left( +60.217797339^{\circ}, +24.393084663 \right)$, which is 
+%%Metsähovi Radio Observatory.
+%Each scan $S = \left\{ s_i \right\}_{i=\s{i}{min}}^{\s{i}{max}}$ consists of maps taken 
+%during $\s{t}{min}(S) \le s_i \le \s{t}{max}(S), \; s_i \in S$.
+%The equatorial coordinates used are relative to the expected position of the central point
+%of the Sun at $t_i$ and they are cosine corrected to have unit aspect ratio:
+%\eqnl{relative_radec}{
+%\delta \mathrm{RA}_i  &=& \frac{\mathrm{RA}_i - \mathrm{RA}^{\astrosun}(t_i)}{\cos \left( \mathrm{dec}^{\astrosun}(t_i) \right)} \\
+%\delta \mathrm{dec}_i &=& \mathrm{dec}_i - \mathrm{dec}^{\astrosun}(t_i) \text{.}
+%}
 %In this work, we study only samples taken on $\SI{37}{GHz}$.
 %The raw intensity $u_i$ is measured in arbitrary units.
 Our solar maps are not sensitive to small systematic pointing errors or inter map variations in signal levels, since we calibrate each scan individually.
