@@ -41,6 +41,7 @@
 \newcommand{\edits}[1]{\textcolor{midblue}{#1}}
 \newcommand{\fg}[1]{\textcolor{midblue}{#1}}
 \newcommand{\fag}[1]{\textcolor{midpurple}{[FAG: #1]}} % with options according to your LaTeX or PDFLaTeX drivers.
+\newcommand{\mjk}[1]{\textcolor{midgreen}{[MJK: #1]}} % with options according to your LaTeX or PDFLaTeX drivers.
 %
 \newcommand{\arrc}[1]{\begin{matrix}[c] #1 \end{matrix}}
 \newcommand{\eqnl}[2]{\begin{eqnarray}\label{#1}#2\end{eqnarray}}
@@ -158,11 +159,11 @@
     circle fitting algorithm.
     Bright features favour center fitting towards the feature,
     while dim features repel the center.
-    We should thus exclude a sample from the target set of the circle fitting
+    We should thus exclude a specimen from the target set of the circle fitting
     by proximity of any pre-determined bright or dim radio feature, since these
     features affect the apparent shape of the disk.
    
-    Each radio sample is given heliographic coordinates as well as time of
+    Each radio specimen is given heliographic coordinates as well as time of
     observation.
     We collect a two-dimensional histogram where each rectangular slot has a
     time range as well as a range of heliographic latitude.
@@ -443,6 +444,10 @@
   \centering
   \includegraphics[trim=0cm 3cm 0cm 1.2cm,clip=True,width=\columnwidth]{nea1311582408.png}
   \includegraphics[trim=0cm 0cm 0cm 1.2cm,clip=True,width=\columnwidth]{nea1467696874.png}
+  \begin{picture}(0,0)(0,0)
+    \put(-130,411){\begin{large}{\sf\bf{(a)}}\end{large}}
+    \put(-130,213){\begin{large}{\sf\bf{(b)}}\end{large}}
+  \end{picture}
   \caption{
     Typical Mets\"ahovi solar observations on $\SI{37}{GHz}$ {\bf(a)}
     25.07.2011 and {\bf(b)} 05.07.2016.
@@ -450,6 +455,9 @@
     samples mapped onto a rectangular grid.
     Since June 2015 a more accurate fit to the beam path was used, scanning 
     horizontally.
+    For the intensity color map each pixel is mapped to the nearest observed
+    sample.
+    This is an original uncalibrated map.
     %Maps that originate May on 2015 or earlier have
     %sweeps along the equator. Samples are assumed on a rectan-
     %gular grid. Typical Metsähovi solar observation on 37 GHz.
@@ -469,7 +477,7 @@
 \subsection{Data sources}\label{sect:source}
 
   During a typical measurement, the antenna beam makes a sweep across the
-  visible solar disk (Figure \ref{typicalmap}).
+  visible solar disk (Fig.~\ref{typicalmap}).
   The data comprises three sources:
   \begin{enumerate}[A]
     \item
@@ -488,20 +496,20 @@
     \item
     Until the end of May 2015 the maps were scanned in the equatorial direction,
     so that declination is shifted between adjacent sweeps, as displayed in
-    Figure\,\ref{typicalmap}{\bf(a)}.
+    Fig.~\ref{typicalmap}{\bf(a)}.
     The maps assume linear antenna tracks with constant speed and sample rate.
     \item
     After June 2015 the sweeps have been horizontal, with shifting altitude
-    between sweeps, as shown in Figure\,\ref{typicalmap}{\bf(b)}.
+    between sweeps, as shown in Fig.~\ref{typicalmap}{\bf(b)}.
     These modern maps respect the true path of the antenna, typically recorded
     with $25$ samples per second for two minutes.
-    %MJK The final map in solar coordinates is presented in Figure 1(c)...
+    %MJK The final map in solar coordinates is presented in Fig.1(c)...
   \end{enumerate}
 
   The digital maps do not include the location of the solar disk.
-  The disk markings in Figure\,\ref{typicalmap}, are identified by the 
+  The disk markings in Fig.~\ref{typicalmap}, are identified by the 
   disk fitting method(s), described in Section\,\ref{sect:disk}.
-  The intensity ranges shown in Figure\,\ref{typicalmap} are the original
+  The intensity ranges shown in Fig.~\ref{typicalmap} are the original
   uncalibrated levels.
   For these, as well as those recovered from the earlier paper prints, the 
   %signal levels need to be normalised, to correctly identify the 
@@ -514,36 +522,41 @@
 
   %
   %%MJK I think it would be best to put figures 1 and 2 into one single figure, and maybe add there also the planned figure of the final map in solar coordinates (Fig 1 caption). Also, the older map should become before the more recent map. 
-  %During a typical measurement, the antenna beam makes a sweep across the visible solar disk (Figure \ref{typicalmap}). 
+  %During a typical measurement, the antenna beam makes a sweep across the visible solar disk (Fig.~\ref{typicalmap}). 
   %Until the end of May on 2015, the maps have been scanned in equatorial direction, so that declination is shifted between
-  %%MJK This would become Figure 1(a).
+  %%MJK This would become Fig.1(a).
   %adjacent sweeps. Since June, 2015, the sweeps have been horizontal, with shifting altitude between sweeps. 
-  %%MJK This would become Figure 1(b).
+  %%MJK This would become Fig.1(b).
   %These modern 
   %maps respect the true path of the antenna, while the older maps have assumed linear antenna tracks with constant speed 
   %%MJK typo
   %and 
   %%samplerate 
   %sample rate along the equator as in Figure
-  %%MJK Figure 1(b).
+  %%MJK Fig.1(b).
   %\ref{oldmap}. The new maps typically recorded with $25$ samples per second for two minutes.
-  %%MJK The final map in solar coordinates is presented in Figure 1(c)...
+  %%MJK The final map in solar coordinates is presented in Fig.1(c)...
   %%MJK Horizontal row/vertical column of panels, up to Sami to decide...
 
   %MJK Adding label
   \subsection{Disk fitting and signal levels} \label{sect:disk}
 
-  Each sample observation yields an intensity map with respect to right 
-  ascension, $\RA$, and declination, $\Dec$, coordinates.
+  %FAG: trying to disembiguate use of 'sample'
+  %Each sample observation yields an intensity map with coordinates right 
+  Each observation scan yields an intensity map with coordinates right 
+  ascension, $\RA$, and declination, $\Dec$.
   Each scan, denoted $S$ and spanning a couple of minutes, comprises a set of
-  samples,  $s_i \in S$
+  %FAG: trying to disembiguate use of 'sample'
+  %beam samples, $s_i \in S$
+  beam-size specimens, $s_i \in S$
   \eqnl{radio_sample}{
   s_i &=& 
   \left( t_i, \dR_i, \dD_i, u_i \right) %\\ \nonumber
   %&=& \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{,}
   }
-  where $t_i$ is the time at which the intensity $u_i$ is observed and 
-  $\s{t}{min}(S) \le s_i \le \s{t}{max}(S)$.
+  where $t_i=t(s_i)$ is the time at which the intensity $u_i=u(s_i)$ is
+  observed and 
+  $\s{t}{min}(S) \le t_i \le \s{t}{max}(S)$.
   The equatorial coordinates used are relative to the expected position of
   the central point of Sun at $t_i$ and are cosine corrected to have unit
   aspect ratio:
@@ -554,23 +567,161 @@
   We consider two disk methods to determine the solar disk position and size
   from each map:
   \begin{enumerate}
-    \item intentionally weighting the center of mass of the radio sample
-    coordinates.
-    \item fitting a circle for those sample coordinates which we, by geometry,
-    expect to belong to the solar limb.
+    \item $S$-curve and centre of mass: weighting the coordinates by the
+    radio specimen intensity, $S$, center of mass.
+    \item Convex hull: fitting a circle to those specimen coordinates, which
+    we expect to belong to the solar limb, based on the geometry.
   \end{enumerate}
   We also consider three methods of signal level normalisation to identify
   consistently between observations QSL and black sky:
   \begin{enumerate}[a]
-    \item  sort the intensity samples and detect the point of zero curvature from the
-    index vs. intensity dependency, the $S$-curve, 
-    \item iteratively calculate the
-    statistical mean and standard deviation of the intensity of 
-    those points which are located within the solar disk and not too close
-    to the limb
+    \item  sort the intensity specimens and detect the point of zero curvature
+    of the $S$-curve (specimen index vs. intensity).
+    \fag{What is meant by constant fraction?}  
+    \item iteratively calculate the statistical mean and standard deviation,
+    excluding outliers, of the intensity of those points that are located
+    within the solar disk and not too close to the limb.
     \item  detect two significant peaks from the intensity histogram,
     the lower intensity peak being the background and the higher the QSL.
   \end{enumerate}
+  In this study, we present the optimal method combinations 1a, 2b and 2c.
+  \mjk{I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.}
+  \fag{Sami please clarify reasoning for the choice.}
+
+  \begin{figure}
+  \centering
+  \includegraphics[width=8.5cm]{Scurve_example.png}
+  \begin{picture}(0,0)(0,0)
+    \put(-245,308){\begin{large}{\sf\bf{(a)}}\end{large}}
+    \put(-245,146){\begin{large}{\sf\bf{(b)}}\end{large}}
+  \end{picture}
+  \caption{
+    Radio specimens of a typical solar scan sorted according to intensity.
+    Panel {\bf(a)} displays all specimens, with the limb transition between
+    background and disk located with the dashed lines.
+    A zoom in between the dashed line in {\bf(b)} includes the polynomial
+    fit from Eq.~\eqref{scurve-approx}.
+    A point of zero curvature (cross) provides a pivot point for signal level
+    normalization.}
+  \label{S-curve_example}
+  \end{figure}
+  \subsubsection{Histogram S-curve}
+  
+  %central position. The data flow begins with radio intensity values $v_i$ measured on $\SI{37}{GHz}$ on time $t_i$ , 
+  %right ascension $\mathrm{RA}_i$ and declination $\mathrm{dec}_i$. These equatorial coordinates are reported with respect 
+  %to the known location of the Sun during the observation. Any analysis of the data is sensitive to the positioning of the 
+  %solar disk, so instead of using the reported coordinates, they are first converted into a fitted coordinate system. Thus 
+  %the size and location of the solar disk are determined from the data. Two complementary methods are used for measuring 
+  %the center and size of the disk.
+  
+  This method first sorts the specimens according to their intensity.
+  This produces a bijective mapping:
+  \eqnl{scurve-mapping1}{
+  f_S:\; \left\{ 1, 2, 3, ..., |S| \right\} \mapsto S \text{,}
+  }
+  such that:
+  \eqnl{scurve-mapping2}{
+  i \le j \; \Leftrightarrow \; u \left( f_S(i) \right) \le u \left( f_S(j) \right) \text{.} 
+  }
+  We can define a monotonous integer function $w^{-1}(j) = u(f_S(j))$.
+  Its inverse, $w(u)$, is plotted for a typical scan in 
+  Fig.~\ref{S-curve_example}{\bf(a)}. 
+  Most specimens belong either to the background or inner disk, while the
+  specimens consisting of the limb will produce a plateau in $w$.
+  %MJK Limb samples only are shown in the lower panel, right? Please refer to the different panels appropriately.
+  We fit a polynomial $P$ such that:
+  \eqnl{scurve-approx}{
+  P(u) = \sum \limits_{i=0}^{n} a_i u^i \approx w(u) \text{,}
+  }
+  where the degree should be odd and at least three in order to catch the shape
+  of $w(u)$.
+  %FAG: reform
+  %We then solve the real roots of $P^{\prime\prime}(u)$, to obtain 
+  %\eqnl{scurve-roots}{
+  %u_1 < ... < u_{n-2} \quad \text{, for which} \quad P^{\prime\prime}(u_j) = 0 \text{.}
+  %}
+  We then solve the real roots of $P^{\prime\prime}(u)$, to obtain 
+  $u_1 < ... < u_{n-2}$, for which $P^{\prime\prime}(u_j) = 0$.
+  There is an odd number of such roots, so we choose the middle root:
+  $u_0 := u_{{(n-1)}/{2}}$.
+  
+  %\fag{Suggestions: In general fonts in the plots are too small. They should at least be as large as the figure caption text. In figure\ref{S-curve_example}, make two plots stacked vertically with shared x-axis, so we can take advantage of the full column width.
+  %Omit plot titles, these can be described in the captions. 
+  \mjk{To me the labels look ok now. Perhaps you have already modified them according to Fred's suggestions. I am not so disturbed by the plot titles, but what is plotted in the different panels should be also explained in the figure caption. }
+  
+  %FAG: sample->specimen
+  %The sample $f_S(i_0)$ with index $i_0 := \floor{w(u_0)+0.5}$ is essentially in the middle of the disk boundary and provides pivot for signal level references. We set:
+  The specimen $f_S(i_0)$ with index $i_0 = \floor{w(u_0)+0.5}$ is essentially
+  in the middle of the disk boundary and provides a pivot for signal level
+  references.
+  We set:
+  \eqnl{scurve-pivots}{
+  i_1 = \floor{\frac{i_0 + 1 + 1}{3} + 0.5} \quad \text{and} \quad
+  i_2 = \floor{\frac{i_0 + |S|}{2} + 0.5} \text{.}
+  }
+  The intensity $w(i_1)$ then represents the background sky and $w(i_2)$ QSL.
+  %FAG: reworded
+  %We then redo the polynomial fitting only for those samples which have intensity in the dynamic range of disk boundary, $10 .. 90 \%$ of QSL.
+  We then apply the polynomial fitting only for those specimens within the
+  disk boundary intensity dynamic range $10 .. 90 \%$ of QSL.
+  \eqnl{scurve-approx1}{
+  P^{(1)}(u) &\approx& w(u) \quad \text{for}\\ \quad \frac{9 w(i_1) + w(i_2)}{10} &\le u \le& \frac{w(i_1) + 9 w(i_2)}{10} \text{.} \nonumber
+  }
+  The result of this second fitting is shown in
+  Fig.~\ref{S-curve_example}{\bf(a)}. 
+  %FAG: out of math mode
+  We find the roots $u_1^{(1)}< ... < u_{n-2}^{(1)}$, for which
+  $P^{(1)\prime\prime}(u_j^{(1)}) = 0$, and $u_0^{(1)} = u_{{(n-1)}/{2}}^{(1)}$ 
+  and set the pivot indices 
+  %We find the roots:
+  %\eqnl{scurve-roots1}{
+  %%MJK One line
+  %%u_1^{(1)} < ... < u_{n-2}^{(1)} 
+  %&u_1^{(1)}& < ... < u_{n-2}^{(1)} \text{, for which} \quad \\
+  %%MJK to remove space
+  %%\quad 
+  %%\text{, for which} \quad
+  %&P^{(1)\prime\prime}(u_j^{(1)})& = 0 \text{, and} \quad 
+  %u_0^{(1)} := u_{\frac{n-1}{2}}^{(1)} \nonumber 
+  %}
+  %%MJK indices?
+  %and set pivot index
+  %MJK
+  as
+  %:
+  \eqnl{scurve-pivots1}{
+  %MJK One line
+  &i_0^{(1)}& = \floor{w(u_0^{(1)})+0.5}
+  %MJK comma
+  \text{,}
+  \quad i_1^{(1)} = \floor{\frac{i_0^{(1)} + 1 + 1}{3} + 0.5} 
+  %\quad 
+  %MJK comma
+  \text{,} 
+  %and} 
+  \nonumber \\
+  %\quad 
+  &i_2^{(1)}& = \floor{\frac{i_0^{(1)} + |S|}{2} + 0.5} \text{.}
+  }
+  %FAG: introduce $v$
+  %We can now calibrate the intensity using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$ for QSL:
+  We can now calibrate the normalised intensity, $v(s)$,
+  using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$ for QSL:
+  \eqnl{scurve-calibration}{
+  s \in S \implies v(s) = \frac{u(s) - w(i_1^{(1)})}{w(i_2^{(1)}) - w(i_1^{(1)})} \text{.}
+  }
+
+
+  \fag{added subsection for convex hull. Is the previous subsection complete?
+  Does the text below apply to this method?}
+  \subsubsection{2 Convex hull}
+  For method (1) the sample observations in each map, as shown in
+  Fig.~\ref{oldmap}, include white specimens, which are excluded from the disk
+  fitting, and red specimens, which are included based on a limb model.
+  Green dots show radial offset correction to the red specimens, which constitute
+  the target set for circle fitting.
+  \fag{What is meant by radial offset? To which limb model do we refer?}
+  %\fag{Comment: Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.}
 
   %FAG reordered text, but still edit TODO
   %Determine the solar disk position and size from each map as well as
@@ -599,47 +750,44 @@
   sample in the target set and proceed iteratively to obtain more
   accurate circle fitting.
   
-  %FAG: edits to here TO Continue...
-    White dots: samples not used for disk fitting. Red 
-  dots: samples used for disk fitting, radial offset calculated based on limb model. Green dots: samples corrected for 
-  radial offset, which constitute the target set for circle fitting. Color map: each pixel is mapped to the nearest 
-  observational sample. Comment: This is an original uncalibrated map. Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.
-  %During the 40 years, the equipment 
-  %has experienced several upgrades and there has also been changes in the data format.
-  %The data requires careful 
-  %normalization procedures, after which the butterfly diagram can be constructed from the solar maps.
-  %The solar maps from 
-  %1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
-  %mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
-  %%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
-  %these plots.
-  %%MJK or rather pattern recognition?
-  %Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
-  %numerical form. For these prepared contour maps, 
-  %%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
-  the solar disk was already available, while for the later maps from 
-  1989 to present the disk 
-  has to be detected using automatic image recognition. 
-  %MJK To make it more clear:
-  %MJK The purpose of this paper is to present two methods () for detecting the disk and ....
-  We present two methods (1: S-curve and 
-  center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
-  statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
-  zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
-  %MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
+  %FAG: Following tract from intro now merged into previous paragraphs
+  %%During the 40 years, the equipment 
+  %%has experienced several upgrades and there has also been changes in the data format.
+  %%The data requires careful 
+  %%normalization procedures, after which the butterfly diagram can be constructed from the solar maps.
+  %%The solar maps from 
+  %%1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
+  %%mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
+  %%%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
+  %%these plots.
+  %%%MJK or rather pattern recognition?
+  %%Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
+  %%numerical form. For these prepared contour maps, 
+  %%%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
+  %the solar disk was already available, while for the later maps from 
+  %1989 to present the disk 
+  %has to be detected using automatic image recognition. 
+  %%MJK To make it more clear:
+  %%MJK The purpose of this paper is to present two methods () for detecting the disk and ....
+  %We present two methods (1: S-curve and 
+  %center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
+  %statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
+  %zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
+  %%MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
 
-%MJK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
-  We recognize six suitable combinations of options for the disk model $F_j$ in 
-  %MJK A&A style
-  %Equation \ref{disk_model}. 
-  Eq.~\ref{disk_model}. 
-  We can 
-  determine the disk size and position using either (1) histogram S-curve (2) convex hull based approach. Furthermore, the 
-  signal levels within the disk can be calibrated by (a) using constant histogram fractions, (b) iteratively calculating 
-  standard deviation, outliers excluded, or (c) interpolating between two slots in a histogram peak. In this study, we have compared the method 
-  combinations $j = \mathrm{1a}, \mathrm{2b}, \mathrm{2c}$.
-  %MJK I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.
+%M%JK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
+  %We recognize six suitable combinations of options for the disk model $F_j$ in 
+  %%MJK A&A style
+  %%Equation \ref{disk_model}. 
+  %Eq.~\ref{disk_model}. 
+  %We can 
+  %determine the disk size and position using either (1) histogram S-curve (2) convex hull based approach. Furthermore, the 
+  %signal levels within the disk can be calibrated by (a) using constant histogram fractions, (b) iteratively calculating 
+  %standard deviation, outliers excluded, or (c) interpolating between two slots in a histogram peak. In this study, we have compared the method 
+  %combinations $j = \mathrm{1a}, \mathrm{2b}, \mathrm{2c}$.
+  %%MJK I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.
   
+  %FAG: edits to here TO Continue...
   To compare these calibration methods, we arbitrarily choose an interval which contains $n$ solar maps within a 
   reasonable time span $[\s{t}{min},\s{t}{max}]$. We process all these maps using each method $j$, and produce a list of 
   trackable radio features $F_j$. Due to differences in the operation of each calibration method, we do not expect the 
@@ -659,97 +807,6 @@
   %MJK hyphen
   least squares method.
 %MJK Is there supposed to be a section about the convex hull method?
-\subsubsection{Histogram S-curve}
-
-%central position. The data flow begins with radio intensity values $v_i$ measured on $\SI{37}{GHz}$ on time $t_i$ , 
-%right ascension $\mathrm{RA}_i$ and declination $\mathrm{dec}_i$. These equatorial coordinates are reported with respect 
-%to the known location of the Sun during the observation. Any analysis of the data is sensitive to the positioning of the 
-%solar disk, so instead of using the reported coordinates, they are first converted into a fitted coordinate system. Thus 
-%the size and location of the solar disk are determined from the data. Two complementary methods are used for measuring 
-%the center and size of the disk.
-
-This method first sorts the samples according to their intensity. This produces a bijective mapping:
-\eqnl{scurve-mapping1}{
-f_S:\; \left\{ 1, 2, 3, ..., |S| \right\} \mapsto S \text{,}
-}
-such that:
-\eqnl{scurve-mapping2}{
-i \le j \; \Leftrightarrow \; u \left( f_S(i) \right) \le u \left( f_S(j) \right) \text{,} 
-}
-and $w^{-1}(j) = u(f_S(j))$ is now a monotonous function defined for integers. The inverse, $w(u)$, is plotted for a typical scan in 
-%MJK A&A style
-%Figure \ref{S-curve_example}. 
-Fig.~\ref{S-curve_example}. 
-Most samples belong either to the background or inner disk, while the samples consisting of the limb will produce a plateau in $w$.
-%MJK Limb samples only are shown in the lower panel, right? Please refer to the different panels appropriately.
-We fit a polynomial $P$ such that:
-\eqnl{scurve-approx}{
-P(u) = \sum \limits_{i=0}^{n} a_i u^i \approx w(u) \text{,}
-}
-where the degree should be odd and at least three in order to catch the shape of $w(u)$. We then solve the real roots of $P^{\prime\prime}(u)$.
-
-\fag{Let's use consistent notation: in the text $u$ is used, while in the plot legend $v$. MJK: well pointed Fred; agreed.}
-
-\eqnl{scurve-roots}{
-u_1 < ... < u_{n-2} \quad \text{, for which} \quad P^{\prime\prime}(u_j) = 0 \text{.}
-}
-There are odd number of such roots, so we choose the one in the middle: $u_0 := u_{\frac{n-1}{2}}$.
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{Scurve_example.png}
-\begin{picture}(0,0)(0,0) \put(-215,315){\begin{huge}a\end{huge}} \put(-215,158){\begin{huge}b\end{huge}} \end{picture}
-\caption{Radio samples of a typical solar scan sorted according to intensity. a) All samples. Between the dashed lines are the mixed samples which have contribution from the solar limb as well as the background. b) Only the mixed samples, into which a polynomial is fitted. A point of zero curvature (cross) provides a pivot point for signal level normalization.}
-\label{S-curve_example}
-\end{figure}
-
-\fag{Suggestions: In general fonts in the plots are too small. They should at least be as large as the figure caption text. In figure\ref{S-curve_example}, make two plots stacked vertically with shared x-axis, so we can take advantage of the full column width.
-Omit plot titles, these can be described in the captions. MJK: To me the labels look ok now. Perhaps you have already modified them according to Fred's suggestions. I am not so disturbed by the plot titles, but what is plotted in the different panels should be also explained in the figure caption. }
-
-The sample $f_S(i_0)$ with index $i_0 := \floor{w(u_0)+0.5}$ is essentially in the middle of the disk boundary and provides pivot for signal level references. We set:
-\eqnl{scurve-pivots}{
-i_1 = \floor{\frac{i_0 + 1 + 1}{3} + 0.5} \quad \text{and} \quad i_2 = \floor{\frac{i_0 + |S|}{2} + 0.5} \text{.}
-}
-The intensity $w(i_1)$ then represents the background and $w(i_2)$ the quiet sun level (QSL). We then redo the polynomial fitting only for those samples which have intensity in the dynamic range of disk boundary, $10 .. 90 \%$ of QSL.
-\eqnl{scurve-approx1}{
-%MJK One line
-%P^{(1)}(u) \approx w(u) \quad \text{for} \quad \frac{9 w(i_1) + w(i_2)}{10} \le u \le \frac{w(i_1) + 9 w(i_2)}{10} \text{.}
-P^{(1)}(u) &\approx& w(u) \quad \text{for}\\ \quad \frac{9 w(i_1) + w(i_2)}{10} &\le& u \le \frac{w(i_1) + 9 w(i_2)}{10} \text{.} \nonumber
-}
-The result of this second fitting in shown in Figure \ref{S-curve_example}. We We find the roots:
-\eqnl{scurve-roots1}{
-%MJK One line
-%u_1^{(1)} < ... < u_{n-2}^{(1)} 
-&u_1^{(1)}& < ... < u_{n-2}^{(1)} \text{, for which} \quad \\
-%MJK to remove space
-%\quad 
-%\text{, for which} \quad
-&P^{(1)\prime\prime}(u_j^{(1)})& = 0 \text{, and} \quad 
-u_0^{(1)} := u_{\frac{n-1}{2}}^{(1)} \nonumber 
-}
-%MJK indices?
-and set pivot index
-%MJK
-as
-%:
-\eqnl{scurve-pivots1}{
-%MJK One line
-&i_0^{(1)}& := \floor{w(u_0^{(1)})+0.5}
-%MJK comma
-\text{,}
-\quad i_1^{(1)} = \floor{\frac{i_0^{(1)} + 1 + 1}{3} + 0.5} 
-%\quad 
-%MJK comma
-\text{,} 
-%and} 
-\nonumber \\
-%\quad 
-&i_2^{(1)}& = \floor{\frac{i_0^{(1)} + |S|}{2} + 0.5} \text{.}
-}
-We can now calibrate the intensity using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$ for QSL:
-\eqnl{scurve-calibration}{
-s \in S \implies v(s) = \frac{u(s) - w(i_1^{(1)})}{w(i_2^{(1)}) - w(i_1^{(1)})} \text{.}
-}
-
 \subsection{Heliographic coordinates from radio data}
 
 %A particular radio data sample $s_i$ contains time $t_i$, relative position on the sky $(\delta \mathrm{RA}_i, \delta 
@@ -918,7 +975,11 @@ Limb intensity profiles showing brightening.
 \begin{figure}
 \centering
 \includegraphics[width=8.5cm]{limbmodel_profiles.png}
-\begin{picture}(0,0)(0,0) \put(-220,315){\begin{huge}a\end{huge}} \put(-220,158){\begin{huge}b\end{huge}} \end{picture}
+  \begin{picture}(0,0)(0,0)
+    \put(-205,306){\begin{large}{\sf\bf{(a)}}\end{large}}
+    \put(-205,146){\begin{large}{\sf\bf{(b)}}\end{large}}
+  \end{picture}
+%\begin{picture}(0,0)(0,0) \put(-220,315){\begin{huge}a\end{huge}} \put(-220,158){\begin{huge}b\end{huge}} \end{picture}
 \caption{Average quiet Sun intensity as a function of radial distance from the visual center, normalized for the center 
 intensity. a) Limb brightening is observed when line of sight is almost tangential to the solar surface. b) The beam 
 size of $2.4 \prime$ mixes the solar limb with the dark background, resulting in a convolution pattern. On both plots, we observe more blurring when the altitude of observation is low, due to atmospheric effects.}
@@ -935,7 +996,7 @@ size of $2.4 \prime$ mixes the solar limb with the dark background, resulting in
 \begin{figure} \centering \includegraphics[width=8.8cm]{maptrack2.png} \caption{Tracked regions are shown with red 
 ellipses for bright regions and with blue ellipses for dim regions. Based on earlier and later sunmaps, we can often 
 expect a weak region to be visible at known heliographic coordinates. When the region nevertheless is found on this map, 
-we show it with a dashed ellipse. The active regions 346 and 356 are clearly visible in Figure \ref{maptrack1}.} 
+we show it with a dashed ellipse. The active regions 346 and 356 are clearly visible in Fig.~\ref{maptrack1}.} 
 \label{maptrack2} \end{figure}
 
 
@@ -966,7 +1027,7 @@ Tabulate the timespans and line fits for all eight.}\\
 \begin{figure}
 \centering
 \includegraphics[width=8.5cm]{butterfly_wingfit_raw.png}
-\caption{Butterfly wing patterns automatically fitted on top of Mets\"ahovi $\SI{37}{GHz}$ data (cf. Figure \ref{butterfly_clear_corr}).} 
+\caption{Butterfly wing patterns automatically fitted on top of Mets\"ahovi $\SI{37}{GHz}$ data (cf. Fig.~\ref{butterfly_clear_corr}).} 
 \label{butterfly_wingfit_raw}
 \end{figure}
 
@@ -991,7 +1052,7 @@ Tabulate the timespans and line fits for all eight.}\\
 
 \section{Results}\label{sect:results}
 \fag{To do identify other observations/publications on polar magnetic cycles to compare with
-Figure\,\ref{butterfly_clear_corr}. MJK: The Srivastava et al., 2018 paper should give plenty of refences. And perhaps more references can be found from those papers.}\\
+Fig.~\ref{butterfly_clear_corr}. MJK: The Srivastava et al., 2018 paper should give plenty of refences. And perhaps more references can be found from those papers.}\\
 
 \begin{table}
 \caption{\label{tab:cycles}
@@ -1032,7 +1093,7 @@ ceased and the length of each cycle $\tau_{\rm cycle}$.
 %\begin{figure}
 %\centering
 %\includegraphics[width=8.8cm]{carrington2.png}
-%\caption{Closeup of Figure \ref{carrington1} showing details of individual tracks. Migration during the given time interval is represented with arrows.}
+%\caption{Closeup of Fig.~\ref{carrington1} showing details of individual tracks. Migration during the given time interval is represented with arrows.}
 %\label{carrington2}
 %\end{figure}
 %
@@ -1040,7 +1101,7 @@ ceased and the length of each cycle $\tau_{\rm cycle}$.
 %\begin{figure}
 %\centering
 %\includegraphics[width=8.8cm]{carrington3.png}
-%\caption{Closeup of Figure \ref{carrington1} showing details of individual observation times with color.}
+%\caption{Closeup of Fig.~\ref{carrington1} showing details of individual observation times with color.}
 %\label{carrington3}
 %\end{figure}
 %
@@ -1097,7 +1158,7 @@ prior knowledge of active regions since they can be excluded in the statistics w
 algorithm. Otherwise the features at the limb would bias the center of the map.
 
 Radial model also increases the dynamic radius of the map, and we are able to detect bright and dim features at the 
-limb, although with increased noise. Each part of the model will benefit other parts and result in a data model of progressive accuracy, as outlined in Figure \ref{roadmap}.
+limb, although with increased noise. Each part of the model will benefit other parts and result in a data model of progressive accuracy, as outlined in Fig.~\ref{roadmap}.
 
 Ultimately, all these three aspects, quiet, bright, and dim features, have a known physical origin, and their 
 statistical appearance and characteristics can be reproduced in appropriate simulations.
