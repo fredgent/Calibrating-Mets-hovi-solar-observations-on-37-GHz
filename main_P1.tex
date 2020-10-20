@@ -302,7 +302,7 @@
   well-resolved
   data about the 
   %MJK should perhaps be written out, when used for the first time, same for 3D.
-  %FAG: OK done
+  %FAG:OK done
   two-dimensional (2D) 
   evolution of the solar surface magnetic 
   field, but observation of the three-dimensional (3D)
@@ -442,22 +442,22 @@
 
   \begin{figure}
   \centering
-  \includegraphics[trim=0cm 3cm 0cm 1.2cm,clip=True,width=\columnwidth]{nea1311582408.png}
-  \includegraphics[trim=0cm 0cm 0cm 1.2cm,clip=True,width=\columnwidth]{nea1467696874.png}
+  \includegraphics[width=\columnwidth]{nea_box.png}
   \begin{picture}(0,0)(0,0)
-    \put(-130,411){\begin{large}{\sf\bf{(a)}}\end{large}}
-    \put(-130,213){\begin{large}{\sf\bf{(b)}}\end{large}}
+    \put(-130,620){\begin{large}\sf\bf{(a)}\end{large}}
+    \put(-130,417){\begin{large}\sf\bf{(b)}\end{large}}
+    \put(-130,213){\begin{large}\sf\bf{(c)}\end{large}}
   \end{picture}
   \caption{
-    Typical Mets\"ahovi solar observations on $\SI{37}{GHz}$ {\bf(a)}
-    25.07.2011 and {\bf(b)} 05.07.2016.
-    Prior to May 2015 the observation beam scans along the equator, with
-    samples mapped onto a rectangular grid.
-    Since June 2015 a more accurate fit to the beam path was used, scanning 
-    horizontally.
-    For the intensity color map each pixel is mapped to the nearest observed
-    sample.
-    This is an original uncalibrated map.
+    Typical Mets\"ahovi solar observations on $\SI{37}{GHz}$ {\bf(a)} 25.07.2011 and {\bf(b)} 05.07.2016. Prior to May 
+    2015 the observation beam scans along the equator, with samples mapped onto a rectangular grid. Since June 2015 a 
+    more accurate fit to the beam path was used, scanning horizontally. For the intensity color map each pixel is mapped 
+    to the nearest observed sample. This is an original uncalibrated map. {\bf(c)} Closeup of the 05.07.2016 map which 
+    illustrates circle fitting.
+    %target set of points used for fitting the circle of the solar limb. White dots are normal 
+    %observational samples, while the blue dots are the samples used for the fitting. Based on sample intensity, the 
+    %radial distance from the center of disk, for each blue dot, is corrected based on sample intensity. The resulting 
+    %target set is shown with green dots.
     %Maps that originate May on 2015 or earlier have
     %sweeps along the equator. Samples are assumed on a rectan-
     %gular grid. Typical Metsähovi solar observation on 37 GHz.
@@ -545,14 +545,12 @@
   %Each sample observation yields an intensity map with coordinates right 
   Each observation scan yields an intensity map with coordinates right 
   ascension, $\RA$, and declination, $\Dec$.
-  Each scan, denoted $S$ and spanning a couple of minutes, comprises a set of
+  Each scan, denoted $S$ and spanning a couple of minutes, comprises a set of beam-size specimens. For $s_i \in S$:
   %FAG: trying to disembiguate use of 'sample'
-  %beam samples, $s_i \in S$
-  beam-size specimens, $s_i \in S$
   \eqnl{radio_sample}{
   s_i &=& 
-  \left( t_i, \dR_i, \dD_i, u_i \right) %\\ \nonumber
-  %&=& \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{,}
+  \left( t_i, \dR_i, \dD_i, u_i \right) \\ %\\ \nonumber
+  &=& \left( t(s_i),\delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{,}
   }
   where $t_i=t(s_i)$ is the time at which the intensity $u_i=u(s_i)$ is
   observed and 
@@ -638,7 +636,7 @@
   %FAG: reform
   %We then solve the real roots of $P^{\prime\prime}(u)$, to obtain 
   %\eqnl{scurve-roots}{
-  %u_1 < ... < u_{n-2} \quad \text{, for which} \quad P^{\prime\prime}(u_j) = 0 \text{.}
+  %u_1 < ... < u_{n-2} \quad \text{, for which} \quad P^{\prime\prime}(u_j) = 0\text{.}
   %}
   We then solve the real roots of $P^{\prime\prime}(u)$, to obtain 
   $u_1 < ... < u_{n-2}$, for which $P^{\prime\prime}(u_j) = 0$.
@@ -659,7 +657,7 @@
   i_1 = \floor{\frac{i_0 + 1 + 1}{3} + 0.5} \quad \text{and} \quad
   i_2 = \floor{\frac{i_0 + |S|}{2} + 0.5} \text{.}
   }
-  The intensity $w(i_1)$ then represents the background sky and $w(i_2)$ QSL.
+  The intensity $w(i_1)$then represents the background sky and $w(i_2)$ QSL.
   %FAG: reworded
   %We then redo the polynomial fitting only for those samples which have intensity in the dynamic range of disk boundary, $10 .. 90 \%$ of QSL.
   We then apply the polynomial fitting only for those specimens within the
@@ -704,9 +702,9 @@
   &i_2^{(1)}& = \floor{\frac{i_0^{(1)} + |S|}{2} + 0.5} \text{.}
   }
   %FAG: introduce $v$
-  %We can now calibrate the intensity using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$ for QSL:
+  %We can now calibrate the intensity using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$for QSL:
   We can now calibrate the normalised intensity, $v(s)$,
-  using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$ for QSL:
+  using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$for QSL:
   \eqnl{scurve-calibration}{
   s \in S \implies v(s) = \frac{u(s) - w(i_1^{(1)})}{w(i_2^{(1)}) - w(i_1^{(1)})} \text{.}
   }
@@ -793,7 +791,7 @@
   To compare these calibration methods, we arbitrarily choose an interval which contains $n$ solar maps within a 
   reasonable time span $[\s{t}{min},\s{t}{max}]$. We process all these maps using each method $j$, and produce a list of 
   trackable radio features $F_j$. Due to differences in the operation of each calibration method, we do not expect the 
-  contents of $F_j$ to be identical for each $j$. Nevertheless, we can pick $m$ features which visually appear to be in 
+  contents of $F_j$ to be identical for each $j$. Nevertheless, we can pick $m$features which visually appear to be in 
   the same location in all $F_j$.
   
   Arbitrary selected active regions $\left\{ \right\}_{k=1}^{5}$ are expected to be detected on maps produced in each of 
@@ -812,17 +810,17 @@
 \subsection{Heliographic coordinates from radio data}
 
 %A particular radio data sample $s_i$ contains time $t_i$, relative position on the sky $(\delta \mathrm{RA}_i, \delta 
-%\mathrm{dec}_i$), and measured intensity $u_i$ in arbitrary linear units. For convenience, we use two equivalent 
+%\mathrm{dec}_i$), and measured intensity $u_i$in arbitrary linear units. For convenience, we use two equivalent 
 %conventions for sample notation:
 %
 %%MJK Introducing line break to fit the equations on a single line
 %%\eqnl{radio_sample}{
-%%s_i = \left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) = \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
+%%s_i = \left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) = \left( t(s_i),\delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
 %%}
 %\eqnl{radio_sample}{
 %s_i &=& 
 %\left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) \\ \nonumber
-%&=& \left( t(s_i), \delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
+%&=& \left( t(s_i),\delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
 %}
 %%Observation is done at time $t_i$ and from geographic location 
 %%$(\phi_{\earth}, \lambda_{\earth}) = \left( +60.217797339^{\circ}, +24.393084663 \right)$, which is 
@@ -891,7 +889,7 @@ in order to obtain Carrington coordinates:
 }
 where $\left( \mathrm{RA}^{\astrosun}(t), \mathrm{dec}^{\astrosun}(t) \right)$ is the equatorial position of the Sun. This quantity, as well as $r^{\astrosun}$, are calculated using the same astronomical model $A$:
 %MJK I would modify the presentation here.
-%The equatorial position of the Sun, $\left( \mathrm{RA}^{\astrosun}(t), \mathrm{dec}^{\astrosun}(t) \right)$, needed in Equation \ref{carrington_coordinates} as well as the visual size $r^{\astrosun}$ needed in Equation \ref{calibration} is calculated using the same astronomical model $A$:
+%The equatorial position of the Sun, $\left( \mathrm{RA}^{\astrosun}(t), \mathrm{dec}^{\astrosun}(t) \right)$,needed in Equation \ref{carrington_coordinates} as well as the visual size $r^{\astrosun}$needed in Equation \ref{calibration} is calculated using the same astronomical model $A$:
 \eqnl{astromodel}{
 \left( \mathrm{RA}^{\astrosun}, \mathrm{dec}^{\astrosun}, r^{\astrosun} \right) = \s{A}{pos} \left( \s{t}{mid}(S), \phi_{\earth}, \lambda_{\earth} \right) \text{.}
 }
@@ -944,9 +942,9 @@ domains for each parameter. Radians are a natural choice of units for $\theta, \
 either be calculated from our astronomical model or fitted to the data as a circle.
 
 
-The solar map is a collection of intensity values $\left\{ v_i \right\}_i$ sampled by the antenna. These are linearly scaled so that $1$ represents the Quiet Sun Level (QSL) and $0$ represents the background. Each intensity value 
+The solar map is a collection of intensity values $\left\{ v_i \right\}_i$sampled by the antenna. These are linearly scaled so that $1$ represents the Quiet Sun Level (QSL) and $0$ represents the background. Each intensity value 
 $v_i$ is accompanied with right ascension $\delta \mathrm{RA}_i$ and declination $\delta 
-\mathrm{dec}_i$ relative to the center of the solar disk, $\left( \mathrm{RA}_{\mathrm{sun}}(t_i), 
+\mathrm{dec}_i$relative to the center of the solar disk, $\left( \mathrm{RA}_{\mathrm{sun}}(t_i), 
 \mathrm{dec}_{\mathrm{sun}}(t_i) \right)$, at the time of observation, $t_i$.
 
 
