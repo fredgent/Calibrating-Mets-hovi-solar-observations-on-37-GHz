@@ -831,25 +831,44 @@
 %\begin{picture}(0,0)(0,0) \put(-220,315){\begin{huge}a\end{huge}} \put(-220,158){\begin{huge}b\end{huge}} \end{picture}
 \caption{Average quiet Sun intensity as a function of radial distance from the visual center, normalized for the center 
 intensity. a) Limb brightening is observed when line of sight is almost tangential to the solar surface. b) The beam 
-size of $2.4 \prime$ mixes the solar limb with the dark background, resulting in a convolution pattern. On both plots, we observe more blurring when the altitude of observation is low, due to atmospheric effects.}
+size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in a convolution pattern. On both plots, we observe more blurring when the altitude of observation is low, due to atmospheric effects.}
 \label{limb_brightening}
 \end{figure}
 %------------------------------------------------------------------------------
+
 %------------------------------------------------------------------------------
 \subsection{Limb correction model}\label{sect:limb}
 
-We intend to estimate the brightness ($v$) based on time ($t$), heliographic latitude ($\theta$), angular distance from the 
-%MJK comma '...disk, as seen...'
-center of solar disk as seen at the time of observation ($r$), and the altitude above the horizon ($\varphi$). The model 
-will contain polynomials of high degree, so that numerical stability is a concern. We need to carefully select the 
-domains for each parameter. Radians are a natural choice of units for $\theta, \varphi \in \left( 0, \frac{\pi}{2} 
-\right)$. For time, $t = \frac{a - 2005}{10}$, where $a$ is a real number $a = 1970 + 
-\frac{\mathrm{unixtime}}{60\cdot60\cdot24\cdot365.25}$. Radius $r$ is represented as relative to the visual solar radius, which can 
-either be calculated from our astronomical model or fitted to the data as a circle.
+%FAG rephrase
+%We intend to estimate the brightness ($v$) based on time ($t$), heliographic latitude ($\theta$), angular distance from the 
+%%MJK comma '...disk, as seen...'
+%center of solar disk as seen at the time of observation ($r$), and the altitude above the horizon ($\varphi$). The model 
+%will contain polynomials of high degree, so that numerical stability is a concern. We need to carefully select the 
+%domains for each parameter. Radians are a natural choice of units for $\theta, \varphi \in \left( 0, \frac{\pi}{2} 
+We seek to determine the brightness ($v$) at time ($t$), heliographic latitude
+($\theta$) and angular distance from the centre of solar disk, based on an
+%FAG we introduce r here, but do not appear to use it and can confuse with radius
+%FAG: does it refer to the observation time or the observation as a specimen?
+observation at time ($\tau$) and altitude above the horizon ($\varphi$).
+We model with polynomials of high degree, so care with numerical stability is 
+required, matching separately domains for each parameter.
+Radians are a natural choice of units for $\theta, \varphi \in \left( 0, \pi/2 
+%FAG reformat
+%\right)$. For time, $t = \frac{a - 2005}{10}$, where $a$ is a real number $a = 1970 + 
+%\frac{\mathrm{unixtime}}{60\cdot60\cdot24\cdot365.25}$. Radius $r$ is represented as relative to the visual solar radius, which can 
+%either be calculated from our astronomical model or fitted to the data as a circle.
+\right)$. For time, $t = (a - 2005)/10$, where $a$ is a real number $a = 1970 +
+\mathrm{unixtime}/(60\cdot60\cdot24\cdot365.25)$. Radius $r$ is represented as
+%FAG: sami is this correct reference to methods
+relative to the visual solar radius, which can be calculated either from our
+astronomical model (method 1) or fitted to the data as a circle (method 2).
 
-
-The solar map is a collection of intensity values $\left\{ v_i \right\}_i$sampled by the antenna. These are linearly scaled so that $1$ represents the Quiet Sun Level (QSL) and $0$ represents the background. Each intensity value 
-$v_i$ is accompanied with right ascension $\delta \mathrm{RA}_i$ and declination $\delta 
+%FAG. is this a repeat of 2.2
+The solar map is a collection of intensity values $\left\{ v_i \right\}_i$ 
+sampled by the antenna.
+These are linearly scaled so that $1$ represents the QSL and $0$ represents
+the black sky.
+Each intensity value $v_i$ is accompanied with right ascension $\delta \mathrm{RA}_i$ and declination $\delta 
 \mathrm{dec}_i$relative to the center of the solar disk, $\left( \mathrm{RA}_{\mathrm{sun}}(t_i), 
 \mathrm{dec}_{\mathrm{sun}}(t_i) \right)$, at the time of observation, $t_i$.
 
@@ -859,25 +878,33 @@ to observers horizon. It is measured in radians, and in practice samples will ha
 \eqnl{altitude_range}{
 \varphi_i \in \left[ \frac{5}{180} \pi, \frac{53}{180} \pi \right] \text{.}
 }
-Each sample also has weight $w_i$, which is set as to balance the target set. 
-There are more 
-observations starting from year $2015$, while only a few maps for year $1989$. 
-%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weigth is lower because of that time interval in more uncertain. Please expand on the logic here.
-Thus we will put more weight on the old 
-maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
+%FAG added reference to Fig 3 and para break. Sami is this correct and an
+%FAG appropriate place to mention the Fig?
+In Fig.\,\ref{limb_brightening}(a), we show the effect of limb brightening for
+observations within the range $\varphi_i\in[7\deg,52\deg]$, and in
+Fig.\,\ref{limb_brightening}(b) the corresponding correction profiles, which 
+are applied near the limb to compensate.
 
-We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
-compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
-from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
-Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
-separate polynomials $P_n$ and $Q_m$ should reduce these risks. 
-%MJK Good idea, but sounds like a task not necessary to undertake now? If the referee asks us to verify this risk, then we should do it. But, I comment it out for now...
-%I suggest testing the optimization code with simulated 
-%data.
-
-%MJK The active region tracking tool is not yet described here. You are still planning to include that, right?
-
-Limb intensity profiles showing brightening. 
+%FAG: moving to results where creating the butterfly maps will now be discussed
+%Each sample also has weight $w_i$, which is set as to balance the target set. 
+%There are more 
+%observations starting from year $2015$, while only a few maps for year $1989$. 
+%%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weigth is lower because of that time interval in more uncertain. Please expand on the logic here.
+%Thus we will put more weight on the old 
+%maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
+%
+%We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
+%compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
+%from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
+%Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
+%separate polynomials $P_n$ and $Q_m$ should reduce these risks. 
+%%MJK Good idea, but sounds like a task not necessary to undertake now? If the referee asks us to verify this risk, then we should do it. But, I comment it out for now...
+%%I suggest testing the optimization code with simulated 
+%%data.
+%
+%%MJK The active region tracking tool is not yet described here. You are still planning to include that, right?
+%
+%Limb intensity profiles showing brightening. 
 
 %------------------------------------------------------------------------------
 \subsection{Heliographic coordinates from radio data}\label{sect:helio}
@@ -966,7 +993,7 @@ where $\left( \mathrm{RA}^{\astrosun}(t), \mathrm{dec}^{\astrosun}(t) \right)$ i
 \eqnl{astromodel}{
 \left( \mathrm{RA}^{\astrosun}, \mathrm{dec}^{\astrosun}, r^{\astrosun} \right) = \s{A}{pos} \left( \s{t}{mid}(S), \phi_{\earth}, \lambda_{\earth} \right) \text{.}
 }
-The choice of $A$ is not critical, since the antenna beam radius is large ($2.4 \prime$) compared to the accuracy of any 
+The choice of $A$ is not critical, since the antenna beam radius is large ($2.4^\prime$) compared to the accuracy of any 
 reasonable model.
 %Only a very large inaccuracy in $A$ would appear as incorrect location of the solar pole in the visible 
 %solar disk and thus as inaccurate heliographic coordinates.
@@ -1003,24 +1030,6 @@ overlapping wings, in order to encourage the algorithm to produce non-overlappin
 parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
 intensity profile.
 
-%------------------------------------------------------------------------------
-\begin{figure*}
-\centering
-\includegraphics[width=\textwidth]{maptrack1.png}
-\caption{Two active regions passing the visible disk as the Sun rotates.}
-\label{maptrack1}
-\end{figure*}
-%------------------------------------------------------------------------------
-
-%------------------------------------------------------------------------------
-\begin{figure} \centering \includegraphics[width=8.8cm]{maptrack2.png} \caption{Tracked regions are shown with red 
-ellipses for bright regions and with blue ellipses for dim regions. Based on earlier and later sunmaps, we can often 
-expect a weak region to be visible at known heliographic coordinates. When the region nevertheless is found on this map, 
-we show it with a dashed ellipse. The active regions 346 and 356 are clearly visible in Fig.~\ref{maptrack1}.} 
-\label{maptrack2} \end{figure}
-%------------------------------------------------------------------------------
-
-
 %\begin{figure}
 %\centering
 %\includegraphics[width=8.5cm]{limbmodel_butterfly1.png}
@@ -1035,6 +1044,23 @@ we show it with a dashed ellipse. The active regions 346 and 356 are clearly vis
 %\label{limb_butterfly2}
 %\end{figure}
 
+
+%-------------------------------------- Two column figure (place early!)
+
+
+
+
+%------------------------------------------------------------------------------
+\section{Results}\label{sect:results}
+\fag{To do: identify other observations/publications on polar magnetic cycles to compare with
+Fig.~\ref{butterfly_clear_corr}. MJK: The Srivastava et al., 2018 paper should give plenty of refences. And perhaps more references can be found from those papers.}\\
+
+%FAG added
+From the series of specimen maps as processed using methods in 
+Section\,\ref{sect:methods}, but without applying the limb correction model
+(Section\,\ref{sect:limb}), we construct the radio butterfly diagram  
+displayed in Fig.\,\ref{butterfly_clear_raw}
+
 %------------------------------------------------------------------------------
 \begin{figure}
 \centering
@@ -1048,6 +1074,32 @@ we show it with a dashed ellipse. The active regions 346 and 356 are clearly vis
 %\fag{(later) obtain same period of photospheric sunspot numbers
 %Tabulate the timespans and line fits for all eight.}\\
 
+%FAG moved from above
+Each specimen map has weight $w_i$, which is set as to balance the target set. 
+There are more 
+observations starting from year $2015$, while only a few maps for year $1989$. 
+%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weigth is lower because of that time interval in more uncertain. Please expand on the logic here.
+Thus we will put more weight on the old 
+maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
+
+We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
+compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
+from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
+Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
+separate polynomials $P_n$ and $Q_m$ should reduce these risks. 
+%MJK Good idea, but sounds like a task not necessary to undertake now? If the referee asks us to verify this risk, then we should do it. But, I comment it out for now...
+%I suggest testing the optimization code with simulated 
+%data.
+%------------------------------------------------------------------------------
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{butterfly_clear_limb.png}
+\caption{Solar intensity at all heliographic latitudes on $\si{37}{GHz}$ over cycles 21 to 24. Averaged over samples for which $r_i \le 1.0$ so that each sample intensity is corrected for beam mixing and limb brightening. This increases the available latitude range, bringing the polar magnetic cycle clearly visible.}
+\label{butterfly_clear_corr}
+\end{figure}
+%------------------------------------------------------------------------------
+
+%MJK The active region tracking tool is not yet described here. You are still planning to include that, right?
 %------------------------------------------------------------------------------
 \begin{figure}
 \centering
@@ -1072,25 +1124,6 @@ Discover the Sun\\
 \label{butterfly_wingfit_sunspot}
 \end{figure}
 %------------------------------------------------------------------------------
-
-%------------------------------------------------------------------------------
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{butterfly_clear_limb.png}
-\caption{Solar intensity at all heliographic latitudes on $\si{37}{GHz}$ over cycles 21 to 24. Averaged over samples for which $r_i \le 1.0$ so that each sample intensity is corrected for beam mixing and limb brightening. This increases the available latitude range, bringing the polar magnetic cycle clearly visible.}
-\label{butterfly_clear_corr}
-\end{figure}
-%------------------------------------------------------------------------------
-
-%-------------------------------------- Two column figure (place early!)
-
-
-
-
-%------------------------------------------------------------------------------
-\section{Results}\label{sect:results}
-\fag{To do: identify other observations/publications on polar magnetic cycles to compare with
-Fig.~\ref{butterfly_clear_corr}. MJK: The Srivastava et al., 2018 paper should give plenty of refences. And perhaps more references can be found from those papers.}\\
 
 %------------------------------------------------------------------------------
 \begin{table}
@@ -1124,56 +1157,22 @@ ceased and the length of each cycle $\tau_{\rm cycle}$.
 \end{table}
 %------------------------------------------------------------------------------
 
-%
-%\begin{figure*}
-%\centering
-%\includegraphics[width=18.5cm]{carrington1.png}
-%\caption{Heliographic map showing tracked regions.}
-%\label{carrington1}
-%\end{figure*}
-%
-%\begin{figure}
-%\centering
-%\includegraphics[width=8.8cm]{carrington2.png}
-%\caption{Closeup of Fig.~\ref{carrington1} showing details of individual tracks. Migration during the given time interval is represented with arrows.}
-%\label{carrington2}
-%\end{figure}
-%
-%
-%\begin{figure}
-%\centering
-%\includegraphics[width=8.8cm]{carrington3.png}
-%\caption{Closeup of Fig.~\ref{carrington1} showing details of individual observation times with color.}
-%\label{carrington3}
-%\end{figure}
-%
-%\begin{figure} \centering \includegraphics[width=8.8cm]{view_power_complex346.png}
-%\caption{Radiative power of the active region 346 seen on top of the Quiet Sun Level. The units are nano steradians of Quiet Sun Level. Hollow points are observations which are more than $0.88$ disk radii from the center. The hollow points have greater uncertainty.}
-%\label{complexpower} \end{figure}
-%
-%\begin{figure} \centering \includegraphics[width=8.8cm]{view_latitude_complex346.png}
-%\caption{Latitude migration of the active region 346. Hollow points are observations which are more than $0.88$ disk radii from the center. The hollow points have greater uncertainty.}
-%\label{complexlatitude} \end{figure}
-%
-%\begin{figure} \centering \includegraphics[width=8.8cm]{view_longitude_complex346.png}
-%\caption{Longitude migration of the active region 346. Hollow points are observations which are more than $0.88$ disk radii from the center. The hollow points have greater uncertainty.}
-%\label{complexlatitude} \end{figure}
-%
-%\begin{figure} \centering \includegraphics[width=8.8cm]{track_butterfly.png}
-%\caption{Butterfly diagram drawn using tracked dim and bright features. When there is enough statistics, the track is shown as line which indicates its migration, otherwise only its average position is shown as a point. It is not yet clear why there is a mass of dim regions at the southern high latitudes, but in north, on cycle 24. The annual oscillation of the southern high latitude dim regions is probably due to observational effects, suggesting that the limb model needs to be upgraded. During the cycle 23, there are not observations every day, which results in scarser statistics and less migration information. As a result, most of the tracks are shown as points on cycle 23.}
-%\label{track_butterfly} \end{figure}
-%
-%\begin{figure} \centering \includegraphics[width=8.8cm]{diffrot.png}
-%\caption{Scatter plot of the bright and dim regions for which migration can be analyzed. At first glance, no significant differential rotation is observable.}
-%\label{diffrot} \end{figure}
-%
-%\begin{figure} \centering \includegraphics[width=8.8cm]{meridional.png}
-%\caption{Scatter plot of the bright and dim regions for which migration can be analyzed. At first glance, no significant meridional flow is observable.}
-%\label{meridional} \end{figure}
-%
-%\begin{figure} \centering \includegraphics[width=8.8cm]{limb_offsets.png}
-%\caption{Analysis of projection effects at the solar limb. As a tracked feature rotates along with the Sun, it is assumed to have a constant angular velocity on rotating heliographic surface, following a great circle. As its visual longitude changes, it is seen first near the east limb, then at the center, and finally at the west limb. We might expect convolution effects to bias its apparent position towards then visual center. This effect does not seem significant.}
-%\label{limb_offsets} \end{figure}
+%------------------------------------------------------------------------------
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{maptrack1.png}
+\caption{Two active regions passing the visible disk as the Sun rotates.}
+\label{maptrack1}
+\end{figure*}
+%------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------
+\begin{figure} \centering \includegraphics[width=8.8cm]{maptrack2.png} \caption{Tracked regions are shown with red 
+ellipses for bright regions and with blue ellipses for dim regions. Based on earlier and later sunmaps, we can often 
+expect a weak region to be visible at known heliographic coordinates. When the region nevertheless is found on this map, 
+we show it with a dashed ellipse. The active regions 346 and 356 are clearly visible in Fig.~\ref{maptrack1}.} 
+\label{maptrack2} \end{figure}
+%------------------------------------------------------------------------------
 
 %------------------------------------------------------------------------------
 \section{Discussion}\label{sect:discussion}
