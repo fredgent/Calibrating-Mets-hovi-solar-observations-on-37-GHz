@@ -9,7 +9,7 @@
 
 %
 \documentclass{aa}  
-
+% SRK website: 42FC36A2
 %
 \usepackage{graphicx,svg,bm,amsmath,dsfont,siunitx,wasysym,tikz,color,scalerel}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -475,26 +475,26 @@
 %------------------------------------------------------------------------------
 \section{Methods}\label{sect:methods}
 
+<<<<<<< HEAD
+\subsection{The solar maps}\label{sect:source}
+=======
 %------------------------------------------------------------------------------
 \subsection{Data sources}\label{sect:source}
+>>>>>>> 030af870b7408ac05424905bf7f941253dc8deac
 
   During a typical measurement, the antenna beam makes a sweep across the
-  visible solar disk (Fig.~\ref{typicalmap}).
-  The data comprises three sources:
+  visible solar disk (Fig.~\ref{typicalmap}). There are three major sets of conventions during the history the record.
   \begin{enumerate}[A]
     \item
     The solar maps from 1978 to 1987 were originally recorded on magnetic
     tapes, from which the data was rendered onto paper contour maps using a
     mechanical plotter.
     Subsequently the magnetic tapes were lost, so that only the printed maps
-    were available. 
-    Applying pattern recognition techniques developed by
-    \cite{masterthesis}, the scans of the paper contour maps were converted
-    back into a numerical form, consistent with that of 
+    were available. Applying pattern recognition techniques presented in \cite{masterthesis}, the digital scans of the paper contour maps were converted into
     %MJK This might not be understandable stand alone. One could add smthg like "the digital format currently used for reconrding new maps".
     %FAG: reworded as suggested
     the digital format used to record maps of the current observations.
-    The solar disk position was already marked on these paper maps.
+    The solar disk position as well as the rotational axis was already marked on these paper maps using a compass and a ruler.
     \item
     Until the end of May 2015 the maps were scanned in the equatorial direction,
     so that declination is shifted between adjacent sweeps, as displayed in
@@ -506,21 +506,37 @@
     These modern maps respect the true path of the antenna, typically recorded
     with $25$ samples per second for two minutes.
     %MJK The final map in solar coordinates is presented in Fig.1(c)...
+    MJK The final map in solar coordinates is presented in~\Fig{typicalmap}{\bf{(c)}.
   \end{enumerate}
 
-  The digital maps do not include the location of the solar disk.
-  The disk markings in Fig.~\ref{typicalmap}, are identified by the 
-  disk fitting method(s), described in Section\,\ref{sect:disk}.
-  The intensity ranges shown in Fig.~\ref{typicalmap} are the original
-  uncalibrated levels.
-  For these, as well as those recovered from the earlier paper prints, the 
+Each line in a digital solar map file contains the exact time and coordinates of a sample as well as the recorded intensity value. The 
+coordinates are relative to the expected location of the center of the Sun on the sky. The intensity is measured on 
+$\SI{37}{GHz}$ and contains the value both on a linear and a logarithmic output from the amplifier. In this paper, we 
+restrict the study into the linear scale. However, the logarithmic scale avoids saturation at extreme intensity values 
+during flare events and will be a target of further research.
+
+Fig.~\ref{typicalmap} shows the original uncalibrated intensities of a typical solar map. We need to normalize the 
+signal levels and also correct for any minor offsets in the sample coordinates in order to have a properly centered map. 
+The purpose of normalization is to have zero intensity at the background and unit intensity for the QSL. The applicable 
+methods are described in Section\,\ref{sect:disk}. For the contour maps up to year 1987, we trust the graphical markings 
+and no calibration is needed.
+
+
+
+
+  %The digital maps do not specify the location of the solar disk.
+  %The disk markings in Fig.~\ref{typicalmap}, are identified by the 
+  %disk fitting method(s), described in Section\,\ref{sect:disk}.
+  %The intensity ranges shown in Fig.~\ref{typicalmap} are the original
+  %uncalibrated levels.
+  %For these, as well as those recovered from the earlier paper prints, the 
   %signal levels need to be normalised, to correctly identify the 
   %MJK Quiet Sun level? Has this been introduced earlier?
   %MJK It was introduced later, now swapped.
   %FAG introduced in introduction, but now added definition and hereafter
   %quiet Sun level (hereafter QSL) and the
-  signal levels need to be normalised, to correctly identify QSL and the
-  black sky, also explained in Section\,\ref{sect:disk}.
+  %signal levels need to be normalised, to correctly identify QSL and the
+  %black sky, also explained in Section\,\ref{sect:disk}.
 
   %
   %%MJK I think it would be best to put figures 1 and 2 into one single figure, and maybe add there also the planned figure of the final map in solar coordinates (Fig 1 caption). Also, the older map should become before the more recent map. 
@@ -539,6 +555,8 @@
   %\ref{oldmap}. The new maps typically recorded with $25$ samples per second for two minutes.
   %%MJK The final map in solar coordinates is presented in Fig.1(c)...
   %%MJK Horizontal row/vertical column of panels, up to Sami to decide...
+
+
 
   %MJK Adding label
 %------------------------------------------------------------------------------
@@ -721,8 +739,20 @@
   }
 
 
+<<<<<<< HEAD
+  \subsubsection{2 Convex hull}
+
+  The convex hull method was mainly used for the contour maps for increased redundancy. Should the other markings on the 
+  maps be misinterpreted, the circular limb profile gives a hint of where the solar disk should be. The convex hull 
+  suits for digital intensity specimen as well.
+
+  We separate the set of points $S = A \cup B$ with $A \cap B = \emptyset$, where $A$ 
+
+
+=======
 %------------------------------------------------------------------------------
   \subsubsection{2 Convex hull}\label{sect:convex-hull}
+>>>>>>> 030af870b7408ac05424905bf7f941253dc8deac
   \fag{added subsection for convex hull. Is the previous subsection complete?
   It is not clear to me how disk fitting (1) is explained in previous
   subsection.
@@ -820,6 +850,11 @@
   least squares method.
 %MJK Is there supposed to be a section about the convex hull method?
 
+<<<<<<< HEAD
+
+
+\subsection{Heliographic coordinates from radio data}
+=======
 %------------------------------------------------------------------------------
 \begin{figure}
 \centering
@@ -908,6 +943,10 @@ are applied near the limb to compensate.
 
 %------------------------------------------------------------------------------
 \subsection{Heliographic coordinates from radio data}\label{sect:helio}
+>>>>>>> 030af870b7408ac05424905bf7f941253dc8deac
+
+
+
 
 %A particular radio data sample $s_i$ contains time $t_i$, relative position on the sky $(\delta \mathrm{RA}_i, \delta 
 %\mathrm{dec}_i$), and measured intensity $u_i$in arbitrary linear units. For convenience, we use two equivalent 
@@ -1037,12 +1076,17 @@ intensity profile.
 %\label{limb_butterfly1}
 %\end{figure}
 
+<<<<<<< HEAD
+
+\subsection{Limb correction model}
+=======
 %\begin{figure}
 %\centering
 %\includegraphics[width=8.5cm]{limbmodel_butterfly2.png}
 %\caption{Idealized butterfly diagram with emphasis on the low %latitudes.}
 %\label{limb_butterfly2}
 %\end{figure}
+>>>>>>> 030af870b7408ac05424905bf7f941253dc8deac
 
 
 %-------------------------------------- Two column figure (place early!)
