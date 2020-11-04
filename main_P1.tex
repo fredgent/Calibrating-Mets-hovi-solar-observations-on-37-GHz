@@ -38,10 +38,12 @@
 \definecolor{midblue}{rgb}{0.0,0.4,0.7}
 \definecolor{midgreen}{rgb}{0.0,0.8,0.3}
 \definecolor{mypurple}{rgb}{0.8,0.2,0.8}
+\definecolor{midorange}{rgb}{0.8,0.4,0.0}
 \newcommand{\edits}[1]{\textcolor{midblue}{#1}}
 \newcommand{\fg}[1]{\textcolor{midblue}{#1}}
 \newcommand{\fag}[1]{\textcolor{midpurple}{[FAG: #1]}} % with options according to your LaTeX or PDFLaTeX drivers.
 \newcommand{\mjk}[1]{\textcolor{midgreen}{[MJK: #1]}} % with options according to your LaTeX or PDFLaTeX drivers.
+\newcommand{\skk}[1]{\textcolor{midorange}{[SKK: #1]}} % with options according to your LaTeX or PDFLaTeX drivers.
 %
 \newcommand{\arrc}[1]{\begin{matrix}[c] #1 \end{matrix}}
 \newcommand{\eqnl}[2]{\begin{eqnarray}\label{#1}#2\end{eqnarray}}
@@ -485,10 +487,10 @@
     tapes, from which the data was rendered onto paper contour maps using a
     mechanical plotter.
     Subsequently the magnetic tapes were lost, so that only the printed maps
-    were available. Applying pattern recognition techniques presented in \cite{masterthesis}, the digital scans of the paper contour maps were converted into
+    were available. Applying pattern recognition techniques presented in \cite{masterthesis}, scans of the maps were converted into
     %MJK This might not be understandable stand alone. One could add smthg like "the digital format currently used for reconrding new maps".
     %FAG: reworded as suggested
-    the digital format used to record maps of the current observations.
+    a digital format which is compatible new maps.
     The solar disk position as well as the rotational axis was already marked on these paper maps using a compass and a ruler.
     \item
     Until the end of May 2015 the maps were scanned in the equatorial direction,
@@ -501,16 +503,17 @@
     These modern maps respect the true path of the antenna, typically recorded
     with $25$ samples per second for two minutes.
     %MJK The final map in solar coordinates is presented in Fig.1(c)...
-    The final map in solar coordinates is presented in Fig\ref{typicalmap}{\bf(c)}.
+    %The final map in solar coordinates is presented in Fig\ref{typicalmap}{\bf(c)}.
+    %SKK: Currently we have no carrington maps planned to be shown on the paper
   \end{enumerate}
 
-Each line in a digital solar map file contains the exact time and coordinates of a sample as well as the recorded intensity value. The 
+Each line in a digital solar map file contains the time and coordinates of a sample as well as the recorded intensity value. The 
 coordinates are relative to the expected location of the center of the Sun on the sky. The intensity is measured on 
-$\SI{37}{GHz}$ and contains the value both on a linear and a logarithmic output from the amplifier. In this paper, we 
+$\SI{37}{GHz}$ and contains linear and logarithmic output from the amplifier as digital values. In this paper, we 
 restrict the study into the linear scale. However, the logarithmic scale avoids saturation at extreme intensity values 
-during flare events and will be a target of further research.
+during flare events and will be a focus of further research.
 
-Fig.~\ref{typicalmap} shows the original uncalibrated intensities of a typical solar map. We need to normalize the 
+Fig.~\ref{typicalmap}{\bf(a-c)} shows original uncalibrated intensities. We need to normalize the 
 signal levels and also correct for any minor offsets in the sample coordinates in order to have a properly centered map. 
 The purpose of normalization is to have zero intensity at the background and unit intensity for the QSL. The applicable 
 methods are described in Section\,\ref{sect:disk}. For the contour maps up to year 1987, we trust the graphical markings 
@@ -557,27 +560,63 @@ and no calibration is needed.
 %------------------------------------------------------------------------------
   \subsection{Disk fitting and signal levels} \label{sect:disk}
 
+    
   %FAG: trying to disembiguate use of 'sample'
   %Each sample observation yields an intensity map with coordinates right 
-  Each observation scan yields an intensity map with coordinates right 
-  ascension, $\RA$, and declination, $\Dec$.
-  Each scan, denoted $S$ and spanning a couple of minutes, comprises a set of beam-size specimens. For $s_i \in S$:
+  %Each observation scan yields an intensity map with coordinates right 
+  %ascension, $\RA$, and declination, $\Dec$.
+  %Each scan, denoted $S$ and spanning a couple of minutes, comprises a set of beam-size specimens. For $s_i \in S$:
   %FAG: trying to disembiguate use of 'sample'
+  %SKK: maybe it could be clearer:
+
+  Each solar map $S$ consists of $N_S$ samples: $S = \left\{ s_i \;:\; i = 1, 2, ..., N \right\}$. Each sample $s_i$ specifies its location $(x_i,y_i)$ and intensity $u_i$ as recorded at time $t_i$:
   \eqnl{radio_sample}{
-  s_i &=& 
-  \left( t_i, \dR_i, \dD_i, u_i \right) \\ %\\ \nonumber
-  &=& \left( t(s_i),\delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{,}
-  }
-  where $t_i=t(s_i)$ is the time at which the intensity $u_i=u(s_i)$ is
-  observed and 
-  $\s{t}{min}(S) \le t_i \le \s{t}{max}(S)$.
-  The equatorial coordinates used are relative to the expected position of
-  the central point of Sun at $t_i$ and are cosine corrected to have unit
-  aspect ratio:
+  s_i &=& \left( t_i, x_i, y_i, u_i, ... \right)
+  }.
+  The additional quantities ($...$) are included for sample $s_i$ as part of the calibration process described below.
+  
+  The location is specified in equatorial coordinates relative to the expected position of the central point of the Sun, $(\RA_{\astrosun}, \Dec_{\astrosun})$, at time $t_i$. The Right Ascension is cosine corrected, so that the maps have unit aspect ratio:
   \eqnl{relative_radec}{
-  \dR_i  &=& \frac{\RA(s_i) - \RA_{\astrosun}(t_i)}{\cos \left( \Dec_{\astrosun}(t_i) \right)} \\
-  \dD_i &=& \Dec(s_i) - \Dec_{\astrosun}(t_i)\text{.}
+  x_i &=& \frac{\RA(s_i) - \RA_{\astrosun}(t_i)}{\cos \left( \Dec_{\astrosun}(t_i) \right)} \\
+  y_i &=& \Dec(s_i) - \Dec_{\astrosun}(t_i)\text{.}
   }
+  The absolute pointing of the antenna is not sufficiently accurate, while we can expect the relative accuracy to be 
+  better. We thus need to determine the exact center for each map. Also, since the signal levels $u_i$ are on arbitrary scale, we 
+  need to normalize them. Normalization is done using statistical functions $f$ and $g$ to calculate references for background and QSL intensities:
+  \eqnl{map_normalization1}{
+  \s{u}{background} = f(S) \; \text{and} \; \s{u}{QSL} = g(S) \text{.}
+  }
+  We then perform a linear transformation to obtain a normalized value $v_i$ for each sample $u_i$:
+  \eqnl{map_normalization2}{
+  v_i := \frac{u_i - \s{u}{background})}{\s{u}{QSL} - \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
+  }
+  The normalized intensity is then zero for a full background sample and unity for a QSL sample. Once the intensity 
+  levels are normalized for map $S$, we can calculate the position $(x_S, y_S)$ and radius $r_S$ of the visible solar disk. The centering 
+  is done using another statistical function $h$ which analyzes the normalized $v_i$ values:
+  \eqnl{map_centering1}{
+  \left( x_S, y_S, r_S \right) := h(S) \text{.}
+  }
+  We can then calculate properly centered coordinates for each sample $s_i$. We denote $r_{\astrosun}$ for the expected visual radius of the solar disk, in radians.
+  \eqnl{map_centering2}{
+  x^{\prime}_i := (x_i - x_S)\frac{r_{\astrosun}(t_{\mathrm{mid},S})}{r_S} \; \text{and} \; y^{\prime}_i := (y_i - y_S)\frac{r_{\astrosun}(t_{\mathrm{mid},S})}{r_S} \text{.}
+  }
+  We assume that the visual radius is constant during the observation of $S$. We use the middle time, $t_{\mathrm{mid},S}$, for evaluation:
+  \eqnl{map_centering3}{
+  t_{\mathrm{mid},S} = \frac{\operatorname{min} \left\{ t_i \right\} + \operatorname{max} \left\{ t_i \right\}}{2} \text{.}
+  }
+
+  We are now free to choose the statistical functions $f$, $g$, $h$ which now describe the calibration algorithm. It is 
+  an open question whether we should use a fixed value for the visual radius, namely, should we fix $r_S = 
+  r_{\astrosun}(t_{\mathrm{mid},S})$. Radio frequency $\SI{37}{GHz}$ probes slightly higher altitudes compared to 
+  visible light, and we might thus expect a larger physical solar radius compared to $R_{\astrosun} = 6.957 \times 10^8 
+  \mathrm{m}$. The standard value $R_{\astrosun}$ is based on visible light and optical depth of $\frac{2}{3}$. \SKK{I 
+  have managed to produce an estimate R_{\astrosun} = 7.10 \times 10^8 \mathrm{m}$ using an inversion model solver.}
+  
+  \cite{solarradius}. 
+
+
+
+
   We consider two disk methods to determine the solar disk position and size
   from each map:
   \begin{enumerate}
@@ -969,7 +1008,7 @@ defined in detail in Sect.~\ref{sect:disk},
 %MJK
 for the scan $S$ in order to produce a disk model:
 \eqnl{disk_model}{
-F_j(S) = \left( \delta \mathrm{RA}_S, \delta \mathrm{dec}_S, R_S, \s{u}{background}(S), \s{u}{QSL}(S) \right) \text{.}
+F_j(S) = \left( \delta \mathrm{RA}_S, \delta \mathrm{dec}_S, r_S, \s{u}{background}(S), \s{u}{QSL}(S) \right) \text{.}
 }
 %The disk fitting model in $F_j$ is used for correcting small tracking errors and calibrating the intensity levels.
 We then obtain calibrated position and intensity for each sample. Signal levels are scaled so that zero is for the background and unity for the 
@@ -981,8 +1020,8 @@ QSL:
 %}
 %such that:
 \eqnl{calibration}{
-x_i &=& \frac{r^{\astrosun} \left( \s{t}{mid}(S) \right)}{R_S} \left( \mathrm{RA}_i -  \mathrm{RA}_S  \right) \\
-y_i &=& \frac{r^{\astrosun} \left( \s{t}{mid}(S) \right)}{R_S} \left( \mathrm{dec}_i - \mathrm{dec}_S \right) \\
+x_i &=& \frac{r^{\astrosun} \left( \s{t}{mid}(S) \right)}{r_S} \left( \mathrm{RA}_i -  \mathrm{RA}_S  \right) \\
+y_i &=& \frac{r^{\astrosun} \left( \s{t}{mid}(S) \right)}{r_S} \left( \mathrm{dec}_i - \mathrm{dec}_S \right) \\
 v_i &=& \frac{u_i - \s{u}{background}(S)}{\s{u}{QSL}(S) - \s{u}{background}(S)} \text{.}
 }
 We get the visible solar radius $r^{\astrosun}$ from our astronomical model $A$, using the middle time $\s{t}{mid}(S) = 
@@ -1145,9 +1184,8 @@ separate polynomials $P_n$ and $Q_m$ should reduce these risks.
 \caption{Butterfly wing patterns automatically fitted on sunspot data, for
 cycles coinciding with the radio cycles in Fig.\,\ref{butterfly_wingfit_raw}.
 Sunspot data courtesy Hathaway \& Upton, Solar Cycle Science,
-Discover the Sun\\ 
-\href{http://solarcyclescience.com/AR_Database/bflydata.txt}
-{http://solarcyclescience.com/AR\_Database/bflydata.txt}.}
+Discover the Sun}
+%\href{http://solarcyclescience.com/AR_Database/bflydata.txt}{http://solarcyclescience.com/AR_Database/bflydata.txt}.
 \label{butterfly_wingfit_sunspot}
 \end{figure}
 %------------------------------------------------------------------------------
