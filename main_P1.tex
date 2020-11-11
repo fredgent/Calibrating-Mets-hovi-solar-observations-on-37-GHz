@@ -200,33 +200,6 @@
 
   \maketitle
 %-------------------------------------------------------------------
-
-\section{List of symbols}
-
-\skk{At least I need this list in order to keep track which letters I use for which purpose}
-
-    \begin{tabular}{lp{40mm}}
-    $S$   & A particular \emph{solar map}, also terms \emph{map} and \emph{scan} are used. To reduce the amount of indices in symbols, often we assume the $S$ is known by context. $S$ is a set of samples. \\
-    $s_i$ & Radio sample in map $S$. It is a bundle of numerical values just as coordinates and intensities. \\
-    $N_S$ & Number of samples in $S$. \\
-    $I_S$ & Index set of $S$: $I_S = \left\{ 1, 2, ..., N_S \right\}$. \\
-    $i$   & Index used for solar map samples so that $s_i \in S \; \Leftrightarrow \; i \in I_S$. Any numerical value accosiated with $s_i$ is referred with index $i$. \\
-    $t_i$ & Time when the sample $s_i$ is recorded. Typical unit is unix time in seconds. Recording the map $S$ typically takes a few minutes. \\
-    $x_i$ & Uncalibrated relative Right Ascension of the radio sample, with respect to the expected center of the visible solar disk. \\
-    $y_i$ & Uncalibrated relative declination of the radio sample, with respect to the expected center of the visible solar disk. \\
-    $u_i$ & Uncalibrated, raw intensity of a particular radio sample $s_i$, typically in the range $-4000 .. 32000$. \\
-    $\RA(s_i)$ & Absolute Right Ascension of a particular sample, as seen from MRO at time $t_i$. \\
-    $\Dec(s_i)$ & Absolute declination of a particular sample, as seen from MRO at time $t_i$. \\
-    $\RA_{\astrosun}(t)$ & Absolute Right Ascension of the center of the solar disk as seen from MRO at time $t$. \\
-    $\Dec_{\astrosun}(t)$ & Absolute Right Ascension of the center of the solar disk as seen from MRO at time $t$. \\
-    $j$ & Index used for solar map samples when they are sorted by their raw intensity. \\
-    $f_S$ & Bijective mapping $f_S:\; I_S \mapsto I_S$ used for sorting the samples by their raw intensities. \\
-    $w^{-1}(j)$ & Index v.s. raw intensity in S-curve method. \\
-    $w(u)$ & raw intensity v.s. index. \\
-    
-    $k$ & Integer for the index of calibration rounds for $S$. We start with $k=0$. \\
-    $v_i^{(k)}$ & Calibrated intensity at round $k$. We aim to have zero at background and unity at QSL. \\
-    \end{tabular}
     
 
 
@@ -1650,6 +1623,35 @@ statistical appearance and characteristics can be reproduced in appropriate simu
 %\draw[myarrow] (qbutterfly.east) -- (compu_w3);
 %\end{tikzpicture}} \caption{Roadmap for extracting valuable information from the solar maps.} \label{roadmap} \end{figure*}
 %
+
+\section{List of symbols}
+
+\skk{At least I need this list in order to keep track which letters I use for which purpose}
+\begin{table*}
+    \caption{list of symbols}\label{tab:sym}
+    \begin{tabular}{lp{120mm}}
+    $S$   & A particular \emph{solar map}, also terms \emph{map} and \emph{scan} are used. To reduce the amount of indices in symbols, often we assume the $S$ is known by context. $S$ is a set of samples. \\
+    $s_i$ & Radio sample in map $S$. It is a bundle of numerical values just as coordinates and intensities. \\
+    $N_S$ & Number of samples in $S$. \\
+    $I_S$ & Index set of $S$: $I_S = \left\{ 1, 2, ..., N_S \right\}$. \\
+    $i$   & Index used for solar map samples so that $s_i \in S \; \Leftrightarrow \; i \in I_S$. Any numerical value accosiated with $s_i$ is referred with index $i$. \\
+    $t_i$ & Time when the sample $s_i$ is recorded. Typical unit is unix time in seconds. Recording the map $S$ typically takes a few minutes. \\
+    $x_i$ & Uncalibrated relative Right Ascension of the radio sample, with respect to the expected center of the visible solar disk. \\
+    $y_i$ & Uncalibrated relative declination of the radio sample, with respect to the expected center of the visible solar disk. \\
+    $u_i$ & Uncalibrated, raw intensity of a particular radio sample $s_i$, typically in the range $-4000 .. 32000$. \\
+    $\RA(s_i)$ & Absolute Right Ascension of a particular sample, as seen from MRO at time $t_i$. \\
+    $\Dec(s_i)$ & Absolute declination of a particular sample, as seen from MRO at time $t_i$. \\
+    $\RA_{\astrosun}(t)$ & Absolute Right Ascension of the center of the solar disk as seen from MRO at time $t$. \\
+    $\Dec_{\astrosun}(t)$ & Absolute Right Ascension of the center of the solar disk as seen from MRO at time $t$. \\
+    $j$ & Index used for solar map samples when they are sorted by their raw intensity. \\
+    $f_S$ & Bijective mapping $f_S:\; I_S \mapsto I_S$ used for sorting the samples by their raw intensities. \\
+    $w^{-1}(j)$ & Index v.s. raw intensity in S-curve method. \\
+    $w(u)$ & raw intensity v.s. index. \\
+    
+    $k$ & Integer for the index of calibration rounds for $S$. We start with $k=0$. \\
+    $v_i^{(k)}$ & Calibrated intensity at round $k$. We aim to have zero at background and unity at QSL. \\
+    \end{tabular}
+\end{table*}
 
 \begin{acknowledgements}
 \end{acknowledgements}
