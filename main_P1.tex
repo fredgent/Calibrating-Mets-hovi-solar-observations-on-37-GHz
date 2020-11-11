@@ -551,26 +551,41 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   %better. We thus need to determine the center of the visual disk for each map. Also, since the signal levels $u_i$ are on arbitrary scale, we 
   %need to normalize them. A solar map consists of three regimes:
   We do not rely on the targeting accuracy of the antenna, and instead
-  determine the center of the visual disk from each map, from which we
-  define the relative location of each sample.
+  determine the center of the visual disk from each map $S$, from which we
+  define the relative location of each $s_i$.
   Also, since the signal levels $u_i$ have arbitrary scale, 
   they need to be normalized.
-  A solar map contains the regions designated as
+  A map $S$ samples from each of the regions we designate as
   \begin{itemize}
   \item Background: The beam probes outer layers of the corona. Low intensity.
   \item Limb: Transition from corona to chromosphere.
   \item Disk: The beam probes chromosphere with varying incident angle. High intensity compared to background. Features, such as dim and bright regions, are visible.
   \end{itemize}
-  For a map $S$, we will perform a preliminary statistical analysis (see Section~\ref{sect:s-curve}) in order to extract 
-  two representative intensity values, $\s{u}{background}$ and $\s{u}{disk}$. We will then perform a linear 
-  transformation for the raw intensity values $u_i$ and obtain normalized intensities $v_i$:
+  For a map $S$ we perform a preliminary statistical analysis (see
+  Section~\ref{sect:s-curve}) in order to extract two representative intensity
+  values, $\s{u}{background}$ and $\s{u}{disk}$.
+  We then perform a linear transformation for the raw intensity values $u_i$
+  and obtain normalized intensities $v_i$ as
   \eqnl{map_normalization}{
-  v_i^{(0)} := \frac{u_i - \s{u}{background})}{\s{u}{disk} - \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
+  v_i^{(0)} := \frac{u_i - \s{u}{background})}{\s{u}{disk} -
+                  \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
   }
-  The normalized intensities are then used for initial centering of the map in Section~\ref{sect:initial-centering}.
+  The normalized intensities are then used for initial centering of the map
+  (Section~\ref{sect:initial-centering}) at $(x^(0),y^(0))$, %FAG added
+  from which the initial radius of the disk, $r^(0)$, is estimated
+  (Section~\ref{sect:initial-radius}).
+  The superscript, (0), is used to indicate the initial values, which are 
+  then refined by an iterative process described in
+  Sections~\ref{sect:further_optimization}, \ref{sect:outliers_disk} and 
+  \ref{sect:outliers_limb}.
+  Following sufficient iterations we obtain calibrated maps $S^(k)$, from 
+  which we proceed to analyze and map the data onto heliographic coordinates
+  and time series. 
+  %FAG: ended
 
   \subsubsection{Initial normalization}\label{sect:s-curve}
 
+  %FAG: edits this far
   Sections~\ref{sect:s-curve} and~\ref{sect:initial-centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
   given by Juha Aatrokoski at MRO, and a similar calibration method is commonly used at MRO.
    
@@ -1007,7 +1022,6 @@ The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
   %combinations $j = \mathrm{1a}, \mathrm{2b}, \mathrm{2c}$.
   %%MJK I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.
   
-  %FAG: edits to here TO Continue...
   To compare these calibration methods, we arbitrarily choose an interval which contains $n$ solar maps within a 
   reasonable time span $[\s{t}{min},\s{t}{max}]$. We process all these maps using each method $j$, and produce a list of 
   trackable radio features $F_j$. Due to differences in the operation of each calibration method, we do not expect the 
