@@ -447,41 +447,6 @@
   %
   %%MJK So, to summarize my comments to the intro: expand significantly on Kallunki earlier paper(s), and pinpoint in detail what was there, and what is new in here, and why this work was necessary. Expand on the relevance of the dataset: what does 37GHz data describe, why is it relevant, what else has been done before in the frequency band? Move the parts describing the workflow to Section 2.
   %
-%--------------------------------------------------------------------
-
-  \begin{figure}
-  \centering
-  \includegraphics[width=\columnwidth]{nea_box.png}
-  \begin{picture}(0,0)(0,0)
-    \put(-130,620){\begin{large}\sf\bf{(a)}\end{large}}
-    \put(-130,417){\begin{large}\sf\bf{(b)}\end{large}}
-    \put(-130,213){\begin{large}\sf\bf{(c)}\end{large}}
-  \end{picture}
-  \caption{
-    Typical Mets\"ahovi solar observations on $\SI{37}{GHz}$ {\bf(a)} 25.07.2011 and {\bf(b)} 05.07.2016. Prior to May 
-    2015 the observation beam scans along the equator, with samples mapped onto a rectangular grid. Since June 2015 a 
-    more accurate fit to the beam path was used, scanning horizontally. For the intensity color map each pixel is mapped 
-    to the nearest observed sample. This is an original uncalibrated map. {\bf(c)} Closeup of the 05.07.2016 map which 
-    illustrates circle fitting.
-    %target set of points used for fitting the circle of the solar limb. White dots are normal 
-    %observational samples, while the blue dots are the samples used for the fitting. Based on sample intensity, the 
-    %radial distance from the center of disk, for each blue dot, is corrected based on sample intensity. The resulting 
-    %target set is shown with green dots.
-    %Maps that originate May on 2015 or earlier have
-    %sweeps along the equator. Samples are assumed on a rectan-
-    %gular grid. Typical Metsähovi solar observation on 37 GHz.
-    %This data format has been in use since June 2015. White
-    %dots: samples not used for disk fitting. Red dots: sam-
-    %ples used for disk fitting, radial offset calculated based on
-    %limb model. Green dots: samples corrected for radial offset,
-    %which constitute the target set for circle fitting. Color map:
-    %each pixel is mapped to the nearest observational sample.
-    %Comment: This is an original uncalibrated map. Explain
-    %what is added up as part of calibration. Include another
-    %plot with the final version in Solar coordinates.
-  \label{oldmap}\label{typicalmap}}
-  \end{figure}
-%------------------------------------------------------------------------------
 \section{Methods}\label{sect:methods}
 
 \subsection{The solar maps}\label{sect:source}
@@ -514,6 +479,30 @@
     %SKK: Currently we have no carrington maps planned to be shown on the paper
   \end{enumerate}
 
+%--------------------------------------------------------------------
+  \begin{figure}
+  \centering
+  \includegraphics[width=\columnwidth]{nea_box.png}
+  \begin{picture}(0,0)(0,0)
+    \put(-85,608){\begin{large}\color{yellow}{\bf{(a)}}\end{large}}
+    \put(-85,402){\begin{large}\color{yellow}{\bf{(b)}}\end{large}}
+    \put(-85,200){\begin{large}\color{yellow}{\bf{(c)}}\end{large}}
+  \end{picture}
+  \caption{
+    Typical Mets\"ahovi solar observations on $\SI{37}{GHz}$ {\bf(a)}
+    25.07.2011 and {\bf(b)} 05.07.2016. Prior to May 2015 the observation beam
+    scans along the equator, with samples mapped onto a rectangular grid.
+    Since June 2015 a more accurate fit to the beam path was used, scanning
+    horizontally. For the intensity color map each pixel is mapped to the
+    nearest observed sample.
+    This is an original uncalibrated map.
+    {\bf(c)} Closeup of the 05.07.2016 map which 
+    illustrates circle fitting.
+    \fag{The x-axis label must be fully visible}
+    \label{oldmap}\label{typicalmap}}
+  \end{figure}
+%------------------------------------------------------------------------------
+
 Each line in a digital solar map file contains the time and coordinates of a sample as well as the recorded intensity 
 value. The coordinates are relative to the expected location of the center of the Sun on the sky. The intensity is 
 measured on $\SI{37}{GHz}$ and contains linear and logarithmic output from the amplifier as digital values. In this 
@@ -527,47 +516,7 @@ need to normalize the signal levels and also correct for any minor offsets in th
 properly centered map. The purpose of normalization is to have zero intensity at the background and unit intensity for 
 the QSL. For the contour maps up to year 1987, we trust the graphical markings and no calibration is needed.
 
-
-
-
-  %The digital maps do not specify the location of the solar disk.
-  %The disk markings in Fig.~\ref{typicalmap}, are identified by the 
-  %disk fitting method(s), described in Section\,\ref{sect:disk}.
-  %The intensity ranges shown in Fig.~\ref{typicalmap} are the original
-  %uncalibrated levels.
-  %For these, as well as those recovered from the earlier paper prints, the 
-  %signal levels need to be normalised, to correctly identify the 
-  %MJK Quiet Sun level? Has this been introduced earlier?
-  %MJK It was introduced later, now swapped.
-  %FAG introduced in introduction, but now added definition and hereafter
-  %quiet Sun level (hereafter QSL) and the
-  %signal levels need to be normalised, to correctly identify QSL and the
-  %black sky, also explained in Section\,\ref{sect:disk}.
-
-  %
-  %%MJK I think it would be best to put figures 1 and 2 into one single figure, and maybe add there also the planned figure of the final map in solar coordinates (Fig 1 caption). Also, the older map should become before the more recent map. 
-  %During a typical measurement, the antenna beam makes a sweep across the visible solar disk (Fig.~\ref{typicalmap}). 
-  %Until the end of May on 2015, the maps have been scanned in equatorial direction, so that declination is shifted between
-  %%MJK This would become Fig.1(a).
-  %adjacent sweeps. Since June, 2015, the sweeps have been horizontal, with shifting altitude between sweeps. 
-  %%MJK This would become Fig.1(b).
-  %These modern 
-  %maps respect the true path of the antenna, while the older maps have assumed linear antenna tracks with constant speed 
-  %%MJK typo
-  %and 
-  %%samplerate 
-  %sample rate along the equator as in Fig.
-  %%MJK Fig.1(b).
-  %\ref{oldmap}. The new maps typically recorded with $25$ samples per second for two minutes.
-  %%MJK The final map in solar coordinates is presented in Fig.1(c)...
-  %%MJK Horizontal row/vertical column of panels, up to Sami to decide...
-
-
-
-  %MJK Adding label
 %------------------------------------------------------------------------------
-
-
   \subsection{Disk fitting and signal levels} \label{sect:disk}
 
     
@@ -579,20 +528,34 @@ the QSL. For the contour maps up to year 1987, we trust the graphical markings a
   %FAG: trying to disembiguate use of 'sample'
   %SKK: maybe it could be clearer:
 
-  Each solar map $S$ consists of $N_S$ samples: $S = \left\{ s_i \;:\; i = 1, 2, ..., N \right\}$. Each sample $s_i$ specifies its location $(x_i,y_i)$ and intensity $u_i$ as recorded at time $t_i$:
+  Each solar map $S$ consists of $N_S$ samples $s_i$:
   \eqnl{radio_sample}{
-  s_i &=& \left( t_i, x_i, y_i, u_i, ... \right)
-  }.
-  The additional quantities ($...$) are included for sample $s_i$ as part of a calibration process described below.
-  
-  The location is specified in equatorial coordinates relative to the expected position of the central point of the Sun, $(\RA_{\astrosun}, \Dec_{\astrosun})$, at time $t_i$. The Right Ascension is cosine corrected, so that the maps have unit aspect ratio:
-  \eqnl{relative_radec}{
-  x_i &=& \frac{\RA(s_i) - \RA_{\astrosun}(t_i)}{\cos \left( \Dec_{\astrosun}(t_i) \right)} \\
-  y_i &=& \Dec(s_i) - \Dec_{\astrosun}(t_i)\text{.}
+    S &=& \left\{ s_i \;:\; i = 1, 2, ..., N_S \right\}\,\text{ and}\nonumber\\
+    s_i &=& \left( t_i, x_i, y_i, u_i, ... \right),
   }
-  The absolute pointing of the antenna is not sufficiently accurate, while we can expect the relative accuracy to be 
-  better. We thus need to determine the center of the visual disk for each map. Also, since the signal levels $u_i$ are on arbitrary scale, we 
-  need to normalize them. A solar map consists of three regimes:
+which specifies location $(x_i,y_i)$ and intensity $u_i$ as recorded at time
+$t_i$ of each $s_i$ observation.
+During calibration, as described below, additional derived quantities ($...$)
+are attributed to each $s_i$.
+Location is specified in equatorial coordinates relative to the expected
+position, $(\RA_{\astrosun}, \Dec_{\astrosun})$, of the central point of Sun
+at time $t_i$.
+With Right Ascension cosine corrected, such that maps have unit aspect ratio, we apply 
+\eqnl{relative_radec}{
+  x_i = \frac{\RA(s_i)
+      - \RA_{\astrosun}(t_i)}{\cos \left( \Dec_{\astrosun}(t_i) \right)}, &&
+  y_i = \Dec(s_i) - \Dec_{\astrosun}(t_i)\text{.}
+  }
+  %FAG: rephrase
+  %The absolute pointing of the antenna is not sufficiently accurate, while we can expect the relative accuracy to be 
+  %better. We thus need to determine the center of the visual disk for each map. Also, since the signal levels $u_i$ are on arbitrary scale, we 
+  %need to normalize them. A solar map consists of three regimes:
+  We do not rely on the targeting accuracy of the antenna, and instead
+  determine the center of the visual disk from each map, from which we
+  define the relative location of each sample.
+  Also, since the signal levels $u_i$ have arbitrary scale, 
+  they need to be normalized.
+  A solar map contains the regions designated as
   \begin{itemize}
   \item Background: The beam probes outer layers of the corona. Low intensity.
   \item Limb: Transition from corona to chromosphere.
@@ -655,8 +618,6 @@ the QSL. For the contour maps up to year 1987, we trust the graphical markings a
   %\end{enumerate}
   %In this study, we present the optimal method combinations 1a, 2b and 2c.
 %------------------------------------------------------------------------------
-  \mjk{I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.}
-  \fag{Sami please clarify reasoning for the choice.}
 
     \skk{I decided it is easier to convert the code into such form that it is easier to document, and the document it. 
     So now the S-curve -method and the calibration stuff described by J. Aatrokoski in MRO is used as an initiation step 
@@ -897,8 +858,6 @@ The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
   %$u_1 < ... < u_{n-2}$, for which $P^{\prime\prime}(u_j) = 0$.
   %There is an odd number of such roots, so we choose the middle root:
   %$u_0 := u_{{(n-1)}/{2}}$.
-  
-  \mjk{To me the labels look ok now. Perhaps you have already modified them according to Fred's suggestions. I am not so disturbed by the plot titles, but what is plotted in the different panels should be also explained in the figure caption. }
   
   %FAG: sample->specimen
   %The sample $f_S(i_0)$ with index $i_0 := \floor{w(u_0)+0.5}$ is essentially in the middle of the disk boundary and provides pivot for signal level references. We set:

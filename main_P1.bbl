@@ -1,4 +1,4 @@
-\begin{thebibliography}{12}
+\begin{thebibliography}{13}
 \expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
 
 \bibitem[{{Babcock}(1961)}]{Babcock61}
@@ -35,6 +35,9 @@ Krause, F. \& R{\"a}dler, K.-H. 1980, {Mean-field Magnetohydrodynamics and
   {Tuominen}}]{PBKT06}
 {Pelt}, J., {Brooke}, J.~M., {Korpi}, M.~J., \& {Tuominen}, I. 2006, \aap, 460,
   875
+
+\bibitem[{{Rozelot} \& {Kosovichev}(2015)}]{Rozelot15}
+{Rozelot}, J.~P. \& {Kosovichev}, A.~{Kilcik}, A. 2015, \apj, 812, 91
 
 \bibitem[{{Selhorst} {et~al.}(2014){Selhorst}, {Costa}, {Gim{\'e}nez de
   Castro}, {Valio}, {Pacini}, \& {Shibasaki}}]{SCGVPS14}
