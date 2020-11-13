@@ -135,10 +135,10 @@
   {
    %FAG moved section to disk fitting
     %Determine the solar disk position and size from each map as well as
-    %normalize the measured background intensity for zero and the Quiet Sun
+    %normalise the measured background intensity for zero and the Quiet Sun
     %Level (QSL) for unity.
     %This can be done using a binary combination of two disk methods (1 and 
-    %2) and three normalization methods (a, b, and c).
+    %2) and three normalisation methods (a, b, and c).
     %The methods are: (1) intentionally weighted center of mass of the radio
     %sample coordinates, (2) fitting a circle for those sample coordinates
     %which we, by geometry, expect to belong to the solar limb, (a) sort the
@@ -354,7 +354,7 @@
   instrumental bias, atmospheric noise and effects, time of day and seasonal
   effects and solar limb dimming effects.
   We present two methods for correctly detecting the position of the solar disk
-  in each map and three methods for normalizing the signal levels, such that
+  in each map and three methods for normaliseing the signal levels, such that
   the background \emph{black sky} has value zero and the 
   %FAG: expanded definitiion in response to MJK later query
   %Quiet Sun Level (QSL) value unity.
@@ -396,7 +396,7 @@
   %During the 40 years, the equipment 
   %has experienced several upgrades and there has also been changes in the data format.
   %he data requires careful 
-  %normalization procedures, after which the butterfly diagram can be constructed from the solar maps. The solar maps from 
+  %normalisation procedures, after which the butterfly diagram can be constructed from the solar maps. The solar maps from 
   %1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
   %mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
   %%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
@@ -412,7 +412,7 @@
   %%MJK The purpose of this paper is to present two methods () for detecting the disk and ....
   %We present two methods (1: S-curve and 
   %center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
-  %statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
+  %statistics and outlier neglection, c: interpolating between histogram peaks) for normaliseing the signal levels so that 
   %zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
   %%MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
   %
@@ -510,10 +510,10 @@ paper, we restrict the study into the linear scale. However, the logarithmic sca
 intensities and also avoids saturation in flare events, thus offering prospects for future 
 research.
 
-We use the word calibration for describing the combined effort of normalizing and centering a map. The applicable 
+We use the word calibration for describing the combined effort of normaliseing and centering a map. The applicable 
 methods are described in Section\,\ref{sect:disk}. The raw intensities of a scan have an arbitrary scale, as in Fig.~\ref{typicalmap}{\bf(a-c)}. We 
-need to normalize the signal levels and also correct for any minor offsets in the sample coordinates in order to have a 
-properly centered map. The purpose of normalization is to have zero intensity at the background and unit intensity for 
+need to normalise the signal levels and also correct for any minor offsets in the sample coordinates in order to have a 
+properly centered map. The purpose of normalisation is to have zero intensity at the background and unit intensity for 
 the QSL. For the contour maps up to year 1987, we trust the graphical markings and no calibration is needed.
 
 %------------------------------------------------------------------------------
@@ -549,12 +549,12 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   %FAG: rephrase
   %The absolute pointing of the antenna is not sufficiently accurate, while we can expect the relative accuracy to be 
   %better. We thus need to determine the center of the visual disk for each map. Also, since the signal levels $u_i$ are on arbitrary scale, we 
-  %need to normalize them. A solar map consists of three regimes:
+  %need to normalise them. A solar map consists of three regimes:
   We do not rely on the targeting accuracy of the antenna, and instead
   determine the center of the visual disk from each map $S$, from which we
   define the relative location of each $s_i$.
   Also, since the signal levels $u_i$ have arbitrary scale, 
-  they need to be normalized.
+  they need to be normalised.
   A map $S$ samples from each of the regions we designate as
   \begin{itemize}
   \item Background: The beam probes outer layers of the corona. Low intensity.
@@ -565,12 +565,12 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   Section~\ref{sect:s-curve}) in order to extract two representative intensity
   values, $\s{u}{background}$ and $\s{u}{disk}$.
   We then perform a linear transformation for the raw intensity values $u_i$
-  and obtain normalized intensities $v_i$ as
-  \eqnl{map_normalization}{
+  and obtain normalised intensities $v_i$ as
+  \eqnl{map_normalisation}{
   v_i^{(0)} := \frac{u_i - \s{u}{background})}{\s{u}{disk} -
                   \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
   }
-  The normalized intensities are then used for initial centering of the map
+  The normalised intensities are then used for initial centering of the map
   (Section~\ref{sect:initial-centering}) at $(x^(0),y^(0))$, %FAG added
   from which the initial radius of the disk, $r^(0)$, is estimated
   (Section~\ref{sect:initial-radius}).
@@ -578,18 +578,27 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   then refined by an iterative process described in
   Sections~\ref{sect:further_optimization}, \ref{sect:outliers_disk} and 
   \ref{sect:outliers_limb}.
-  Following sufficient iterations we obtain calibrated maps $S^(k)$, from 
+  Following sufficient iterations we obtain calibrated maps $S^{(k)}$, from 
   which we proceed to analyze and map the data onto heliographic coordinates
   and time series. 
   %FAG: ended
 
-  \subsubsection{Initial normalization}\label{sect:s-curve}
+  \subsubsection{Initial normalisation}\label{sect:s-curve}
 
-  %FAG: edits this far
-  Sections~\ref{sect:s-curve} and~\ref{sect:initial-centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
-  given by Juha Aatrokoski at MRO, and a similar calibration method is commonly used at MRO.
-   
-  In order to extract representatives $\s{u}{background}$ and $\s{u}{disk}$, we will first obtain a list of samples in map $S$, sorted by their raw intensity values $u_i$. Let $I_S$ be the set of indices for samples in $S$:
+  %FAG: rephrased
+  %Sections~\ref{sect:s-curve} and~\ref{sect:initial-centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
+  %given by Juha Aatrokoski at MRO, and a similar calibration method is commonly used at MRO.
+  The initial normalisation and centering methods described here and in
+  Section~\ref{sect:initial-centering} derive from an oral outline
+  given by Juha Aatrokoski at MRO of the calibration method commonly used at
+  MRO, including \citet{metsahovi40}.
+%FAG: removed para break and rephrase
+  %In order to extract representatives $\s{u}{background}$ and $\s{u}{disk}$, we will first obtain a list of samples in map $S$, sorted by their raw intensity values $u_i$. Let $I_S$ be the set of indices for samples in $S$:
+  In this step we initialise $\s{u}{background}$ and $\s{u}{disk}$.
+  The samples in map $S$ are sorted by their raw intensity values $u_i$.
+  \fg{I think this may be unnecessarily detailed (verbose).
+  It can be summarised in words, alternative below...}
+  Let $I_S$ be the set of indices for samples in $S$:
   \eqnl{S-curve_indices}{
   I_S = \left\{ 1, 2, ..., N_S \right\} \text{.}
   }
@@ -602,6 +611,18 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   w^{-1}(j) = u_{f_S(j)}
   }
   Its inverse, $w(u)$, is plotted for a typical scan in Fig.~\ref{S-curve_example}{\bf(a)}. 
+
+  \fg{Alternative wording}
+
+  We construct a monotonous integer function $w^{-1}$, such that
+  $w^{-1}(j) = u_j$.
+  The integer $j$ denotes the index of the re-ordered sample set $s_i,$ such
+  that $j \le j^{\prime}\Leftrightarrow u_{j} \le u_{j^{\prime}}.$
+  In Fig.~\ref{S-curve_example}{\bf(a)} , the inverse $w(u)$ is plotted against
+  $u$ for a typical scan.
+
+  \fg{Alternative wording end}
+  %FAG: edits this far
 
 
   %We are now free to choose the statistical functions $f$, $g$, $h$ which now describe the calibration algorithm. It is 
@@ -634,27 +655,6 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   %In this study, we present the optimal method combinations 1a, 2b and 2c.
 %------------------------------------------------------------------------------
 
-    \skk{I decided it is easier to convert the code into such form that it is easier to document, and the document it. 
-    So now the S-curve -method and the calibration stuff described by J. Aatrokoski in MRO is used as an initiation step 
-    for an iteration process. This iteration process selects limb samples a estimates they distance from the center. It 
-    then fits a circle and neglects outliers. The centering is performed iteratively. I am almost done describing the 
-    process thoroughly.}
-
-    \skk{I though earlier about performing a comparison of the effectiviness of my convex hull method / limb model, the 
-    S-curve method and the Shabasaki method. Actually these three methods are not completely overlapping in what they 
-    perform, so they do not compete. And what I do is more iterative, and these two other methods only provide a 
-    starting point for the iteration. Actually, I also wrote a simple method for producing a starting point, but the 
-    S-curve method is more effective so I changed the code to use S-curve method first.}
-
-    \skk{Anyway, the limb model -based iteration is what actually makes the centering.}
-    
-    \skk{There is another issue which I think is more serious. Metsähovi maps metadata are based on the standard value 
-    for solar radius, $6.957 \times 10^8 \mathrm{m}$. For $\SI{8.1}{nm}$ wavelength, value $7.101 \times 10^8 
-    \mathrm{m}$ is more realistic, based on \cite{Rozelot15}. By analyzing the Metsähovi maps I have managed to produce 
-    two different values, based on different approaches. One, based on single day maps, produces $7.10 \times 10^8 
-    \mathrm{m}$, which is pretty close. By using cycle 24 and a different definition for the radius, I arrive at $7.18 
-    \times 10^8 \mathrm{m}$. I am currently reprosessing the data based on the later value of the radius.}
-    
   \begin{figure}
   \centering
   \includegraphics[width=8.5cm]{Scurve_example.png}
@@ -669,7 +669,7 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
     A zoom in between the dashed line in {\bf(b)} includes the polynomial
     fit from Eq.~\eqref{scurve-approx}.
     A point of zero curvature (cross) provides a pivot point for signal level
-    normalization.}
+    normalisation.}
   \label{S-curve_example}
   \end{figure}
 
@@ -692,6 +692,8 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   \eqnl{scurve-target}{
   T_k = \sum \limits_{i = \s{i}{min}^{(k)}}^{\s{i}{max}^{(k)}} \left( w(u_i) - i \right)^2 \text{.}
   }
+  \fg{Perhaps most of the following details could be moved to an appendix and 
+  here we just summarise the key points of the stage?}
   The domain of the first optimization round ($k=1$) contains the whole map:
   \eqnl{scurve-firstdomain}{
   \s{i}{min}^{(1)} := 1 \; \text{and} \; \s{i}{max}^{(1)} := N_S \text{,}
@@ -732,7 +734,8 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   for the pivot $\s{i}{pivot}^{(k)}$. This leads to a failure if the resulting second differential $P_k^{\prime\prime}(u)$ 
   has zero or even number of real roots. Otherwise we can select the middle real root and proceed.
 
-  The initial normalized intensities $v_i^{(0)}$ can now be assigned using Equation~\ref{map_normalization}.
+  \fg{Summarise the above and move the details to an appendix?}
+  The initial normalised intensities $v_i^{(0)}$ can now be assigned using Equation~\ref{map_normalisation}.
   
   \subsubsection{Initial centering}\label{sect:initial-centering}
 
@@ -746,6 +749,27 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   }
   This defines the initial center of the solar disk for the map, but it is further optimized below, starting from Section~\ref{sect:further_optimization}.
 
+    \skk{I decided it is easier to convert the code into such form that it is easier to document, and the document it. 
+    So now the S-curve -method and the calibration stuff described by J. Aatrokoski in MRO is used as an initiation step 
+    for an iteration process. This iteration process selects limb samples a estimates they distance from the center. It 
+    then fits a circle and neglects outliers. The centering is performed iteratively. I am almost done describing the 
+    process thoroughly.}
+
+    \skk{I though earlier about performing a comparison of the effectiviness of my convex hull method / limb model, the 
+    S-curve method and the Shabasaki method. Actually these three methods are not completely overlapping in what they 
+    perform, so they do not compete. And what I do is more iterative, and these two other methods only provide a 
+    starting point for the iteration. Actually, I also wrote a simple method for producing a starting point, but the 
+    S-curve method is more effective so I changed the code to use S-curve method first.}
+
+    \skk{Anyway, the limb model -based iteration is what actually makes the centering.}
+    
+    \skk{There is another issue which I think is more serious. Metsähovi maps metadata are based on the standard value 
+    for solar radius, $6.957 \times 10^8 \mathrm{m}$. For $\SI{8.1}{nm}$ wavelength, value $7.101 \times 10^8 
+    \mathrm{m}$ is more realistic, based on \cite{Rozelot15}. By analyzing the Metsähovi maps I have managed to produce 
+    two different values, based on different approaches. One, based on single day maps, produces $7.10 \times 10^8 
+    \mathrm{m}$, which is pretty close. By using cycle 24 and a different definition for the radius, I arrive at $7.18 
+    \times 10^8 \mathrm{m}$. I am currently reprosessing the data based on the later value of the radius.}
+    
   \subsubsection{Initial radius}\label{sect:initial-radius}
 
   It is possible to calculate the radius of the disk as well. We start by calculating area integrals of a function $f(x,y) = x^2+y^2 = r^2$ over a disk of radius $R$, $\mathcal{B}(\bm{0},R)$. This gives:
@@ -960,10 +984,10 @@ The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
 
   %FAG reordered text, but still edit TODO
   %Determine the solar disk position and size from each map as well as
-  %normalize the measured background intensity for zero and the Quiet Sun
+  %normalise the measured background intensity for zero and the Quiet Sun
   %Level (QSL) for unity.
   %This can be done using a binary combination of two disk methods (1 and 
-  %2) and three normalization methods (a, b, and c).
+  %2) and three normalisation methods (a, b, and c).
   %The methods are: (1) intentionally weighted center of mass of the radio
   %sample coordinates, (2) fitting a circle for those sample coordinates
   %which we, by geometry, expect to belong to the solar limb, (a) sort the
@@ -989,7 +1013,7 @@ The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
   %%During the 40 years, the equipment 
   %%has experienced several upgrades and there has also been changes in the data format.
   %%The data requires careful 
-  %%normalization procedures, after which the butterfly diagram can be constructed from the solar maps.
+  %%normalisation procedures, after which the butterfly diagram can be constructed from the solar maps.
   %%The solar maps from 
   %%1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
   %%mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
@@ -1006,7 +1030,7 @@ The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
   %%MJK The purpose of this paper is to present two methods () for detecting the disk and ....
   %We present two methods (1: S-curve and 
   %center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
-  %statistics and outlier neglection, c: interpolating between histogram peaks) for normalizing the signal levels so that 
+  %statistics and outlier neglection, c: interpolating between histogram peaks) for normaliseing the signal levels so that 
   %zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
   %%MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
 
@@ -1053,7 +1077,7 @@ The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
     \put(-205,146){\begin{large}{\sf\bf{(b)}}\end{large}}
   \end{picture}
 %\begin{picture}(0,0)(0,0) \put(-220,315){\begin{huge}a\end{huge}} \put(-220,158){\begin{huge}b\end{huge}} \end{picture}
-\caption{Average quiet Sun intensity as a function of radial distance from the visual center, normalized for the center 
+\caption{Average quiet Sun intensity as a function of radial distance from the visual center, normalised for the center 
 intensity. a) Limb brightening is observed when line of sight is almost tangential to the solar surface. b) The beam 
 size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in a convolution pattern. On both plots, we observe more blurring when the altitude of observation is low, due to atmospheric effects.}
 \label{limb_brightening}
@@ -1420,7 +1444,7 @@ surface. We also obtain various structural information from these regions.
   \item Heliographic latitude: $l_j$.
   \item Distance from the center of disk, relative to the apparent radius of the disk: $r_j$.
   \item Altitude of observation, angle with respect to horizon at MRO: $a_j$.
-  \item Normalized intensity: $v_j$.
+  \item Normalised intensity: $v_j$.
   \end{itemize}
 
   Here the index $j$ is mapped to some sample $s_i$ on some map $S$, and $j$ runs over all the maps of cycle $24$. The 
