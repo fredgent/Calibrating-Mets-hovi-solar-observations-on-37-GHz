@@ -1,0 +1,113 @@
+\symtable{Disk fitting and signal levels}{
+$S$         & A particular \emph{solar map}, also terms \emph{map} and \emph{scan} are used. $S$ is a set of samples. In order to reduce the amount of subscripts and superscripts in various symbols, we often omit the $S$ and assume that it is known from context. \\
+$s_i$       & Radio sample in map $S$. It is a bundle of numerical values just as coordinates and intensities. \\
+$N_S$       & Number of samples in map $S$. \\
+$I_S$       & Index set of $S$: $I_S = \left\{ 1, 2, ..., N_S \right\}$. \\
+$i$         & Index used for solar map samples so that $s_i \in S \; \Leftrightarrow \; i \in I_S$. Any numerical value accosiated with $s_i$ is referred with index $i$. \\
+$t_i$       & Time when the sample$s_i$ is recorded. Typical unit is unix time in seconds. Recording the map $S$ typically takes a few minutes. \\
+$x_i$       & Uncalibrated relative right ascension of the radio sample, with respect to the expected center of the visible solar disk. \\
+$y_i$       & Uncalibrated relative declination of the radio sample, with respect to the expected center of the visible solar disk. Cosine corrected. \\
+$u_i$       & Uncalibrated, raw intensity of a particular radio sample $s_i$, typically in the range $-4000 .. 32000$. \\
+$\RA(s_i)$  & Absolute right ascension of a particular sample, as seen from MRO at time $t_i$. \\
+$\Dec(s_i)$ & Absolute declination of a particular sample, as seen from MRO at time $t_i$. \\
+$t$         & Time. \\
+$\RA_{\astrosun}(t)$  & Absolute right ascension of the center of the solar disk as seen from MRO at time $t$. \\
+$\Dec_{\astrosun}(t)$ & Absolute declination of the center of the solar disk as seen from MRO at time $t$. \\
+$c$         & Calibration round; calibration involves normalization and centering. We start with $c=0$. \\
+$v_i^{(c)}$ & Normalized sample intensity after round $c$. We aim to have zero intensity at the background and unity at the disk. \\
+$x^{(c)}$   & \multirow{2}{140mm}{Center of the calibrated map after round $c$.} \\
+$y^{(c)}$ \\
+$x_i^{(c)}$ & \multirow{2}{140mm}{Calibrated right ascension and declination of sample $s_i$ after calibration round $c$.} \\
+$y_i^{(c)}$ \\
+$r^{(c)}$   & Radius of the calibrated map after round $c$.}
+
+\symtable{Initial normalization}{
+$j$         & Index used for solar map samples when they are sorted by their raw intensity. \\
+$u$         & Real value used for uncalibrated intesities. \\
+$f_S$       & Bijective mapping $f_S:\; I_S \mapsto I_S$ used for sorting the samples by their raw intensities. \\
+$w^{-1}(j)$ & Index v.s. raw intensity in the S-curve method: $w^{-1}(j) = u_{f_S(j)}$ and $j \le j^{\prime} \; \Leftrightarrow \; w^{-1}(j) \le w^{-1}(j^{\prime})$. \\
+$w(u)$      & Inverse of $w^{-1}(j)$, raw intensity v.s. sample index. \\
+$k$         & Integer used for iterations of the S-curve method, starting with $k=1$. \\
+$P_k(u)$    & Polynomial used to approximate $w(u)$ during iteration round $k$. \\
+$\s{n}{sc}$ & Degree of $P_k$ approximation for $w(u)$. Typically, $\s{n}{nc} = 3$. Must be odd and at least $3$. \\
+$a_n^{(k)}$ & Coefficient of $P_k$. \\
+$\bm{a}_k$  & All coefficients of $P_k$ as a vector of $\s{n}{sc}+1$ elements. \\
+$T_k(\bm{a}_k)$           & Target function when optimizing the quality of fit for $w(u)$. \\
+$\s{j}{min}^{(k)}$        & \multirow{2}{140mm}{Domain of indices used on round $k$.} \\
+$\s{j}{max}^{(k)}$ \\
+$\s{u}{root}^{(k)}$       & Point of zero curvature, for which $P^{\prime\prime}_k(\s{u}{root}) = 0$. \\
+$\s{j}{pivot}^{(k)}$      & Pivot index obtained as $\s{j}{pivot}^{(k)} := P_k(\s{u}{root})$. \\
+$\s{u}{background}^{(k)}$ & Background level obtained from S-curve method iteration $k$. \\
+$\s{u}{disk}^{(k)}$       & Solar disk level obtained from S-curve method iteration $k$. \\
+$\s{u}{background}$       & \multirow{2}{140mm}{Final intensity levels when we have terminated the S-curve iteration.} \\
+$\s{u}{disk}$}
+
+\symtable{Initial centering and radius}{
+$b_i^{(c)}$              & Sample weight during calibration round $c$. \\
+$\mathcal{B}(\bm{0},R)$  & Disk of radius $R$ centered at origin. \\
+$t_S$              & Average observational time during recording $S$. \\
+$r_{\astrosun}(t)$ & Apparent radius of the Sun at time $t$. \\
+$R_{\astrosun}$    & Physical, three-dimensional radius of the Sun. Depends on wavelength of observation and on exact definition. \\
+$d(t)$             & Physical distance between the center (core) of the Sun and MRO during observation at time $t$.}
+
+\symtable{Inner disk outliers}{
+$q$                       & Iteration round number, starting with $q=0$, when neglecting inner disk outliers. \\
+$\Lambda$                 & Rectangular lattice, a set of lattice points superimposed over the visible solar disk. \\
+$I_{\Lambda}$             & Index set for lattice points. \\
+$h$                       & Index for rectangular lattice points. \\
+$\lambda_h$               & Individual lattice point with $h \in I_{\Lambda}$ and $\Lambda = \left\{ \lambda_h :\; h \in I_{\Lambda}\right)$. \\
+$\s{n}{grid}$             & Grid size for the lattice.\\
+$\s{x}{min}$              & \multirow{4}{140mm}{Box spanning a two-dimensional range of right ascension and declination. Each sample in scan $S$ fits within this box such that $\s{x}{min} = \min{x_i}$, $\s{x}{max} = \max{x_i}$, $\s{y}{min} = \min{y_i}$, and $\s{y}{max} = \max{y_i}$. This frames the lattice $\Lambda$ and covers the solar disk.} \\
+$\s{x}{max}$ \\
+$\s{y}{min}$ \\
+$\s{y}{max}$ \\
+$h_x$                     & \multirow{2}{140mm}{Two-dimensional index for lattice points: $0 \le h_x,h_y < \s{n}{grid}$ with $h_x,h_y \in \mathds{N}$.} \\
+$h_y$ \\
+$x_h$                     & \multirow{2}{140mm}{Right ascension and declination of the lattice point $h$ with $\s{x}{min} \le x_h \le \s{x}{max}$ and $\s{y}{min} \le y_h \le \s{y}{max}$.} \\
+$y_h$ \\
+$i_{\Lambda}(h)$          & Maps the lattice index $h \in I_{\Lambda}$ into the map index $i \in I_S$ of the nearest uncalibrated sample. \\
+$d_h^{(c)}$               & Distance between lattice point $\lambda_h$ and nearest sample $s_i$ at calibration round $c$. \\
+$u_h^{(c)}$               & Lattice point intensity during calibration round $c$. \\
+$I_c$                     & Subset of the lattice which contains the inner disk. \\
+$I_c^{(q)}$               & Subset of $I_c$ so that bright and dim features are omitted, starting from $q=0$ with $I_c^{(0)} := I_c$. \\
+$\s{u}{QSL}^{(c,q)}$      & Quiet Sun Level defined after $q$ outlier iterations during calibration round $c$. \\
+$\s{\sigma}{QSL}^{(c,q)}$ & Standard deviation, outliers neglected, after $q$ iterations during calibration round $c$. \\
+$\s{q}{max}$              & Number of iterative outlier neglection rounds. \\
+$\s{u}{QSL}^{(c)}$        & QSL after outliers neglected from inner disk: $\s{u}{QSL}^{(c)} = \s{u}{QSL}^{(c,\s{q}{max})}$. \\
+$\s{\sigma}{QSL}^{(c)}$   & QSL standard deviation after outliers neglected from inner disk: $\s{\sigma}{QSL}^{(c)} = \s{\sigma}{QSL}^{(c,\s{q}{max})}$.}
+
+\symtable{Bright and dim features}{
+$I_c^{(\mathrm{dim})}$    & Lattice subset that consists of dim features. \\
+$I_c^{(\mathrm{QSL})}$    & Lattice subset that contains no significant features. It is the based on the previous centering round as $I_c^{(\mathrm{QSL})} = I_{c-1}^{(\s{q}{max}+1)}$. \\
+$I_c^{(\mathrm{bright})}$ & Lattice subset that consists of bright features. \\
+$\mathcal{F}_c$           & Set of features obtained from calibration round $c$. \\
+$F$                       & Particular feature $F \in \mathcal{F}_c$. \\
+$A(F)$                    & Area of a feature $F$. \\
+$r(F)$                    & Radius of a feature $F$. \\
+$z(F)$                    & Two-dimensional location of a feature $F$.}
+
+\symtable{Limb outliers}{
+$r_i^{(c)}$               & Relative radial distance of sample $s_i$ from the visual center of the solar disk, based on previous calibration round $c-1$. \\
+$L^{(c)}_1$               & Samples in $S$ which are not too close to any bright or dim feature. \\
+$L^{(c)}_2$               & Samples which are located at the limb by $\pm 0.04$radii. \\
+$L^{(c)}_3$               & Samples with intensities between $0.05$ and $0.95$ QSL. \\
+$L^{(c)}$                 & Boundary subset used for centering: $L^{(c)} := L^{(c)}_1 \cap L^{(c)}_2 \cap L^{(c)}_3$. \\
+$r_i^{\prime(c)}$         & Estimated relative radial distance for sample $s_i \in L^{(c)}$, based on known limb profile, on round $c$. \\
+$p$                       & Grand iteration round for optimizing limb profile. This involves processing all the maps of one solar cycle. \\
+$l_{p,S}(r)$              & Limb profile for map $S$: estimated intensity at radius $r$ from the center of the solar disk. The profile is a result of chromospheric limb brightning and telescope beam spreading due to diffraction and scattering at Earth's atmosphere. \\
+$l_{0,S}(r)$              & Simple limb profile for bootstrapping the grand iteration at $p=0$. It is identical for all maps. \\
+$a_{\astrosun}(t)$        & Altitude of the center (core) of the Sun, angle above horizon, as seen from MRO at time $t$. \\
+$a_S$                     & Altitude when observing map $S$: $a_S := a_{\astrosun}(t_S)$. \\
+$m$                       & Round for iterating the limb profile on a particular $p$, using maps of one solar cycle. \\
+$\bm{x}_m^{(p)}$          & Parameter set for the limb model, optimizing at round $m$ and grand iteration $p$. \\
+$\kappa$                  & Constant for deciding the level of detail we want for the limb model. \\
+$\rho(r)$                 & Transformation for emphasing details at $r=1$: $\rho(r) = \kappa \arctan \left( r - 1 \right)$. \\
+$B(\bm{x},\rho,a)$        & Two-dimensional polynomial of $\rho$ and $a$ with desired degree and coefficients included in $\bm{x}$. \\
+$\delta r_i^{(c)}$        & Radial error for sample $s_i$: $\delta r_i^{(c)} := r_i^{(c)} - r_i^{\prime(c)}$. \\
+$g$                       & Round for negleting limb outliers. We start from $g=4$. \\
+$\s{g}{out}$              & Maximum outlier neglection round when there are $\s{g}{out} - 4$ such rounds. \\
+$\Delta \left( L^{(c)}_g \right)$ & Standard deviation of radial errors on rounds $g$ and $c$.}
+
+\symtable{Subsequent centering}{
+$T_g$ & Quality of circle fitting.}
+

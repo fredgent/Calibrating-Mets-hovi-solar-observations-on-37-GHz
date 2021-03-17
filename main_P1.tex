@@ -11,10 +11,9 @@
 \documentclass{aa}  
 % SRK website: 42FC36A2
 %
-\usepackage{graphicx,svg,bm,amsmath,dsfont,siunitx,wasysym,tikz,color,scalerel}
+\usepackage{graphicx,svg,bm,amsmath,dsfont,siunitx,wasysym,tikz,color,scalerel,multirow,tabularx,hyperref,placeins}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\usepackage{comment}
-\usepackage{hyperref}
 %\usetikzlibrary{arrows,positioning,decorations.pathmorphing,backgrounds,calc,shadows}
 %\tikzset{
 %    ashadow/.style={opacity=.25, shadow xshift=0.1, shadow yshift=-0.1, color=red!50!black},
@@ -540,7 +539,7 @@ are attributed to each $s_i$.
 Location is specified in equatorial coordinates relative to the expected
 position, $(\RA_{\astrosun}, \Dec_{\astrosun})$, of the central point of Sun
 at time $t_i$.
-With Right Ascension cosine corrected, such that maps have unit aspect ratio, we apply 
+With right ascension cosine corrected, such that maps have unit aspect ratio, we apply 
 \eqnl{relative_radec}{
   x_i = \frac{\RA(s_i)
       - \RA_{\astrosun}(t_i)}{\cos \left( \Dec_{\astrosun}(t_i) \right)}, &&
@@ -561,69 +560,75 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   \item Limb: Transition from corona to chromosphere.
   \item Disk: The beam probes chromosphere with varying incident angle. High intensity compared to background. Features, such as dim and bright regions, are visible.
   \end{itemize}
-  For a map $S$ we perform a preliminary statistical analysis (see
-  Section~\ref{sect:s-curve}) in order to extract two representative intensity
-  values, $\s{u}{background}$ and $\s{u}{disk}$.
-  We then perform a linear transformation for the raw intensity values $u_i$
-  and obtain normalised intensities $v_i$ as
-  \eqnl{map_normalisation}{
-  v_i^{(0)} := \frac{u_i - \s{u}{background})}{\s{u}{disk} -
-                  \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
-  }
-  The normalised intensities are then used for initial centering of the map
-  (Section~\ref{sect:initial-centering}) at $(x^(0),y^(0))$, %FAG added
-  from which the initial radius of the disk, $r^(0)$, is estimated
-  (Section~\ref{sect:initial-radius}).
-  The superscript, (0), is used to indicate the initial values, which are 
-  then refined by an iterative process described in
-  Sections~\ref{sect:further_optimization}, \ref{sect:outliers_disk} and 
-  \ref{sect:outliers_limb}.
-  Following sufficient iterations we obtain calibrated maps $S^{(k)}$, from 
-  which we proceed to analyze and map the data onto heliographic coordinates
-  and time series. 
-  %FAG: ended
 
+  For a map $S$, we will perform a preliminary statistical analysis (see Section~\ref{sect:s-curve}) in order to extract 
+  two representative intensity values, $\s{u}{background}$ and $\s{u}{disk}$. We will then perform a linear 
+  transformation for the raw intensity values $u_i$ and obtain the first normalized intensities $v_i^{(0)}$ as
+  \eqnl{map_normalization}{
+  v_i^{(0)} := \frac{u_i - \s{u}{background})}{\s{u}{disk} - \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
+  }
+  The normalized intensities are then used for initial centering of the map in Section~\ref{sect:initial-centering}. 
+  This allows us to refine the equatorial coordinates of the samples as:
+  \eqnl{map_centering}{
+  \left( x_i^{(0)}, y_i^{(0)} \right) := \left( x_i, y_i \right) - \left( x^{(0)}, y^{(0)} \right) \text{.}
+  }
+  If the radius of the solar disk is not fixed, we can optionally also measure it. This finishes the initial calibration 
+  round, for which we use a superscript $\cdot^{(c)}$ with $c=0$, also in Equations~\ref{map_normalization} 
+  and~\ref{map_centering}. This will be followed by additional calibration rounds, starting from 
+  Section~\ref{sect:iterative-calibration}. Each calibration round produces a new normalized intensity value 
+  $v^{(c+1)}$(Section~\ref{sect:disk-outliers}) for each sample. Using these new values $v^{(c+1)}$, the center for the 
+  disk is further optimized as $(x^{(c+1)}, y^{(c+1)})$ in Section~\ref{sect:disk-outliers}.
+
+  %FAG added
+  %from which the initial radius of the disk, $r^(0)$, is estimated (Section~\ref{sect:initial-radius}). 
+  %The superscript, 
+  %(0), is used to indicate the initial values, which are then refined by an iterative process described in 
+  %Sections~\ref{sect:iterative_calibration}, \ref{sect:outliers_disk} and \ref{sect:outliers_limb}. Following sufficient 
+  %iterations we obtain calibrated maps $S^{(k)}$, from which we proceed to analyze and map the data onto heliographic 
+  %coordinates and time series.
+  %FAG: ended
+  \skk{Currenly, the code is not measuring the radius for each map. I implemented the functionality for 
+  that, but probably we don't need it. If it turns out that the relative scale is inaccurate and varies between maps, we 
+  can start using it. Maybe it would be clearer to omit the radius mode altogether. I just feel that it is relatively 
+  easy to include the radius as a free parameter in case we so desire. If we think this as a methodology paper, the 
+  radius measurement is a good bonus.}  
+  \skk{There are no superscripts or subscripts for $S$. I have included the progressive calibration steps as additional 
+  values included in the bundles $s_i\in S$.}
+  
   \subsubsection{Initial normalisation}\label{sect:s-curve}
 
   %FAG: rephrased
   %Sections~\ref{sect:s-curve} and~\ref{sect:initial-centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
   %given by Juha Aatrokoski at MRO, and a similar calibration method is commonly used at MRO.
-  The initial normalisation and centering methods described here and in
-  Section~\ref{sect:initial-centering} derive from an oral outline
-  given by Juha Aatrokoski at MRO of the calibration method commonly used at
-  MRO, including \citet{metsahovi40}.
-%FAG: removed para break and rephrase
-  %In order to extract representatives $\s{u}{background}$ and $\s{u}{disk}$, we will first obtain a list of samples in map $S$, sorted by their raw intensity values $u_i$. Let $I_S$ be the set of indices for samples in $S$:
-  In this step we initialise $\s{u}{background}$ and $\s{u}{disk}$.
-  The samples in map $S$ are sorted by their raw intensity values $u_i$.
-  \fg{I think this may be unnecessarily detailed (verbose).
-  It can be summarised in words, alternative below...}
-  Let $I_S$ be the set of indices for samples in $S$:
+  The initial normalisation and centering methods described here and in Section~\ref{sect:initial-centering} derive from 
+  an oral outline given by Juha Aatrokoski at MRO of the calibration method commonly used at MRO, including 
+  \citet{metsahovi40}.
+  \skk{Thanks Fred!}
+
+  %FAG: removed para break and rephrase
+  %In order to extract representatives $\s{u}{background}$ and $\s{u}{disk}$, we will first obtain a list of samples in 
+  %map $S$, sorted by their raw intensity values $u_i$. Let $I_S$ be the set of indices for samples in $S$:
+
+  In this step we initialise $\s{u}{background}$ and $\s{u}{disk}$. The samples in map $S$ are sorted by their raw 
+  intensity values $u_i$. \fg{I think this may be unnecessarily detailed (verbose). It can be summarised in words, 
+  alternative below...} Let $I_S$ be the set of indices for samples in $S$:
+
+  \skk{Whether it is \emph{initialize} or \emph{initialise}, I think this time it is a thing which A\&A should decide.}
+
   \eqnl{S-curve_indices}{
   I_S = \left\{ 1, 2, ..., N_S \right\} \text{.}
   }
-  There is a bijective mapping $f_S:\; I_S \mapsto I_S$ such that for $j,j^{\prime} \in I_S$, $i = f_S(j)$, and $i^{\prime} = f_S(j^{\prime})$:
-  \eqnl{scurve-mapping1}{
-  j \le j^{\prime} \; \Leftrightarrow \; u_{i} \le u_{i^{\prime}} \text{.}
-  }
-  We will now define a monotonous integer function $w^{-1}:\; I_S \mapsto \real$ to get the intensity for as a function of index on the sorted list:
-  \eqnl{scurve-inverse}{
-  w^{-1}(j) = u_{f_S(j)}
-  }
-  Its inverse, $w(u)$, is plotted for a typical scan in Fig.~\ref{S-curve_example}{\bf(a)}. 
-
-  \fg{Alternative wording}
-
   We construct a monotonous integer function $w^{-1}$, such that
   $w^{-1}(j) = u_j$.
-  The integer $j$ denotes the index of the re-ordered sample set $s_i,$ such
-  that $j \le j^{\prime}\Leftrightarrow u_{j} \le u_{j^{\prime}}.$
+  The integer $j$ denotes the index of the re-ordered sample set $S = \left\{ s_j \right\}$ such
+  that $j \le j^{\prime} \Leftrightarrow u_{j} \le u_{j^{\prime}}.$
   In Fig.~\ref{S-curve_example}{\bf(a)} , the inverse $w(u)$ is plotted against
-  $u$ for a typical scan.
+  $u$ for a typical scan. For mathematical rigor, we need to handle the case of several samples having identical intensity:
+  \eqnl{scurve-inverse-rigor}{
+  w:\;\real \mapsto I_S, \quad w(u) = \max{0, j \in I_S:\; w^{-1}(j) \le u} \text{.}
+  }
 
-  \fg{Alternative wording end}
-  %FAG: edits this far
-
+  \skk{I included Fred's alternative wording but retained some of the formalism. I still need the index set $I_N$ later on.}
 
   %We are now free to choose the statistical functions $f$, $g$, $h$ which now describe the calibration algorithm. It is 
   %an open question whether we should use a fixed value for the visual radius, namely, should we fix $r_S = 
@@ -684,19 +689,19 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   values and are observed as high slopes on $w(u)$. The limb region, however, contains more diverse intensity values and 
   produces a middle plateau in $w(u)$. We need an algorithm to define the exact center of this plateau for every map, and
   %MJK Limb samples only are shown in the lower panel, right? Please refer to the different panels appropriately.
-  thus fit a sequence cubic (of degree $n=3$) polynomials $P_k$ such that:
+  thus fit a sequence cubic (of degree $\s{n}{sc}=3$) polynomials $P_k$ such that:
   \eqnl{scurve-approx}{
-  P_k(u) = \sum \limits_{j=0}^{n} a_j^{(k)} u^j \approx w(u) \text{.}
+  P_k(u) = \sum \limits_{n=0}^{\s{n}{sc}} a_n^{(k)} u^j \approx w(u) \text{.}
   }
-  The fitting is performed as a quadratic optimization problem where we minimize the value of a target function $T_k$:
+  The fitting is performed as a quadratic optimization problem where we minimize the value of a target function $T_k$ over the domain $[\s{j}{min}^{(k)}, \s{j}{max}^{(k)}]$:
   \eqnl{scurve-target}{
-  T_k = \sum \limits_{i = \s{i}{min}^{(k)}}^{\s{i}{max}^{(k)}} \left( w(u_i) - i \right)^2 \text{.}
+  T_k(\bm{a}_k) = \sum \limits_{j = \s{j}{min}^{(k)}}^{\s{j}{max}^{(k)}} \left( w \left( w^{-1}(j) \right) - P_k \left( w^{-1}(j) \right) \right)^2 \text{.}
   }
   \fg{Perhaps most of the following details could be moved to an appendix and 
   here we just summarise the key points of the stage?}
   The domain of the first optimization round ($k=1$) contains the whole map:
   \eqnl{scurve-firstdomain}{
-  \s{i}{min}^{(1)} := 1 \; \text{and} \; \s{i}{max}^{(1)} := N_S \text{,}
+  \s{j}{min}^{(1)} := 1 \; \text{and} \; \s{j}{max}^{(1)} := N_S \text{,}
   }
   while the subsequent domain will be defined based on result of the previous optimization round. After obtaining 
   $P_k(u)$, we calculate the root $\s{u}{root}^{(k)}$, where the curvature of $P_k(u)$ changes from negative to 
@@ -706,21 +711,21 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   }
   The root defines the pivot index for separating the disk from the background:
   \eqnl{scurve-pivot}{
-  \s{i}{pivot}^{(k)} := P_k(\s{u}{root}^{(k)}) \text{.}
+  \s{j}{pivot}^{(k)} := P_k(\s{u}{root}^{(k)}) \text{.}
   }
   The representatives can now be assigned based on the pivot index as:
   \eqnl{scurve-background}{
-  \s{u}{background}^{(k)} := w^{-1} \left( \floor{\frac{\s{i}{pivot}^{(k)} + 1}{2} + 0.5} \right) \text{and}
+  \s{u}{background}^{(k)} := w^{-1} \left( \floor{\frac{\s{j}{pivot}^{(k)} + 1}{2} + 0.5} \right) \text{and}
   }
   \eqnl{scurve-disk}{
-  \s{u}{disk}^{(k)} := w^{-1} \left( \floor{\frac{\s{i}{pivot}^{(k)} + 2 N_S}{3} + 0.5} \right) \text{.}
+  \s{u}{disk}^{(k)} := w^{-1} \left( \floor{\frac{\s{j}{pivot}^{(k)} + 2 N_S}{3} + 0.5} \right) \text{.}
   }
   The domain of the subsequent round is specified using the representatives:
   \eqnl{scurve-nextdomain-min}{
-  \s{i}{min}^{(k+1)} := w \left( \floor{ 0.9 * \s{u}{background}^{(k)} + 0.1 * \s{u}{disk}^{(k)} + 0.5 } \right) \text{and}
+  \s{j}{min}^{(k+1)} := w \left( \floor{ 0.9 * \s{u}{background}^{(k)} + 0.1 * \s{u}{disk}^{(k)} + 0.5 } \right) \text{and}
   }
   \eqnl{scurve-nextdomain-max}{
-  \s{i}{max}^{(k+1)} := w \left( \floor{ 0.1 * \s{u}{background}^{(k)} + 0.9 * \s{u}{disk}^{(k)} + 0.5 } \right) \text{.}
+  \s{j}{max}^{(k+1)} := w \left( \floor{ 0.1 * \s{u}{background}^{(k)} + 0.9 * \s{u}{disk}^{(k)} + 0.5 } \right) \text{.}
   }
   We then perform the next step $k := k+1$ and start by fitting a new polynomial in Equation~\ref{scurve-approx}. The 
   idea is that for the second round, we only use the limb samples and could expect a better fitting of $P_2$ compared to 
@@ -739,13 +744,13 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   
   \subsubsection{Initial centering}\label{sect:initial-centering}
 
-  For map $S$, we will calculate the weighted center of sample coordinates. For each sample $s_i \in S$ will be assigned an initial weight $a_i$:
+  For map $S$, we will calculate the weighted center of sample coordinates. For each sample $s_i \in S$ will be assigned an initial weight $b_i$:
   \eqnl{centering-initial-weight}{
-  a_i := \begin{cases} 1 & \text{when}\; v_i \ge 0.85 \\ \frac{v_i^{(0)} - 0.15}{0.85 - 0.15} & \text{when}\; 0.15 < v_i^{(0)} < 0.85 \\ 0 & \text{when} v_i^{(0)} \le 0.15 \end{cases} \text{.}
+  b_i^{(0)} := \begin{cases} 1 & \text{when}\; v_i^{(0)} \ge 0.85 \\ \frac{v_i^{(0)} - 0.15}{0.85 - 0.15} & \text{when}\; 0.15 < v_i^{(0)} < 0.85 \\ 0 & \text{when} v_i^{(0)} \le 0.15 \end{cases} \text{.}
   }
   Then center of mass is then:
   \eqnl{centering-center-of-mass}{
-  \left( x^{(0)}, y^{(0)} \right) := \frac{\sum \limits_{i=1}^{N_S} a_i \left( x_i^{(0)}, y_i^{(0)} \right)}{\sum \limits_{i=1}^{N_S} a_i} \text{.}
+  \left( x^{(0)}, y^{(0)} \right) := \frac{\sum \limits_{i=1}^{N_S} b_i^{(0)} \left( x_i^{(0)}, y_i^{(0)} \right)}{\sum \limits_{i=1}^{N_S} b_i^{(0)}} \text{.}
   }
   This defines the initial center of the solar disk for the map, but it is further optimized below, starting from Section~\ref{sect:further_optimization}.
 
@@ -782,18 +787,18 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
   }
   Following this reasoning, the initial radius of the disk on the map $S$ is:
   \eqnl{initial_radius3}{
-  r^{(0)} := \sqrt{2 \frac{\sum \limits_{i=1}^{N_S} a_i \left( \left( x_i - x^{(0)} \right)^2 + \left( y_i - y^{(0)} \right)^2 \right)}{\sum \limits_{i=1}^{N_S} a_i}} \text{.}
+  r^{(0)} := \sqrt{2 \frac{\sum \limits_{i=1}^{N_S} b_i^{(0)} \left( \left( x_i - x^{(0)} \right)^2 + \left( y_i - y^{(0)} \right)^2 \right)}{\sum \limits_{i=1}^{N_S} b_i^{(0)}}} \text{.}
   }
-  Per map calibration of the radius is useful if the scale of the relative Right Ascension and declination would be inaccurate.
+  Per map calibration of the radius is useful if the scale of the relative right ascension and declination would be inaccurate.
 
-  In here we have assumed that the radius is known in advance, i.e. $r^{(k)} = r_{\astrosun}(t_S)$ for all $k$. Time $t_S$ is the middle time of scanning $S$, namely:
+  In here we have assumed that the radius is known in advance, i.e. $r^{(c)} = r_{\astrosun}(t_S)$ for all calibration rounds $c$. Time $t_S$ is the middle time of scanning $S$, namely:
   \eqnl{initial_radius_time}{
   t_S = \frac{\min{t_i :\; s_i \in S} + \max{ t_i :\; s_i \in S}}{2} \text{.}
   }
 
   \subsubsection{Physical radius of the Sun}\label{sect:physical_radius}
   
-  In this paper, we have assumed that the scale of the relative Right Ascension and declination are correct and thus the 
+  In this paper, we have assumed that the scale of the relative right ascension and declination are correct and thus the 
   radius of the disk is based on geometry. Let $R_{\astrosun}$ be the physical radius of the Sun and $d(t)$ be the distance 
   between MRO on Earth and the physical center (core) of the Sun at time $t$. Then:
   \eqnl{visual_angle}{
@@ -811,262 +816,173 @@ With Right Ascension cosine corrected, such that maps have unit aspect ratio, we
 
   \subsubsection{Iterative calibration} \label{sect:further_optimization}
 
-  Having obtained the initial center of the disk as $(x^{(0)}, y^{(0)})$, and optionally, its radius $r^{(0)}$, we 
-  proceed iteratively. We accept the background intensity $\s{u}{background}$ from the initial calibration while perform more analysis in order to determine the inner disk signal levels properly. We measure the QSL and its standard deviation, while utliers within the disk are neglected. Between each QSL determination loop, we refine the centering of the disk.
-
-  The next thing is to calculate a radial distance for each sample $s_i \in S$ based on the centering round $k$:
-  \eqnl{calib_radial_distance}{
-  r_i^{(k)} := \sqrt{\left( x_i - x^{(k)} \right)^2 + \left( y_i - y^{(k)} \right)^2} \text{.}
-  }
-
+  Having obtained the initial ($c=0$) center of the disk as $(x^{(c)}, y^{(c)})$, and optionally, its radius $r^{(c)}$, we 
+  proceed iteratively for $c:=c+1$. We accept the background intensity $\s{u}{background}$ from the initial calibration while perform 
+  more analysis in order to determine the inner disk signal levels properly. We measure the QSL and its standard 
+  deviation, while outliers within the disk are neglected. Between each QSL determination loop, we refine the centering 
+  of the disk.
+  
   \subsubsection{Inner disk outliers} \label{sect:outliers_disk}
 
-  The inner disk $I_k \subset S$ is defined as the region that is within $0.9 r^{(k)}$ distance from center:
-  \eqnl{calib_inner_disk1}{
-  I_k = \left\{ s_i \in S :\; r_i^{(k)} \le 0.9 r^{(k)} \right\} \text{.}
-  }
-  We do not use the whole inner disk for measuring QSL, since it typically contains bright and dim features such as active regions. Also, the sample density may vary within the disk, since the antenna sweeps may not necassarily be uniform. In practice, the sweeps are regular except for antenna wiggling, but our code is not dependent on than. We create a rectangular grid of lattice points $\lambda_{h} = \left( x_h, y_h, u_h, v_h \right)$, where $h$ is the index for lattice points and $\left( x_h, y_h \right)$ are lattice point coordinates. For the scan $S$, We have a mapping $i_S:\;H_S \mapsto I_S$: 
-  \eqnl{calib_inner_disk_lattice}{
-  u_h := u_{i_S(h)} \; \text{and} \; v_h := v_{i_S(h)} \text{.}
-  }
+  We aim to calculate the average intensity within the disk. However, we do not use the whole inner disk for measuring 
+  QSL, since it typically contains bright and dim features such as active regions. These features will be neglected as 
+  outliers in a series of iterative rounds.
+
+  The beam pointing may be slightly 
+  irregular due to oscillations in pointing. See Figure~\ref{typicalmap}{\bf(b)} for a typical antenna path. In 
+  practice, the sweeps are moderately regular except for antenna wiggling, but our code does not expect uniform sample 
+  density. We create a rectangular grid ($\Lambda$) of lattice points $\lambda_h \in \Lambda$. The lattice points are indexed via a set $I_{\Lambda}$:
   
-  For first outlier neglection round, we have $w=0$ and set $I_{k,0} := I_k$. We calculate the average intensity $\s{u}{QSL}^{(k,w)}$ and stanard deviation $\s{\sigma}{QSL}^{(k,w)}$ as follows:
+  \eqnl{calib_inner_disk_lattice}{
+  \Lambda = \left\{ \lambda_h :\; h \in I_{\Lambda} \right\} \text{.}
+  }
+  Each lattice point contains relative sky coordinates $\left( x_h, y_h \right)$ as well as an intensity value $u_h$:
+  \eqnl{calib_inner_disk_point}{
+  \lambda_h = \left( x_h, y_h, u_h \right) \text{.}
+  }
+  We can construct a lattice of desired integer resolution $\s{n}{grid} \in \mathds{N}$ by defining the index set as:
+  \eqnl{calib_inner_disk_index}{
+  I_{\Lambda} = \left\{ 0, 1, ..., \s{n}{grid}-1 \right\} \text{.}
+  }
+  We set up a rectangular frame to bound all the samples in $S$ as:
+  \eqnl{calib_inner_disk_frame}{
+  \s{x}{min} := \min{x_i:\, s_i \in S}, \; \s{x}{max} := \max{x_i:\, s_i \in S}, \; \s{y}{min} := \min{y_i:\, s_i \in S} \text{, and} \, \s{y}{max} := \max{y_i:\, s_i \in S} \text{.}
+  }
+  We define the index numbers as:
+  \eqnl{calib_inner_disk_elem}{
+  h = h_x \s{n}{grid} + h_y \; \text{where} \; 0 \le h_x,h_y < \s{n}{grid}, \; h_x,h_y \in \mathds{N} \text{.}
+  }
+  The coordinates are then obtained as:
+  \eqnl{calib_inner_disk_lattice_x}{
+  x_h := \s{x}{min} + \left( \s{x}{max} - \s{x}{min} \right) \frac{h_x}{\s{n}{grid}} \; \text{and}
+  }
+  \eqnl{calib_inner_disk_lattice_y}{
+  y_h := \s{y}{min} + \left( \s{y}{max} - \s{y}{min} \right) \frac{h_y}{\s{n}{grid}} \text{.}
+  }
+  The intensity associated with a lattice point $\lambda_h$ is that of the nearest sample $s_i \in S$, which is obtained via mapping $i_{\Lambda}:\; I_{\Lambda} \mapsto I_S$:
+  \eqnl{calib_inner_disk_lattice_u}{
+  u_h := u_i, \; i = i_{\Lambda}(h) \text{.}
+  }
+  The mapping $i_{\Lambda}(h)$ transforms the lattice point of index $h$ into the map sample of index $i$, so that the nearest sample is chosen. The distance between $\lambda_h$ and $s_i$ is measured as $d_h$ using uncalibrated coordinates:
+  \eqnl{calib_inner_disk_nearest1}{
+  d_h^2 = \min{\left( x_i - x_h \right)^2 + \left( y_i - y_h \right)^2:\; s_i \in S} \; \text{and}
+  }
+  \eqnl{calib_inner_disk_nearest2}{
+  \left( x_{i_{\Lambda}(h)} - x_h \right)^2 + \left( y_{i_{\Lambda}(h)} - y_h \right)^2 = d_h^2 \text{.}
+  }
+   When several map samples satisfy Equation~\ref{calib_inner_disk_nearest2}, the mapping $i_{\Lambda}(h)$ is chosen 
+  arbitrarily. It is possible to use e.g. linear interpolation based on Voronoi tessellation here. However, currently it 
+  is not implemented. \skk{I wanted to implement Voronoi tessellation but the code has already grown to have too many 
+  features that it was not feasible. Currently I am working with the inversion model solver, which has no need for any 
+  interpolation anyway. So writing the tessellation ready is still possible but a side step to my opinion, and that is 
+  why I gave up.}
+ 
+  For each calibration round $c$, we define the inner disk $I_c \subset \Lambda$ as the region that is within $0.9 r^{(c)}$ distance from origin, using centered coordinates:
+  \eqnl{calib_inner_disk1}{
+  I_c := \left\{ \lambda_h :\; \sqrt{\left( x_h - x^{(c)} \right)^2 + \left( y_h - y^{(c)} \right)^2} \le 0.9 r^{(c)} \right\} \text{.}
+  }  
+  For first outlier neglection round, we have $q=0$ and set $I_{c}^{(0)} := I_c$. We calculate the average intensity $\s{u}{QSL}^{(c,q)}$ and standard deviation $\s{\sigma}{QSL}^{(c,q)}$ as follows:
   \eqnl{calib_inner_disk2}{
-  \s{u}{QSL}^{(k,w)} := \frac{1}{|I_{k,w}|} \sum \limits_{s_i \in I_{k,w}} u_i \; \text{and}
+  \s{u}{QSL}^{(c,q)} := \frac{1}{|I_{c}^{(q)}|} \sum \limits_{\lambda_h \in I_{c}^{(q)}} u_h \; \text{and}
   }
   \eqnl{calib_inner_disk3}{
-  \s{\sigma}{QSL}^{(k,w)} := \sqrt{\frac{1}{|I_{k,w}|} \sum \limits_{s_i \in I_{k,w}} \left( u_i - \s{u}{QSL}^{(k,w)} \right)^2} \text{.}
+  \s{\sigma}{QSL}^{(c,q)} := \sqrt{\frac{1}{|I_{c}^{(q)}|} \sum \limits_{\lambda_h \in I_{c}^{(q)}} \left( u_h - \s{u}{QSL}^{(c,q)} \right)^2} \text{.}
   }
-  The next 
+  The subsequent outlier neglection rounds omit the lattice points whose intensities are not within two standard deviations from the average, when previous outliers are neglected:
+  \eqnl{calib_inner_disk4}{
+  I_c^{(q+1)} := \left\{ \lambda_h \in I_c^{(q)} :\; \left|u_h^{(c)} - \s{u}{QSL}^{(c,q)} \right| \le 2 \s{\sigma}{QSL}^{(c,q)} \right\} \text{.}
+  }
+  After a few rounds, $q = \s{q}{max}$, the set of non-outliers converges and we have obtained a new reference 
+  intensity. We can now define the QSL and its standard deviation for the next calibration round $c \mapsto c+1$ as:
+  \eqnl{calib_inner_disk5}{
+  I_{c+1}^{(\mathrm{QSL})} := I_{c}^{(\s{q}{max}+1)},\; \s{u}{QSL}^{(c+1)} := \s{u}{QSL}^{(c,\s{q}{max})} \text{, and} \; \s{\sigma}{QSL}^{(c+1)} := \s{\sigma}{QSL}^{(c,\s{q}{max})} \text{.}
+  }
+  For the next calibration round, the sample intensities are renormalized:
+  \eqnl{calib_inner_disk6}{
+  v_i^{(c+1)} := \frac{u_i - \s{u}{background}}{\s{u}{QSL}^{(c+1)} - \s{u}{background}} \text{.}
+  }
+  The first time we run the above substitions (Section~\ref{sect:outliers_disk}) is for $c=0$.
+
+  \subsubsection{Bright and dim features} \label{sect:bright_dim_features}
+
+  From now on, the first round is for $c=1$. We separate the inner disk of the previous centering round, $I_{c-1}$, into three subsets, 
+  $I_c^{(\mathrm{dim})}$, $I_c^{(\mathrm{QSL})} = I_{c-1}^{(\s{q}{max}+1)}$, and $I_c^{(\mathrm{bright})}$ based on 
+  normalized signal levels:
+  \eqnl{calib_features_dim}{
+  I_c^{(\mathrm{dim})} := \left\{ \lambda_h \in I_{c-1} :\; u_h - \s{u}{QSL}^{(c)} < -2 \s{\sigma}{QSL}^{(c)} \right\} \; \text{and}
+  } 
+  \eqnl{calib_features_bright}{
+  I_c^{(\mathrm{bright})} := \left\{ \lambda_h \in I_{c-1} :\; u_h - \s{u}{QSL}^{(c)} > 02 \s{\sigma}{QSL}^{(c)} \right\} \text{.}
+  } 
+  We will partition the lattice points in $I_c^{(\mathrm{dim})}$ and $I_c^{(\mathrm{bright})}$ into a set of features $\mathcal{F}_c$ such that:
+  \eqnl{calib_features2}{
+  \bigcup \limits_{F \in \mathcal{F}_c} F = I_c^{(\mathrm{dim})} \cup I_c^{(\mathrm{bright})} \text{.}
+  }
+  Any two features $F, F^{\prime} \in \mathcal{F}_c$, $F \ne F^{\prime}$ are separate such that $F \cap F^{\prime} = 
+  \emptyset$. Any two neighbouring lattice points $\lambda_h, \lambda_{h^{\prime}} \in I_c$ satisfy the clustering 
+  requirement. If either $\lambda_h,\lambda_{h^{\prime}} \in I_c^{(\mathrm{dim})}$ or $\lambda_h,\lambda_{h^{\prime}} 
+  \in I_c^{(\mathrm{bright})}$, then there is a feature $F \in \mathcal{F}_c$ such that $\lambda_h,\lambda_{h^{\prime}} 
+  \in F$. Thus any connected bright or dim pattern on the solar disk, significantly outside the range of the QSL 
+  intensitities, will constitute a feature $F \in \mathcal{F}_c$. The features are typically bright and dim regions on 
+  chromosphere, but they can also arise from instrumental effects just as changing weather conditions during observation 
+  of $S$.
+  
+  The area of a feature $F$, $A(F)$, is the number of lattice points in $F$ times the lattice square area:
+  \eqnl{calib_features3}{
+  A(F) := |F| \frac{\left( \s{x}{max} - \s{x}{min} \right) \left( \s{y}{max} - \s{x}{min} \right)}{\s{n}{grid}^2} \text{.}
+  }
+  We define the radius $r(F)$ of a feature $F$ as the radius of circle which has area $2 A(F)$:
+  \eqnl{calib_features4}{
+  r(F) := \sqrt{\frac{2 A(F)}{\pi}} \text{.}
+  }
+  The location $z(F)$ of a feature $F \in \mathcal{F}_c$ is calculated as a center of mass using calibrated coordinates and QSL relative intensity as weight:
+  \eqnl{calib_features5}{
+  z(F) := \left( x(F), y(F) \right) = \frac{\sum \limits_{\lambda_h \in F} \left( x_h, y_h \right) \left| u_h - \s{u}{QSL}^{(c)} \right|}{\sum \limits_{\lambda_h \in F} \left| u_h - \s{u}{QSL}^{(c)} \right|} - \left( x^{(c-1)}, y^{(c-1)} \right) \text{.}
+  }
 
   \subsubsection{Limb outliers} \label{sect:outliers_limb}
 
-  For detecting limb outliers, we start from round $k=0$ and collect a subset $L^{(k)} \subset S$ of the map $S$ as follows:
+  In the next step of this algorithm, we will neglect those antenna samples which are too close to any known feature. We form a set $L^{(c)}_1 \subset S$ based on Equation~\ref{calib_features5}.
+  \eqnl{calib_features6}{
+  L^{(c)}_1 := S \setminus \bigcup \limits_{F \in \mathcal{F}_c} \left\{ s_i \in S: \; \sqrt{\left( x^{(c-1)}_i - x(F) \right)^2 + \left( y^{(c-1)}_i - y(F) \right)^2} \le r(F) \right\} \text{.}
+  }
+  We will calculate a relative radial distance for each sample $s_i \in S$ based on previous round $c-1$:
+  \eqnl{calib_radial_distance}{
+  r_i^{(c)} := \frac{\sqrt{\left( x_i - x^{(c-1)} \right)^2 + \left( y_i - y^{(c-1)} \right)^2}}{r^{(c-1)}} \text{.}
+  }
+  For detecting limb outliers, we collect a subset $L^{(c)}_2 \subset S$ of the map $S$ which restricts radial distances into the boundary region:
   \eqnl{calib_subset1}{
-  L^{(k)}_1 = \left\{ s_i \in S:\; 0.96 \le \frac{r_i^{(k)}}{r^{(k)}} \le 1.04 \right\} \text{.}
+  L^{(c)}_2 := \left\{ s_i \in S:\; 0.96 \le r_i^{(c)} \le 1.04 \right\} \text{.}
   }
-  These points reside at the limb when it comes to the current centering round. Further requirement for the limb is that the intensities must also be consistent with being on the limb.
+  These points reside at the limb when it comes to the current centering round $c$. Further requirement for the limb is that the intensities must also be consistent with being on the limb, defining another subset.
   \eqnl{calib_subset2}{
-  L^{(k)}_2 = \left\{ s_i \in S:\; 0.05 \le v_i^{(k)} \le 0.95 \right\} \text{.}
+  L^{(c)}_3 := \left\{ s_i \in S:\; 0.05 \le v_i^{(c)} \le 0.95 \right\} \text{.}
   }
-  Moreover, there is a set of points which are close to known bright or dim regions, $L^{(k)}_3$. For the first 
-  iteration, $k=0$, we have $L^{(0)}_3 = \emptyset$. For further steps, it is defined as part of the calibration on the 
-  previous round. The final boundary set $L^{(k)}$ is taken as:
+  The final boundary set $L^{(c)}$ is taken as:
   \eqnl{calib_subset3}{
-  L^{(k)} := L^{(k)}_1 \cap L^{(k)}_2 \setminus L^{(k)}_3 \text{.}
+  L^{(c)} := L^{(c)}_1 \cap L^{(c)}_2 \cap L^{(c)}_3 \text{.}
   }
   We thus want to avoid any known chromospheric features when they are close to the limb, since they would produce 
-  exceptional values there and interfere with proper centering. Having obtained $L^{(k)}$, we calculate a radial 
-  estimate: $r_i^{\prime(k)}$, for each $s_i \in L^{(k)}$. This is based on a known limb profile. For details on how the limb model is obtained, please refer to Section \ref{sect:radius_method1}. Initially, we had no forehand details of the limb and the model had to be constructed from the pre-centered maps. Another option is to assume that the limb profile is a simple linear function for $p=0$:
+  exceptional values there and interfere with proper centering. Having obtained $L^{(c)}$, we calculate a radial 
+  estimate: $r_i^{\prime(c)}$, for each $s_i \in L^{(c)}$. This is based on a known limb profile $l_{p,S}(r)$. For details on how the 
+  limb model is obtained, please refer to Section \ref{sect:radius_method1}. Initially, we had no forehand details of 
+  the limb and the model had to be constructed using more rudimentary methods. Another option for bootstrapping is to assume a simple linear function for the first limb model round $p=0$:
   \eqnl{calib_limbmodel1}{
-  l_{p=0}(r) = 1 - \frac{1.04 - r}{1.04 - 0.96} \text{.}
+  l_{0,S}(r) = \frac{1.04 - r}{1.04 - 0.96} \text{.}
   }
-  After all the maps have been processed, we can construct a more sophisticated limb model for $p := p+1$. First we need to optimize the target in Equation~\ref{physical_radius_target} and obtain parameters for functions in Equation~\ref{physical_radius_polynomials}. Denote $a_S$ for the altitude where the center of the Sun is as seen from MRO during observation of map $S$. This can be the temporal average altitude. The limb model for $S$ at round $p$ is then:
+  After maps of a given solar cycle have been processed, we can construct a more sophisticated limb model for the next grand iteration round $p := p+1$. First we need 
+  to optimize the target in Equation~\ref{physical_radius_target} and obtain parameters for functions in 
+  Equation~\ref{physical_radius_polynomials}. Denote $a_S = a_{\astrosun}(t_S)$ for the altitude where the center of the Sun is as seen from 
+  MRO during observation of map $S$. The limb model for $S$ at round $p \ge 1$ is 
+  then:
   \eqnl{calib_limbmodel2}{
   l_{p,S}(r) = \frac{B(\bm{x}_m^{(p)}, \rho(r), a_S)}{B(\bm{x}_m^{(p)}, \rho(1/3), a_S)} \text{.}
   }
-  The parameter set $\bm{x}_m^{(p)}$ is optimized for round $p$ and with sufficiently large $m$. The initial limb model is the same for all maps, namely, $l_{0,S} := l_{m=0}$. 
-The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
+  The parameter set $\bm{x}_m^{(p)}$ is optimized for round $p$ and with sufficiently large $m$. Figure~\ref{limb_brightening} illustrates the optimized limb profiles of cycle 24 for the applicable range of altitudes.
+  The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
   \eqnl{calib_limbmodel3}{
-  l_{p,S}(r_i^{\prime(k)}) = v_i^{(k)} \implies r_i^{\prime(k)} := l_{p,S}^{-1}(v_i^{(k)}) \text{.}
+  l_{p,S}(r_i^{\prime(c)}) = v_i^{(k)} \implies r_i^{\prime(c)} := l_{p,S}^{-1}(v_i^{(c)}) \text{.}
   }
-  The radial inaccuracy for each sample $s_i$ is then calculated as difference between the real and estimated radius:
-  \eqnl{calib_deviation1}{
-  \delta r_i^{(k)} := r_i^{(k)} - r_i^{\prime(k)} \text{.}
-  }
-  For a given set of limb samples, $L$, we can calculate the standard deviation of radial estimates as:
-  \eqnl{calib_deviation2}{
-  \Delta^{(k)}(L) = \sqrt{\frac{\sum \limits_{s_i \in L} \left( \delta r_i^{(k)} \right)^2}{|L|}} \text{.}
-  }
-  When a radial estimate is expectionally far away from the real real distance, the corresponding sample is probably associated with activity on the limb or a with an instrumetal error. We want to neglect such samples and use only the best samples for centering the map. We thus start with limb set $L^{(k)}_4 := L^{(k)}$ and proceed the iteration, starting from $q=4$, as follows:
-  \eqnl{calib_deviation3}{
-  L^{(k)}_{q+1} = \left\{ s_i \in L^{(k)} : \; |\delta r_i^{(k)}| \le 2 \Delta^{(k)}\left( L^{(k)}_{q} \right) \right\} \text{.}
-  }
-  After a couple of steps we have neglected any outliers with good reliability. We can use the limb set $L^{(k)}_{q=7}$ for this.
-  
-  
-  
-
-
-  %FAG: reform
-  %We then solve the real roots of $P^{\prime\prime}(u)$, to obtain 
-  %\eqnl{scurve-roots}{
-  %u_1 < ... < u_{n-2} \quad \text{, for which} \quad P^{\prime\prime}(u_j) = 0\text{.}
-  %}
-  %We then solve the real roots of $P^{\prime\prime}(u)$, to obtain 
-  %$u_1 < ... < u_{n-2}$, for which $P^{\prime\prime}(u_j) = 0$.
-  %There is an odd number of such roots, so we choose the middle root:
-  %$u_0 := u_{{(n-1)}/{2}}$.
-  
-  %FAG: sample->specimen
-  %The sample $f_S(i_0)$ with index $i_0 := \floor{w(u_0)+0.5}$ is essentially in the middle of the disk boundary and provides pivot for signal level references. We set:
-  The specimen $f_S(i_0)$ with index $i_0 = \floor{w(u_0)+0.5}$ is essentially
-  in the middle of the disk boundary and provides a pivot for signal level
-  references.
-  We set:
-  \eqnl{scurve-pivots}{
-  i_1 = \floor{\frac{i_0 + 1 + 1}{3} + 0.5} \quad \text{and} \quad
-  i_2 = \floor{\frac{i_0 + |S|}{2} + 0.5} \text{.}
-  }
-  The intensity $w(i_1)$then represents the background sky and $w(i_2)$ QSL.
-  %FAG: reworded
-  %We then redo the polynomial fitting only for those samples which have intensity in the dynamic range of disk boundary, $10 .. 90 \%$ of QSL.
-  We then apply the polynomial fitting only for those specimens within the
-  disk boundary intensity dynamic range $10 .. 90 \%$ of QSL.
-  \eqnl{scurve-approx1}{
-  P^{(1)}(u) &\approx& w(u) \quad \text{for}\\ \quad \frac{9 w(i_1) + w(i_2)}{10} &\le u \le& \frac{w(i_1) + 9 w(i_2)}{10} \text{.} \nonumber
-  }
-  The result of this second fitting is shown in
-  Fig.~\ref{S-curve_example}{\bf(a)}. 
-  %FAG: out of math mode
-  We find the roots $u_1^{(1)}< ... < u_{n-2}^{(1)}$, for which
-  $P^{(1)\prime\prime}(u_j^{(1)}) = 0$, and $u_0^{(1)} = u_{{(n-1)}/{2}}^{(1)}$ 
-  and set the pivot indices 
-  %We find the roots:
-  %\eqnl{scurve-roots1}{
-  %%MJK One line
-  %%u_1^{(1)} < ... < u_{n-2}^{(1)} 
-  %&u_1^{(1)}& < ... < u_{n-2}^{(1)} \text{, for which} \quad \\
-  %%MJK to remove space
-  %%\quad 
-  %%\text{, for which} \quad
-  %&P^{(1)\prime\prime}(u_j^{(1)})& = 0 \text{, and} \quad 
-  %u_0^{(1)} := u_{\frac{n-1}{2}}^{(1)} \nonumber 
-  %}
-  %%MJK indices?
-  %and set pivot index
-  %MJK
-  as
-  %:
-  \eqnl{scurve-pivots1}{
-  %MJK One line
-  &i_0^{(1)}& = \floor{w(u_0^{(1)})+0.5}
-  %MJK comma
-  \text{,}
-  \quad i_1^{(1)} = \floor{\frac{i_0^{(1)} + 1 + 1}{3} + 0.5} 
-  %\quad 
-  %MJK comma
-  \text{,} 
-  %and} 
-  \nonumber \\
-  %\quad 
-  &i_2^{(1)}& = \floor{\frac{i_0^{(1)} + |S|}{2} + 0.5} \text{.}
-  }
-  %FAG: introduce $v$
-  %We can now calibrate the intensity using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$for QSL:
-  We can now calibrate the normalised intensity, $v(s)$,
-  using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$for QSL:
-  \eqnl{scurve-calibration}{
-  s \in S \implies v(s) = \frac{u(s) - w(i_1^{(1)})}{w(i_2^{(1)}) - w(i_1^{(1)})} \text{.}
-  }
-
-
-  \subsubsection{2 Convex hull}\label{sect:convex-hull}
-
-  The convex hull method was mainly used for the contour maps for increased redundancy. Should the other markings on the 
-  maps be misinterpreted, the circular limb profile gives a hint of where the solar disk should be. The convex hull 
-  suits for digital intensity specimen as well.
-
-  We separate the set of points $S = A \cup B$ with $A \cap B = \emptyset$, where $A$ 
-
-
-  \fag{added subsection for convex hull. Is the previous subsection complete?
-  It is not clear to me how disk fitting (1) is explained in previous
-  subsection.
-  Does the text below apply to this method (2)?}
-  For method (1) the sample observations in each map, as shown in
-  Fig.~\ref{oldmap}, include white specimens, which are excluded from the disk
-  fitting, and red specimens, which are included based on a limb model.
-  Green dots show radial offset correction to the red specimens, which constitute
-  the target set for circle fitting.
-  \fag{What is meant by radial offset? To which limb model do we refer?}
-  %\fag{Comment: Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.}
-
-  %FAG reordered text, but still edit TODO
-  %Determine the solar disk position and size from each map as well as
-  %normalise the measured background intensity for zero and the Quiet Sun
-  %Level (QSL) for unity.
-  %This can be done using a binary combination of two disk methods (1 and 
-  %2) and three normalisation methods (a, b, and c).
-  %The methods are: (1) intentionally weighted center of mass of the radio
-  %sample coordinates, (2) fitting a circle for those sample coordinates
-  %which we, by geometry, expect to belong to the solar limb, (a) sort the
-  %intensity samples and detect the point of zero curvature from the index vs.     intensity dependency, the S-curve, (b) iteratively calculate the
-  %statistical mean and standard deviation of the intensity of 
-  %those points which are located within the solar disk and not too close
-  %to the limb, (c) detect two significant peaks from the intensity histogram,
-  %the lower intensity peak being the background and the higher the QSL.
-
-  Method (2) can be augmented using two additional sets of information.
-  When we observe exactly at the limb, we would expect $0.5$ QSL intensity
-  due the the beam mixing disk and background signal.
-  If one particular sample has intensity $0.4$ QSL, we would expect the
-  sample to be slightly more away from the center.
-  Collecting a large set of observations on different conditions, we can
-  estimate how quickly the intensity drops as the beam passes the limb 
-  from disk to background.
-  Utilizing this limb profile, we can fine tune the position of each limb
-  sample in the target set and proceed iteratively to obtain more
-  accurate circle fitting.
-  
-  %FAG: Following tract from intro now merged into previous paragraphs
-  %%During the 40 years, the equipment 
-  %%has experienced several upgrades and there has also been changes in the data format.
-  %%The data requires careful 
-  %%normalisation procedures, after which the butterfly diagram can be constructed from the solar maps.
-  %%The solar maps from 
-  %%1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
-  %%mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
-  %%%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
-  %%these plots.
-  %%%MJK or rather pattern recognition?
-  %%Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
-  %%numerical form. For these prepared contour maps, 
-  %%%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
-  %the solar disk was already available, while for the later maps from 
-  %1989 to present the disk 
-  %has to be detected using automatic image recognition. 
-  %%MJK To make it more clear:
-  %%MJK The purpose of this paper is to present two methods () for detecting the disk and ....
-  %We present two methods (1: S-curve and 
-  %center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
-  %statistics and outlier neglection, c: interpolating between histogram peaks) for normaliseing the signal levels so that 
-  %zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
-  %%MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
-
-%M%JK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
-  %We recognize six suitable combinations of options for the disk model $F_j$ in 
-  %%MJK A&A style
-  %%Equation \ref{disk_model}. 
-  %Eq.~\ref{disk_model}. 
-  %We can 
-  %determine the disk size and position using either (1) histogram S-curve (2) convex hull based approach. Furthermore, the 
-  %signal levels within the disk can be calibrated by (a) using constant histogram fractions, (b) iteratively calculating 
-  %standard deviation, outliers excluded, or (c) interpolating between two slots in a histogram peak. In this study, we have compared the method 
-  %combinations $j = \mathrm{1a}, \mathrm{2b}, \mathrm{2c}$.
-  %%MJK I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.
-  
-  To compare these calibration methods, we arbitrarily choose an interval which contains $n$ solar maps within a 
-  reasonable time span $[\s{t}{min},\s{t}{max}]$. We process all these maps using each method $j$, and produce a list of 
-  trackable radio features $F_j$. Due to differences in the operation of each calibration method, we do not expect the 
-  contents of $F_j$ to be identical for each $j$. Nevertheless, we can pick $m$features which visually appear to be in 
-  the same location in all $F_j$.
-  
-  Arbitrary selected active regions $\left\{ \right\}_{k=1}^{5}$ are expected to be detected on maps produced in each of 
-  %MJK please select one notation, either with or without brackets. I like the bracketed version more.
-  the fitting models (1a), (2b), and (2c). When seen from Earth, the active region makes a steady progress from 
-  %MJK No 'the', Fred?
-  the east 
-  to west. When these observations on relative $(\mathrm{RA}, \mathrm{dec}$ coordinates are plotted on heliographic 
-  surface, we expect them to fit on a great
-  %MJK commas required
-  circle. The quality of the fitting algorithm $F_j$ can thus be measured as the 
-  inverse of standard deviation from the best agreeing isocircle obtained using the 
-  %MJK hyphen
-  least squares method.
-%MJK Is there supposed to be a section about the convex hull method?
-
-
 
 %------------------------------------------------------------------------------
 \begin{figure}
@@ -1077,12 +993,58 @@ The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
     \put(-205,146){\begin{large}{\sf\bf{(b)}}\end{large}}
   \end{picture}
 %\begin{picture}(0,0)(0,0) \put(-220,315){\begin{huge}a\end{huge}} \put(-220,158){\begin{huge}b\end{huge}} \end{picture}
-\caption{Average quiet Sun intensity as a function of radial distance from the visual center, normalised for the center 
-intensity. a) Limb brightening is observed when line of sight is almost tangential to the solar surface. b) The beam 
+\caption{Average quiet Sun intensity as a function of radial distance from the visual center, normalised for the intensity at $0.33$ radii from the center. a) Limb brightening is observed when line of sight is almost tangential to the solar surface. b) The beam 
 size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in a convolution pattern. On both plots, we observe more blurring when the altitude of observation is low, due to atmospheric effects.}
 \label{limb_brightening}
 \end{figure}
 %------------------------------------------------------------------------------
+  
+  The radial error for each sample $s_i$ is then calculated as difference between the real and estimated radius:
+  \eqnl{calib_deviation1}{
+  \delta r_i^{(c)} := r_i^{(c)} - r_i^{\prime(c)} \text{.}
+  }
+   We want to neglect outliers for which the radial error is too high. These are associated with activity on the limb or 
+  a with an instrumetal error. The outlier filtering is done iteratively, starting with $g=4$ and setting $L^{(c)}_4 := 
+  L^{(c)}$.
+  For a given set of limb samples, $L^{(c)}_g$, we can calculate the standard deviation of radial estimates as:
+  \eqnl{calib_deviation2}{
+  \Delta \left( L^{(c)}_g \right) = \sqrt{\frac{\sum \limits_{s_i \in L^{(c)}_g} \left( \delta r_i^{(c)} \right)^2}{\left|L^{(c)}_g \right|}} \text{.}
+  }
+  The subsequent boundary sets $g \mapsto g+1$ are constructed from $L^{(c)}$ as follows:
+  \eqnl{calib_deviation3}{
+  L^{(c)}_{g+1} = \left\{ s_i \in L^{(c)} : \; \left|\delta r_i^{(c)} \right| \le 2 \Delta \left( L^{(c)}_{g} \right) \right\} \text{.}
+  }
+  After a couple of steps we have neglected any outliers with good reliability. We can use the limb set $L^{(c)}_{\s{g}{out}}$ with $\s{g}{out} := 10$for this.
+
+  \subsubsection{Subsequent centering} \label{sect:subsequent-centering}
+
+  We will fit a circle into the set $L^{(c)}_{\s{g}{out}}$. The quality of fitting is evaluated as $T_c$:
+  \eqnl{subsequent_centering1}{
+  T_c(\bm{z}) = \sum \limits_{s_i \in L^{(c)}_{\s{g}{out}}} \left( \sqrt{\left( x_i - x \right)^2 + \left( y_i - y \right)^2} - r_i^{(c)} r \right)^2 \text{.}
+  }
+  Here the vector $\bm{z} = \left( x, y, r \right)^T$.
+  The radius $r$ is optionally a free parameter, otherwise we fix $r := r^{(c)} = r^{(0)}$ (see 
+  Section~\ref{sect:initial-radius}). We search of optimal values $\bm{z}_{\zeta}^{(c)}$ which minimize $T_c$, starting with $\zeta=0$:
+  \eqnl{subsequent_centering2}{
+  \bm{z}_0^{(c)} := \left( x^{(c-1)}, y^{(c-1)}, r^{(c-1)} \right)^T \text{.}
+  }
+  We assume that $T_c(\bm{z})$ is locally quadratic with $H_c(\bm{z})$ begin the Hessian of $T_c(\bm{z})$:
+  \eqnl{subsequent_centering3}{
+  T_c(\bm{z}+\delta \bm{z}) \approx T_c(\bm{z}) + \delta \bm{z}^T \nabla T_c(\bm{z}) + \frac{1}{2} \delta \bm{z}^T H_c(\bm{z}) \delta \bm{z} \text{.}
+  }
+  The quadratic approximation has minimum at: $\delta \bm{z} = -H_c^{-1}(\bm{z}) \nabla T_c(\bm{z})$. By iterating as:
+  \eqnl{subsequent_centering4}{
+  \bm{z}_{\zeta+1} := \bm{z}_{\zeta} - H_c^{-1}(\bm{z}_{\zeta}) \nabla T_c(\bm{z}_{\zeta}) \text{,}
+  }
+  we arrive at a true minimum of $T_c$ in few steps. The convergence is detected when the value of $T_c$ no longer 
+  decreases in subsequent iterations due to numerical limits and small shift $\delta \bm{z}_{\zeta}$. This optimum value defines the new center and radius for the map:
+  \eqnl{subsequent_centering5}{
+  \left( x^{(c)}, y^{(c)}, r^{(c)} \right)^T := \lim \limits_{\zeta \to \infty} \bm{z}_{\zeta} \text{.}
+  }
+  We will now loop back to Section~\ref{sect:outliers-disk} unless we have reached $c = \s{c}{max} := 5$. \skk{Hey, natural language is also a programming language.}
+  In subsequent sections, we will use the fully calibrated values $x_i^{(\s{c}{max})}$, $y_i^{(\s{c}{max})}$, and $r_i^{(\s{c}{max})}$ for each sample $s_i \in S$.
+
+\skk{Moved the convex hull stuff into a separate file, probably not to be included in the paper.}
 
 %------------------------------------------------------------------------------
 \subsection{Limb correction model}\label{sect:limb}
@@ -1471,7 +1433,7 @@ surface. We also obtain various structural information from these regions.
   The optimization is performed iteratively. We start with an initial vector $\bm{x}_0$, where each element 
   $\bm{x}_0^{(g)}$ will be a small random value, except for $g=0,15$where we start with $\bm{x}^{(g)} = 1$, thus 
   setting $c_{0,0} = d_{0,0} = 1$ and giving a flat solar cycle and flat disk with some noise. We proceed with iterative 
-  steps of quadratic optimization. At each step$m$ we calculate the gradient $\bm{g}_m := \nabla U(\bm{x}_m)$ and the Hessian of $U(\bm{x_m}$, which should be $H_m$. Basically we search for the point of zero gradient iteratively, starting from $m=0$:
+  steps of quadratic optimization. At each step $m$ we calculate the gradient $\bm{g}_m := \nabla U(\bm{x}_m)$ and the Hessian of $U(\bm{x_m}$, which should be $H_m$. Basically we search for the point of zero gradient iteratively, starting from $m=0$:
   \eqnl{physical_radius_step}{
   \bm{x}_{m+1} := \bm{x}_m - H_m^{-1} \bm{g}_m \text{.}
   }
@@ -1482,7 +1444,7 @@ surface. We also obtain various structural information from these regions.
   negative eigenvalues, but will eventually descend away from possible saddle points.
   
   We force the disk to be flat at the center, thus $\frac{\partial B}{\partial r}\big|_{r=0} = 0$. This limits the 
-  subspace allowed for $\bm{x}$ and reduces the amount of degrees of freedom in the setting to $37$. The optimization stops successfully (converges) at step $m$when we observe that:
+  subspace allowed for $\bm{x}$ and reduces the amount of degrees of freedom in the setting to $37$. The optimization stops successfully (converges) at step $m$ when we observe that:
   \begin{itemize}
   \item $H_m$ is positively definite in the allowed subspace.
   \item The next step $\bm{x}_{m+1} - \bm{x}_{m}$is comparable to numerical precision.
@@ -1518,7 +1480,7 @@ surface. We also obtain various structural information from these regions.
   Section~\ref{sect:outliers_limb} and~\ref{sect:outliers_disk}.
 
   Each sample constitutes of four values: $s_j = (t_j, x_j, y_j, v_j)$, where $t_j$ is time, $v_j$ is calibrated intensity, 
-  and $(x_j,y_j)$ describe the position of the sample on the calibrated disk as Right Ascension and declination 
+  and $(x_j,y_j)$ describe the position of the sample on the calibrated disk as right ascension and declination 
   relative to the center of the Sun. We parametrize the telescope beam $B(z^2)$with a polynomial times a gaussian function of known width $\sigma$:
   \eqnl{inversion_beam}{
   B(z^2) = e^{-\frac{z^2}{2 \sigma^2}} \sum \limits_{g=0}^{4} b_g z^{2g} \text{.}
@@ -1621,37 +1583,25 @@ statistical appearance and characteristics can be reproduced in appropriate simu
 %\end{tikzpicture}} \caption{Roadmap for extracting valuable information from the solar maps.} \label{roadmap} \end{figure*}
 %
 
-\section{List of symbols}
+\FloatBarrier
 
-\skk{At least I need this list in order to keep track which letters I use for which purpose}
-\begin{table*}
-    \caption{list of symbols}\label{tab:sym}
-    \begin{tabular}{lp{120mm}}
-    $S$   & A particular \emph{solar map}, also terms \emph{map} and \emph{scan} are used. To reduce the amount of indices in symbols, often we assume the $S$ is known by context. $S$ is a set of samples. \\
-    $s_i$ & Radio sample in map $S$. It is a bundle of numerical values just as coordinates and intensities. \\
-    $N_S$ & Number of samples in $S$. \\
-    $I_S$ & Index set of $S$: $I_S = \left\{ 1, 2, ..., N_S \right\}$. \\
-    $i$   & Index used for solar map samples so that $s_i \in S \; \Leftrightarrow \; i \in I_S$. Any numerical value accosiated with $s_i$ is referred with index $i$. \\
-    $t_i$ & Time when the sample $s_i$ is recorded. Typical unit is unix time in seconds. Recording the map $S$ typically takes a few minutes. \\
-    $x_i$ & Uncalibrated relative Right Ascension of the radio sample, with respect to the expected center of the visible solar disk. \\
-    $y_i$ & Uncalibrated relative declination of the radio sample, with respect to the expected center of the visible solar disk. \\
-    $u_i$ & Uncalibrated, raw intensity of a particular radio sample $s_i$, typically in the range $-4000 .. 32000$. \\
-    $\RA(s_i)$ & Absolute Right Ascension of a particular sample, as seen from MRO at time $t_i$. \\
-    $\Dec(s_i)$ & Absolute declination of a particular sample, as seen from MRO at time $t_i$. \\
-    $\RA_{\astrosun}(t)$ & Absolute Right Ascension of the center of the solar disk as seen from MRO at time $t$. \\
-    $\Dec_{\astrosun}(t)$ & Absolute Right Ascension of the center of the solar disk as seen from MRO at time $t$. \\
-    $j$ & Index used for solar map samples when they are sorted by their raw intensity. \\
-    $f_S$ & Bijective mapping $f_S:\; I_S \mapsto I_S$ used for sorting the samples by their raw intensities. \\
-    $w^{-1}(j)$ & Index v.s. raw intensity in S-curve method. \\
-    $w(u)$ & raw intensity v.s. index. \\
-    
-    $k$ & Integer for the index of calibration rounds for $S$. We start with $k=0$. \\
-    $v_i^{(k)}$ & Calibrated intensity at round $k$. We aim to have zero at background and unity at QSL. \\
-    \end{tabular}
-\end{table*}
+\section{List of symbols} \label{sect:sym}
+
+\skk{At least I need this list in order to keep track of reserved letters. I tried using 'longtable' to automatically 
+wrap the table along many pages, but it complains about two column mode. I also tried 'supertabular' but it didn't work 
+either. Maybe it is best to manually split the table as I did in my mastersthesis. It is anyway good to assign the 
+symbols into groups by relevance.}
+\setlength{\extrarowheight}{3pt}
+\def\tabularxcolumn#1{m{#1}}
+\newcommand{\symtable}[2]{\begin{table*} \caption{#1} \begin{tabularx}{\textwidth}{lX} #2 \end{tabularx} \end{table*}}
+\input{sym.tex}
+
+\FloatBarrier
+
 
 \begin{acknowledgements}
 \end{acknowledgements}
+
 
 % WARNING
 %-------------------------------------------------------------------

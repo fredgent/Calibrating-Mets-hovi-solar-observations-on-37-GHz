@@ -1,0 +1,179 @@
+
+  %FAG: reform
+  %We then solve the real roots of $P^{\prime\prime}(u)$, to obtain 
+  %\eqnl{scurve-roots}{
+  %u_1 < ... < u_{n-2} \quad \text{, for which} \quad P^{\prime\prime}(u_j) = 0\text{.}
+  %}
+  %We then solve the real roots of $P^{\prime\prime}(u)$, to obtain 
+  %$u_1 < ... < u_{n-2}$, for which $P^{\prime\prime}(u_j) = 0$.
+  %There is an odd number of such roots, so we choose the middle root:
+  %$u_0 := u_{{(n-1)}/{2}}$.
+  
+  %FAG: sample->specimen
+  %The sample $f_S(i_0)$ with index $i_0 := \floor{w(u_0)+0.5}$ is essentially in the middle of the disk boundary and provides pivot for signal level references. We set:
+  The specimen $f_S(i_0)$ with index $i_0 = \floor{w(u_0)+0.5}$ is essentially
+  in the middle of the disk boundary and provides a pivot for signal level
+  references.
+  We set:
+  \eqnl{scurve-pivots}{
+  i_1 = \floor{\frac{i_0 + 1 + 1}{3} + 0.5} \quad \text{and} \quad
+  i_2 = \floor{\frac{i_0 + |S|}{2} + 0.5} \text{.}
+  }
+  The intensity $w(i_1)$then represents the background sky and $w(i_2)$ QSL.
+  %FAG: reworded
+  %We then redo the polynomial fitting only for those samples which have intensity in the dynamic range of disk boundary, $10 .. 90 \%$ of QSL.
+  We then apply the polynomial fitting only for those specimens within the
+  disk boundary intensity dynamic range $10 .. 90 \%$ of QSL.
+  \eqnl{scurve-approx1}{
+  P^{(1)}(u) &\approx& w(u) \quad \text{for}\\ \quad \frac{9 w(i_1) + w(i_2)}{10} &\le u \le& \frac{w(i_1) + 9 w(i_2)}{10} \text{.} \nonumber
+  }
+  The result of this second fitting is shown in
+  Fig.~\ref{S-curve_example}{\bf(a)}. 
+  %FAG: out of math mode
+  We find the roots $u_1^{(1)}< ... < u_{n-2}^{(1)}$, for which
+  $P^{(1)\prime\prime}(u_j^{(1)}) = 0$, and $u_0^{(1)} = u_{{(n-1)}/{2}}^{(1)}$ 
+  and set the pivot indices 
+  %We find the roots:
+  %\eqnl{scurve-roots1}{
+  %%MJK One line
+  %%u_1^{(1)} < ... < u_{n-2}^{(1)} 
+  %&u_1^{(1)}& < ... < u_{n-2}^{(1)} \text{, for which} \quad \\
+  %%MJK to remove space
+  %%\quad 
+  %%\text{, for which} \quad
+  %&P^{(1)\prime\prime}(u_j^{(1)})& = 0 \text{, and} \quad 
+  %u_0^{(1)} := u_{\frac{n-1}{2}}^{(1)} \nonumber 
+  %}
+  %%MJK indices?
+  %and set pivot index
+  %MJK
+  as
+  %:
+  \eqnl{scurve-pivots1}{
+  %MJK One line
+  &i_0^{(1)}& = \floor{w(u_0^{(1)})+0.5}
+  %MJK comma
+  \text{,}
+  \quad i_1^{(1)} = \floor{\frac{i_0^{(1)} + 1 + 1}{3} + 0.5} 
+  %\quad 
+  %MJK comma
+  \text{,} 
+  %and} 
+  \nonumber \\
+  %\quad 
+  &i_2^{(1)}& = \floor{\frac{i_0^{(1)} + |S|}{2} + 0.5} \text{.}
+  }
+  %FAG: introduce $v$
+  %We can now calibrate the intensity using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$for QSL:
+  We can now calibrate the normalised intensity, $v(s)$,
+  using $w(i_1^{(1)})$ for the background and $w(i_2^{(1)})$for QSL:
+  \eqnl{scurve-calibration}{
+  s \in S \implies v(s) = \frac{u(s) - w(i_1^{(1)})}{w(i_2^{(1)}) - w(i_1^{(1)})} \text{.}
+  }
+
+
+  \subsubsection{2 Convex hull}\label{sect:convex-hull}
+
+  The convex hull method was mainly used for the contour maps for increased redundancy. Should the other markings on the 
+  maps be misinterpreted, the circular limb profile gives a hint of where the solar disk should be. The convex hull 
+  suits for digital intensity specimen as well.
+
+  We separate the set of points $S = A \cup B$ with $A \cap B = \emptyset$, where $A$ 
+
+
+  \fag{added subsection for convex hull. Is the previous subsection complete?
+  It is not clear to me how disk fitting (1) is explained in previous
+  subsection.
+  Does the text below apply to this method (2)?}
+  For method (1) the sample observations in each map, as shown in
+  Fig.~\ref{oldmap}, include white specimens, which are excluded from the disk
+  fitting, and red specimens, which are included based on a limb model.
+  Green dots show radial offset correction to the red specimens, which constitute
+  the target set for circle fitting.
+  \fag{What is meant by radial offset? To which limb model do we refer?}
+  %\fag{Comment: Explain what is added up as part of calibration. Include another plot with the final version in Solar coordinates.}
+
+  %FAG reordered text, but still edit TODO
+  %Determine the solar disk position and size from each map as well as
+  %normalise the measured background intensity for zero and the Quiet Sun
+  %Level (QSL) for unity.
+  %This can be done using a binary combination of two disk methods (1 and 
+  %2) and three normalisation methods (a, b, and c).
+  %The methods are: (1) intentionally weighted center of mass of the radio
+  %sample coordinates, (2) fitting a circle for those sample coordinates
+  %which we, by geometry, expect to belong to the solar limb, (a) sort the
+  %intensity samples and detect the point of zero curvature from the index vs.     intensity dependency, the S-curve, (b) iteratively calculate the
+  %statistical mean and standard deviation of the intensity of 
+  %those points which are located within the solar disk and not too close
+  %to the limb, (c) detect two significant peaks from the intensity histogram,
+  %the lower intensity peak being the background and the higher the QSL.
+
+  Method (2) can be augmented using two additional sets of information.
+  When we observe exactly at the limb, we would expect $0.5$ QSL intensity
+  due the the beam mixing disk and background signal.
+  If one particular sample has intensity $0.4$ QSL, we would expect the
+  sample to be slightly more away from the center.
+  Collecting a large set of observations on different conditions, we can
+  estimate how quickly the intensity drops as the beam passes the limb 
+  from disk to background.
+  Utilizing this limb profile, we can fine tune the position of each limb
+  sample in the target set and proceed iteratively to obtain more
+  accurate circle fitting.
+  
+  %FAG: Following tract from intro now merged into previous paragraphs
+  %%During the 40 years, the equipment 
+  %%has experienced several upgrades and there has also been changes in the data format.
+  %%The data requires careful 
+  %%normalisation procedures, after which the butterfly diagram can be constructed from the solar maps.
+  %%The solar maps from 
+  %%1978 to 1987 were originally recorded on magnetic tapes, out of which the data was rendered on contour maps using a 
+  %%mechanical plotter. Since then, the magnetic tapes have been lost, and the maps were only available as 
+  %%%MJK it would not hurt to stress that they were printer on paper only -> plots -> printouts.
+  %%these plots.
+  %%%MJK or rather pattern recognition?
+  %%Using various image recognition techniques featured in \cite{masterthesis}, these contour maps were converted back into 
+  %%numerical form. For these prepared contour maps, 
+  %%%MJK Define better what you mean by 'solar disk being available'. It might not be clear to a common reader.
+  %the solar disk was already available, while for the later maps from 
+  %1989 to present the disk 
+  %has to be detected using automatic image recognition. 
+  %%MJK To make it more clear:
+  %%MJK The purpose of this paper is to present two methods () for detecting the disk and ....
+  %We present two methods (1: S-curve and 
+  %center of mass, 2: convex hull) for detecting the disk and three methods (a: S-curve and constant fraction, b: 
+  %statistics and outlier neglection, c: interpolating between histogram peaks) for normaliseing the signal levels so that 
+  %zero is the black sky at the background and unity is the Quiet Sun Level (QSL).
+  %%MJK Then there should be a sentence stating that "As our final data product we present here a butterfly diagram of radio brightenings extending over the full time span of the recorded Mets\"ahovi solar data set".
+
+%M%JK This would be better in the methods section, to outline the general workflow from the raw data to the final product.
+  %We recognize six suitable combinations of options for the disk model $F_j$ in 
+  %%MJK A&A style
+  %%Equation \ref{disk_model}. 
+  %Eq.~\ref{disk_model}. 
+  %We can 
+  %determine the disk size and position using either (1) histogram S-curve (2) convex hull based approach. Furthermore, the 
+  %signal levels within the disk can be calibrated by (a) using constant histogram fractions, (b) iteratively calculating 
+  %standard deviation, outliers excluded, or (c) interpolating between two slots in a histogram peak. In this study, we have compared the method 
+  %combinations $j = \mathrm{1a}, \mathrm{2b}, \mathrm{2c}$.
+  %%MJK I guess there is a reason(s), why you have converged to these combinations. Hence, it would be better to say: We investigated all the possible combinations of these methods, and due to following reasons converged to the combinations 1a, 2b and 2c being the optimal ones: blaa blaa. Here we present only comparisons in between these optimal method combinations.
+  
+  To compare these calibration methods, we arbitrarily choose an interval which contains $n$ solar maps within a 
+  reasonable time span $[\s{t}{min},\s{t}{max}]$. We process all these maps using each method $j$, and produce a list of 
+  trackable radio features $F_j$. Due to differences in the operation of each calibration method, we do not expect the 
+  contents of $F_j$ to be identical for each $j$. Nevertheless, we can pick $m$ features which visually appear to be in 
+  the same location in all $F_j$.
+  
+  Arbitrary selected active regions $\left\{ \right\}_{k=1}^{5}$ are expected to be detected on maps produced in each of 
+  %MJK please select one notation, either with or without brackets. I like the bracketed version more.
+  the fitting models (1a), (2b), and (2c). When seen from Earth, the active region makes a steady progress from 
+  %MJK No 'the', Fred?
+  the east 
+  to west. When these observations on relative $(\mathrm{RA}, \mathrm{dec}$ coordinates are plotted on heliographic 
+  surface, we expect them to fit on a great
+  %MJK commas required
+  circle. The quality of the fitting algorithm $F_j$ can thus be measured as the 
+  inverse of standard deviation from the best agreeing isocircle obtained using the 
+  %MJK hyphen
+  least squares method.
+%MJK Is there supposed to be a section about the convex hull method?
+
