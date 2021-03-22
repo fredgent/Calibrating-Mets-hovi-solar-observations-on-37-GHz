@@ -448,7 +448,14 @@
   %
 \section{Methods}\label{sect:methods}
 
+\fag{Explain here which steps are not used for historical maps and which analysis in the paper below applies to the new maps and the old maps - tracking not feasible
+Summarise the pipeline and the reasons for each step in a paragraph here before then detailing the steps.
+identify coordinates -- information about the chromosphere with lim brightening
+model, and estimate radius of the radio data, etc.
+}
+
 \subsection{The solar maps}\label{sect:source}
+
 
   During a typical measurement, the antenna beam makes a sweep across the
   visible solar disk (Fig.~\ref{typicalmap}). There are three major sets of conventions during the history the record.
@@ -501,7 +508,6 @@
     \label{oldmap}\label{typicalmap}}
   \end{figure}
 %------------------------------------------------------------------------------
-
 Each line in a digital solar map file contains the time and coordinates of a sample as well as the recorded intensity 
 value. The coordinates are relative to the expected location of the center of the Sun on the sky. The intensity is 
 measured on $\SI{37}{GHz}$ and contains linear and logarithmic output from the amplifier as digital values. In this 
@@ -515,6 +521,9 @@ need to normalise the signal levels and also correct for any minor offsets in th
 properly centered map. The purpose of normalisation is to have zero intensity at the background and unit intensity for 
 the QSL. For the contour maps up to year 1987, we trust the graphical markings and no calibration is needed.
 
+\fag{Emphasis that A is new addition to previous published work. Made possible by Masters ...
+and then clarify the distinction. What is new and how is our treatment new. C-B-A.}
+
 %------------------------------------------------------------------------------
   \subsection{Disk fitting and signal levels} \label{sect:disk}
 
@@ -526,7 +535,6 @@ the QSL. For the contour maps up to year 1987, we trust the graphical markings a
   %Each scan, denoted $S$ and spanning a couple of minutes, comprises a set of beam-size specimens. For $s_i \in S$:
   %FAG: trying to disembiguate use of 'sample'
   %SKK: maybe it could be clearer:
-
   Each solar map $S$ consists of $N_S$ samples $s_i$:
   \eqnl{radio_sample}{
     S &=& \left\{ s_i \;:\; i = 1, 2, ..., N_S \right\}\,\text{ and}\nonumber\\
@@ -561,10 +569,10 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \item Disk: The beam probes chromosphere with varying incident angle. High intensity compared to background. Features, such as dim and bright regions, are visible.
   \end{itemize}
 
-  For a map $S$, we will perform a preliminary statistical analysis (see Section~\ref{sect:s-curve}) in order to extract 
+  For a map $S$, we will perform a preliminary statistical analysis (see Section~\ref{sect:s_curve}) in order to extract 
   two representative intensity values, $\s{u}{background}$ and $\s{u}{disk}$. We will then perform a linear 
   transformation for the raw intensity values $u_i$ and obtain the first normalized intensities $v_i^{(0)}$ as
-  \eqnl{map_normalization}{
+  \eqnl{map_normalisation}{
   v_i^{(0)} := \frac{u_i - \s{u}{background})}{\s{u}{disk} - \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
   }
   The normalized intensities are then used for initial centering of the map in Section~\ref{sect:initial-centering}. 
@@ -573,47 +581,44 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \left( x_i^{(0)}, y_i^{(0)} \right) := \left( x_i, y_i \right) - \left( x^{(0)}, y^{(0)} \right) \text{.}
   }
   If the radius of the solar disk is not fixed, we can optionally also measure it. This finishes the initial calibration 
-  round, for which we use a superscript $\cdot^{(c)}$ with $c=0$, also in Equations~\ref{map_normalization} 
+  round, for which we use a superscript $\cdot^{(c)}$ with $c=0$, also in Equations~\ref{map_normalisation} 
   and~\ref{map_centering}. This will be followed by additional calibration rounds, starting from 
-  Section~\ref{sect:iterative-calibration}. Each calibration round produces a new normalized intensity value 
-  $v^{(c+1)}$(Section~\ref{sect:disk-outliers}) for each sample. Using these new values $v^{(c+1)}$, the center for the 
-  disk is further optimized as $(x^{(c+1)}, y^{(c+1)})$ in Section~\ref{sect:disk-outliers}.
+  Section~\ref{sect:further_optimization}. Each calibration round produces a new normalized intensity value 
+  $v^{(c+1)}$(Section~\ref{sect:disk_outliers}) for each sample. Using these new values $v^{(c+1)}$, the center for the 
+  disk is further optimized as $(x^{(c+1)}, y^{(c+1)})$ in Section~\ref{sect:disk_outliers}.
 
   %FAG added
-  %from which the initial radius of the disk, $r^(0)$, is estimated (Section~\ref{sect:initial-radius}). 
+  %from which the initial radius of the disk, $r^(0)$, is estimated (Section~\ref{sect:initial_radius}). 
   %The superscript, 
   %(0), is used to indicate the initial values, which are then refined by an iterative process described in 
   %Sections~\ref{sect:iterative_calibration}, \ref{sect:outliers_disk} and \ref{sect:outliers_limb}. Following sufficient 
   %iterations we obtain calibrated maps $S^{(k)}$, from which we proceed to analyze and map the data onto heliographic 
   %coordinates and time series.
   %FAG: ended
-  \skk{Currenly, the code is not measuring the radius for each map. I implemented the functionality for 
-  that, but probably we don't need it. If it turns out that the relative scale is inaccurate and varies between maps, we 
-  can start using it. Maybe it would be clearer to omit the radius mode altogether. I just feel that it is relatively 
-  easy to include the radius as a free parameter in case we so desire. If we think this as a methodology paper, the 
-  radius measurement is a good bonus.}  
-  \skk{There are no superscripts or subscripts for $S$. I have included the progressive calibration steps as additional 
-  values included in the bundles $s_i\in S$.}
+  %\skk{There are no superscripts or subscripts for $S$. I have included the progressive calibration steps as additional 
+  %values included in the bundles $s_i\in S$.}
   
-  \subsubsection{Initial normalisation}\label{sect:s-curve}
+  \subsubsection{Initial normalisation}\label{sect:s_curve}
 
   %FAG: rephrased
-  %Sections~\ref{sect:s-curve} and~\ref{sect:initial-centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
+  %Sections~\ref{sect:s_curve} and~\ref{sect:initial-centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
   %given by Juha Aatrokoski at MRO, and a similar calibration method is commonly used at MRO.
-  The initial normalisation and centering methods described here and in Section~\ref{sect:initial-centering} derive from 
+  The initial normalisation and centering methods described here and in Section~\ref{sect:initial_centering} derive from 
   an oral outline given by Juha Aatrokoski at MRO of the calibration method commonly used at MRO, including 
   \citet{metsahovi40}.
-  \skk{Thanks Fred!}
+  %\skk{Thanks Fred!}
 
   %FAG: removed para break and rephrase
   %In order to extract representatives $\s{u}{background}$ and $\s{u}{disk}$, we will first obtain a list of samples in 
   %map $S$, sorted by their raw intensity values $u_i$. Let $I_S$ be the set of indices for samples in $S$:
 
   In this step we initialise $\s{u}{background}$ and $\s{u}{disk}$. The samples in map $S$ are sorted by their raw 
-  intensity values $u_i$. \fg{I think this may be unnecessarily detailed (verbose). It can be summarised in words, 
-  alternative below...} Let $I_S$ be the set of indices for samples in $S$:
+  intensity values $u_i$. 
+%\fg{I think this may be unnecessarily detailed (verbose). It can be summarised in words, 
+%  alternative below...}i
+ Let $I_S$ be the set of indices for samples in $S$:
 
-  \skk{Whether it is \emph{initialize} or \emph{initialise}, I think this time it is a thing which A\&A should decide.}
+%  \skk{Whether it is \emph{initialize} or \emph{initialise}, I think this time it is a thing which A\&A should decide.}
 
   \eqnl{S-curve_indices}{
   I_S = \left\{ 1, 2, ..., N_S \right\} \text{.}
@@ -628,7 +633,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   w:\;\real \mapsto I_S, \quad w(u) = \max{0, j \in I_S:\; w^{-1}(j) \le u} \text{.}
   }
 
-  \skk{I included Fred's alternative wording but retained some of the formalism. I still need the index set $I_N$ later on.}
+%  \skk{I included Fred's alternative wording but retained some of the formalism. I still need the index set $I_N$ later on.}
 
   %We are now free to choose the statistical functions $f$, $g$, $h$ which now describe the calibration algorithm. It is 
   %an open question whether we should use a fixed value for the visual radius, namely, should we fix $r_S = 
@@ -742,7 +747,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \fg{Summarise the above and move the details to an appendix?}
   The initial normalised intensities $v_i^{(0)}$ can now be assigned using Equation~\ref{map_normalisation}.
   
-  \subsubsection{Initial centering}\label{sect:initial-centering}
+  \subsubsection{Initial centering}\label{sect:initial_centering}
 
   For map $S$, we will calculate the weighted center of sample coordinates. For each sample $s_i \in S$ will be assigned an initial weight $b_i$:
   \eqnl{centering-initial-weight}{
@@ -754,6 +759,11 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   }
   This defines the initial center of the solar disk for the map, but it is further optimized below, starting from Section~\ref{sect:further_optimization}.
 
+  \skk{Currenly, the code is not measuring the radius for each map. I implemented the functionality for 
+  that, but probably we don't need it. If it turns out that the relative scale is inaccurate and varies between maps, we 
+  can start using it. Maybe it would be clearer to omit the radius mode altogether. I just feel that it is relatively 
+  easy to include the radius as a free parameter in case we so desire. If we think this as a methodology paper, the 
+  radius measurement is a good bonus.}  
     \skk{I decided it is easier to convert the code into such form that it is easier to document, and the document it. 
     So now the S-curve -method and the calibration stuff described by J. Aatrokoski in MRO is used as an initiation step 
     for an iteration process. This iteration process selects limb samples a estimates they distance from the center. It 
@@ -775,7 +785,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
     \mathrm{m}$, which is pretty close. By using cycle 24 and a different definition for the radius, I arrive at $7.18 
     \times 10^8 \mathrm{m}$. I am currently reprosessing the data based on the later value of the radius.}
     
-  \subsubsection{Initial radius}\label{sect:initial-radius}
+  \subsubsection{Initial radius}\label{sect:initial_radius}
 
   It is possible to calculate the radius of the disk as well. We start by calculating area integrals of a function $f(x,y) = x^2+y^2 = r^2$ over a disk of radius $R$, $\mathcal{B}(\bm{0},R)$. This gives:
   \eqnl{initial_radius}{
@@ -822,7 +832,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   deviation, while outliers within the disk are neglected. Between each QSL determination loop, we refine the centering 
   of the disk.
   
-  \subsubsection{Inner disk outliers} \label{sect:outliers_disk}
+  \subsubsection{Inner disk outliers} \label{sect:disk_outliers}
 
   We aim to calculate the average intensity within the disk. However, we do not use the whole inner disk for measuring 
   QSL, since it typically contains bright and dim features such as active regions. These features will be neglected as 
@@ -901,7 +911,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \eqnl{calib_inner_disk6}{
   v_i^{(c+1)} := \frac{u_i - \s{u}{background}}{\s{u}{QSL}^{(c+1)} - \s{u}{background}} \text{.}
   }
-  The first time we run the above substitions (Section~\ref{sect:outliers_disk}) is for $c=0$.
+  The first time we run the above substitions (Section~\ref{sect:disk_outliers}) is for $c=0$.
 
   \subsubsection{Bright and dim features} \label{sect:bright_dim_features}
 
@@ -1016,7 +1026,7 @@ size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in
   }
   After a couple of steps we have neglected any outliers with good reliability. We can use the limb set $L^{(c)}_{\s{g}{out}}$ with $\s{g}{out} := 10$for this.
 
-  \subsubsection{Subsequent centering} \label{sect:subsequent-centering}
+  \subsubsection{Subsequent centering} \label{sect:subsequent_centering}
 
   We will fit a circle into the set $L^{(c)}_{\s{g}{out}}$. The quality of fitting is evaluated as $T_c$:
   \eqnl{subsequent_centering1}{
@@ -1024,7 +1034,7 @@ size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in
   }
   Here the vector $\bm{z} = \left( x, y, r \right)^T$.
   The radius $r$ is optionally a free parameter, otherwise we fix $r := r^{(c)} = r^{(0)}$ (see 
-  Section~\ref{sect:initial-radius}). We search of optimal values $\bm{z}_{\zeta}^{(c)}$ which minimize $T_c$, starting with $\zeta=0$:
+  Section~\ref{sect:initial_radius}). We search of optimal values $\bm{z}_{\zeta}^{(c)}$ which minimize $T_c$, starting with $\zeta=0$:
   \eqnl{subsequent_centering2}{
   \bm{z}_0^{(c)} := \left( x^{(c-1)}, y^{(c-1)}, r^{(c-1)} \right)^T \text{.}
   }
@@ -1041,7 +1051,7 @@ size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in
   \eqnl{subsequent_centering5}{
   \left( x^{(c)}, y^{(c)}, r^{(c)} \right)^T := \lim \limits_{\zeta \to \infty} \bm{z}_{\zeta} \text{.}
   }
-  We will now loop back to Section~\ref{sect:outliers-disk} unless we have reached $c = \s{c}{max} := 5$. \skk{Hey, natural language is also a programming language.}
+  We will now loop back to Section~\ref{sect:outliers_disk} unless we have reached $c = \s{c}{max} := 5$. \skk{Hey, natural language is also a programming language.}
   In subsequent sections, we will use the fully calibrated values $x_i^{(\s{c}{max})}$, $y_i^{(\s{c}{max})}$, and $r_i^{(\s{c}{max})}$ for each sample $s_i \in S$.
 
 \skk{Moved the convex hull stuff into a separate file, probably not to be included in the paper.}
@@ -1472,7 +1482,7 @@ surface. We also obtain various structural information from these regions.
   We start with a predefined $R_{\astrosun}$ and sweep the reasonable interval $[6.90, 7.25] \times 10^8 \mathrm{m}$. 
   Currently the model works on a few $n \approx 14$ maps at once. This does not analyze a full solar cycle but rather a 
   single day of observations. The model involves a centering scheme similar to that in described fully in 
-  Section~\ref{sect:s-curve}, \ref{sect:initial-centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
+  Section~\ref{sect:s_curve}, \ref{sect:initial-centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
   scheme involves solving the inversion problem several times and constructing the limb model for each map individually 
   each time the inversion problem is solved. This approach tackles not only the different altitude of observation 
   depending on time of day, but also varying weather and atmospheric conditions which affect the telescope beam. The 
