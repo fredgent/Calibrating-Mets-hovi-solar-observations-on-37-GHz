@@ -547,6 +547,511 @@ disk center. This already produces a fairly good centering, but we seek to furth
 brightness gives a hint of how far from the center it should be, supposed the general limb intensity profile is known. 
 Utilising this information, we can perform a circle fitting and more sophisticated centering.
 
+%FAG: moving to results where creating the butterfly maps will now be discussed
+%Each sample also has weight $w_i$, which is set as to balance the target set. 
+%There are more 
+%observations starting from year $2015$, while only a few maps for year $1989$. 
+%%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weigth is lower because of that time interval in more uncertain. Please expand on the logic here.
+%Thus we will put more weight on the old 
+%maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
+%
+%We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
+%compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
+%from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
+%Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
+%separate polynomials $P_n$ and $Q_m$ should reduce these risks. 
+%%MJK Good idea, but sounds like a task not necessary to undertake now? If the referee asks us to verify this risk, then we should do it. But, I comment it out for now...
+%%I suggest testing the optimization code with simulated 
+%%data.
+%
+%%MJK The active region tracking tool is not yet described here. You are still planning to include that, right?
+%
+%Limb intensity profiles showing brightening. 
+
+%------------------------------------------------------------------------------
+\subsection{Heliographic coordinates from radio data}\label{sect:helio}
+
+
+
+
+%A particular radio data sample $s_i$ contains time $t_i$, relative position on the sky $(\delta \mathrm{RA}_i, \delta 
+%\mathrm{dec}_i$), and measured intensity $u_i$in arbitrary linear units. For convenience, we use two equivalent 
+%conventions for sample notation:
+%
+%%MJK Introducing line break to fit the equations on a single line
+%%\eqnl{radio_sample}{
+%%s_i = \left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) = \left( t(s_i),\delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
+%%}
+%\eqnl{radio_sample}{
+%s_i &=& 
+%\left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) \\ \nonumber
+%&=& \left( t(s_i),\delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
+%}
+%%Observation is done at time $t_i$ and from geographic location 
+%%$(\phi_{\earth}, \lambda_{\earth}) = \left( +60.217797339^{\circ}, +24.393084663 \right)$, which is 
+%%Metsähovi Radio Observatory.
+%Each scan $S = \left\{ s_i \right\}_{i=\s{i}{min}}^{\s{i}{max}}$ consists of maps taken 
+%during $\s{t}{min}(S) \le s_i \le \s{t}{max}(S), \; s_i \in S$.
+%The equatorial coordinates used are relative to the expected position of the central point
+%of the Sun at $t_i$ and they are cosine corrected to have unit aspect ratio:
+%\eqnl{relative_radec}{
+%\delta \mathrm{RA}_i  &=& \frac{\mathrm{RA}_i - \mathrm{RA}^{\astrosun}(t_i)}{\cos \left( \mathrm{dec}^{\astrosun}(t_i) \right)} \\
+%\delta \mathrm{dec}_i &=& \mathrm{dec}_i - \mathrm{dec}^{\astrosun}(t_i) \text{.}
+%}
+%In this work, we study only samples taken on $\SI{37}{GHz}$.
+%The raw intensity $u_i$ is measured in arbitrary units.
+Our solar maps are not sensitive to small systematic pointing errors or inter map variations in signal levels, since we calibrate each scan individually.
+% determine the position and size of the solar disk as well as signal levels in the background and within the quiet sun area.
+%MJK not to confuse the reader, refer already forward
+We apply algorithm $F_j$,
+%MJK
+defined in detail in Sect.~\ref{sect:disk},
+%MJK
+for the scan $S$ in order to produce a disk model:
+\eqnl{disk_model}{
+F_j(S) = \left( \delta \mathrm{RA}_S, \delta \mathrm{dec}_S, r_S, \s{u}{background}(S), \s{u}{QSL}(S) \right) \text{.}
+}
+%The disk fitting model in $F_j$ is used for correcting small tracking errors and calibrating the intensity levels.
+We then obtain calibrated position and intensity for each sample. Signal levels are scaled so that zero is for the background and unity for the 
+%MJK OK, defined here, hence:
+%Quiet Sun Level (QSL):
+QSL:
+%\eqnl{calibrated_samples}{
+%c_i = F(S)(s_i) = \left( t_i, x_i, y_i, v_i \right) \text{,}
+%}
+%such that:
+\eqnl{calibration}{
+x_i &=& \frac{r^{\astrosun} \left( \s{t}{mid}(S) \right)}{r_S} \left( \mathrm{RA}_i -  \mathrm{RA}_S  \right) \\
+y_i &=& \frac{r^{\astrosun} \left( \s{t}{mid}(S) \right)}{r_S} \left( \mathrm{dec}_i - \mathrm{dec}_S \right) \\
+v_i &=& \frac{u_i - \s{u}{background}(S)}{\s{u}{QSL}(S) - \s{u}{background}(S)} \text{.}
+}
+We get the visible solar radius $r^{\astrosun}$ from our astronomical model $A$, using the middle time $\s{t}{mid}(S) = 
+\frac{\s{t}{min}(S) + \s{t}{max}(S)}{2}$ for simplicity. We then use $A$ to project our refined Sun-relative equatorial coordinates $(x_i,y_i)$ 
+from the observer's geolocation (Metsähovi Radio Observatory):
+\eqnl{mro_geolocation}{
+(\phi^{\earth}, \lambda^{\earth}) = \left( +60.217797339^{\circ}, +24.393084663^{\circ} 
+%MJK , in wrong place
+%\right)} \text{,}
+\right) \text{,}}
+into an idealized heliographic surface 
+in order to obtain Carrington coordinates:
+\eqnl{carrington_coordinates}{
+&\left( \phi^{\astrosun}_i, 
+%MJK Making equation fit one line
+%\lambda^{\astrosun}_i \right) = A_{\rm surf}
+\lambda^{\astrosun}_i \right) = A_{\rm surf} \times& \\
+&\left( \arrc{\s{t}{mid}(S), \phi^{\earth}, \lambda^{\earth}
+%MJK Removing some commas
+%, 
+\\
+\mathrm{RA}^{\astrosun} \left( \s{t}{mid}(S) \right) + x_i / \cos \left( \mathrm{dec}^{\astrosun} \left( \s{t}{mid}(S) \right) \right)&
+%, 
+\\
+\mathrm{dec}^{\astrosun} \left( \s{t}{mid}(S) \right) + y_i} \right) \nonumber 
+%MJK Reforming
+%\text{.}
+\text{,}
+}
+where $\left( \mathrm{RA}^{\astrosun}(t), \mathrm{dec}^{\astrosun}(t) \right)$ is the equatorial position of the Sun. This quantity, as well as $r^{\astrosun}$, are calculated using the same astronomical model $A$:
+%MJK I would modify the presentation here.
+%The equatorial position of the Sun, $\left( \mathrm{RA}^{\astrosun}(t), \mathrm{dec}^{\astrosun}(t) \right)$,needed in Equation \ref{carrington_coordinates} as well as the visual size $r^{\astrosun}$needed in Equation \ref{calibration} is calculated using the same astronomical model $A$:
+\eqnl{astromodel}{
+\left( \mathrm{RA}^{\astrosun}, \mathrm{dec}^{\astrosun}, r^{\astrosun} \right) = \s{A}{pos} \left( \s{t}{mid}(S), \phi_{\earth}, \lambda_{\earth} \right) \text{.}
+}
+The choice of $A$ is not critical, since the antenna beam radius is large ($2.4^\prime$) compared to the accuracy of any 
+reasonable model.
+%Only a very large inaccuracy in $A$ would appear as incorrect location of the solar pole in the visible 
+%solar disk and thus as inaccurate heliographic coordinates.
+
+%FAG: commented out - may be old remarks?  
+%\fag{Add the equation for calculating the best fit and variance and iteration to exclude outliers.}\\
+  %\fag{Describe in outline the procedure for deriving butterfly fits.
+  %}
+When the disk fitting is done, every radio sample can be projected into rotating heliographic surface. We use the 
+Carrington coordinates for this. As every sample now has time, heliographic latitude, and intensity relative to QSL, we 
+can average them on a two-dimensional grid in order to obtain a butterfly diagram. The sunspot data is already in a 
+format that has latitude and time bins, so simple interpolation is needed to convert it into the same domain as our 
+butterfly. For radio data, the measurable quantity is the intensity, while for the sunspot data it is the fraction of 
+area covered by sunspot, between two arcs of constant latitude.
+
+Having obtained the butterfly 
+%MJK diagram?
+diagrams, we 
+%MJK We should imply that more analysis is to come later.
+%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Section BLAA2."
+perform feature detection in order to get quantified information on the wing 
+shapes. 
+%MJK Again, introduction might not be the best place to describe the workflow, but the methods section.
+This is done iteratively, starting with the each hemisphere and predefined solar cycle start and end times 
+(later: wing). For each wing, we give the high intensity cells a considerable weight and fit a polynomial of a desired 
+degree to the time-latitude domain. This gives the wing shape and root. Statistical variance with respect to the root 
+gives us the wing thickness, which can be assumed a constant or a polynomial function of desired degree. We fit the 
+third polynomial in the time,intensity domain, where the intensity is averaged over the wing latitudes for each time 
+cell. The relevant roots or local minima of this intensity polynomial give the begin and end times for each wing. Having 
+now quantified the shape and dimensions of each wing, we can neglect any outlier cells from the grid and perform several 
+iteration steps to refine the shape. In the last stage, all the wings will coexist in the same grid, which now contains 
+all the 40 years of data from both hemispheres. We will set the weights to zero for those cells which would have 
+overlapping wings, in order to encourage the algorithm to produce non-overlapping wings. We tried several sets of 
+parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
+intensity profile.
+
+%\begin{figure}
+%\centering
+%\includegraphics[width=8.5cm]{limbmodel_butterfly1.png}
+%\caption{Idealized butterfly diagram showing cyclic behaviour at high %latitudes.}
+%\label{limb_butterfly1}
+%\end{figure}
+
+
+%\subsection{Limb correction model}
+%\begin{figure}
+%\centering
+%\includegraphics[width=8.5cm]{limbmodel_butterfly2.png}
+%\caption{Idealized butterfly diagram with emphasis on the low %latitudes.}
+%\label{limb_butterfly2}
+%\end{figure}
+
+
+%-------------------------------------- Two column figure (place early!)
+
+
+
+
+%------------------------------------------------------------------------------
+\section{Results}\label{sect:results}
+\fag{To do: identify other observations/publications on polar magnetic cycles to compare with
+Fig.~\ref{butterfly_clear_corr}. MJK: The Srivastava et al., 2018 paper should give plenty of refences. And perhaps more references can be found from those papers. Check Potsdam publications.}\\
+
+%FAG added
+From the series of specimen maps as processed using methods in 
+Section\,\ref{sect:methods}, but without applying the limb correction model
+(Section\,\ref{sect:limb}), we construct the radio butterfly diagram  
+displayed in Fig.\,\ref{butterfly_clear_raw}
+
+%------------------------------------------------------------------------------
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{butterfly_clear_raw.png}
+\caption{Solar intensity at all heliographic latitudes on $\si{37}{GHz}$ over cycles 21 to 24. Averaged over samples for which $r_i \le 0.9$ to avoid beam mixing with the background.
+}
+\label{butterfly_clear_raw}
+\end{figure}
+%------------------------------------------------------------------------------
+%FAG. i think this has now been done
+%\fag{(later) obtain same period of photospheric sunspot numbers
+%Tabulate the timespans and line fits for all eight.}\\
+
+%FAG moved from above
+Each specimen map has weight $w_i$, which is set as to balance the target set. 
+There are more 
+observations starting from year $2015$, while only a few maps for year $1989$. 
+%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weigth is lower because of that time interval in more uncertain. Please expand on the logic here.
+Thus we will put more weight on the old 
+maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
+
+We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
+compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
+from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
+Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
+separate polynomials $P_n$ and $Q_m$ should reduce these risks. 
+%MJK Good idea, but sounds like a task not necessary to undertake now? If the referee asks us to verify this risk, then we should do it. But, I comment it out for now...
+%I suggest testing the optimization code with simulated 
+%data.
+%------------------------------------------------------------------------------
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{butterfly_clear_limb.png}
+\caption{Solar intensity at all heliographic latitudes on $\si{37}{GHz}$ over cycles 21 to 24. Averaged over samples for which $r_i \le 1.0$ so that each sample intensity is corrected for beam mixing and limb brightening. This increases the available latitude range, bringing the polar magnetic cycle clearly visible.}
+\label{butterfly_clear_corr}
+\end{figure}
+%------------------------------------------------------------------------------
+
+%MJK The active region tracking tool is not yet described here. You are still planning to include that, right?
+%------------------------------------------------------------------------------
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{butterfly_wingfit_raw.png}
+\caption{Butterfly wing patterns automatically fitted on top of Mets\"ahovi $\SI{37}{GHz}$ data (cf. Fig.~\ref{butterfly_clear_corr}).} 
+\label{butterfly_wingfit_raw}
+\end{figure}
+%------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------
+\begin{figure}
+\centering
+\includegraphics[width=8.5cm]{butterfly_wingfit_sunspot.png}
+%FAG replace citation with url
+%\caption{Butterfly wing patterns automatically fitted on sunspot data \cite{SUNSPOTDATA:1}. The sunspot cycle coincides with the radio cycle seen in Fig.. \ref{butterfly_wingfit_raw}. Comment: fix 21st cycle fitting.}
+\caption{Butterfly wing patterns automatically fitted on sunspot data, for
+cycles coinciding with the radio cycles in Fig.\,\ref{butterfly_wingfit_raw}.
+Sunspot data courtesy Hathaway \& Upton, Solar Cycle Science,
+Discover the Sun}
+%\href{http://solarcyclescience.com/AR_Database/bflydata.txt}{http://solarcyclescience.com/AR_Database/bflydata.txt}.
+\label{butterfly_wingfit_sunspot}
+\end{figure}
+%------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------
+\begin{table}
+\caption{\label{tab:cycles}
+Heliographic solar intensity butterfly fits for cycles 21 -- 24, by hemisphere.
+Latitude Lat$_0$ and time $t_0$ at the start of each cycle, the slope of transition
+towards the Equator, the time $t_{\rm end}$ at which each cycle is considered to have
+ceased and the length of each cycle $\tau_{\rm cycle}$.
+}
+\begin{tabular}{l|ccccr}
+\hline\hline
+\input{raw.tex}
+\hline
+\end{tabular}
+\end{table}
+%------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------
+\begin{table}
+\caption{\label{tab:cycles_sunspot}
+Sunspot data fits for cycles 21 -- 24, by hemisphere.
+Latitude Lat$_0$ and time $t_0$ at the start of each cycle, the slope of transition
+towards the Equator, the time $t_{\rm end}$ at which each cycle is considered to have
+ceased and the length of each cycle $\tau_{\rm cycle}$.
+}
+\begin{tabular}{l|ccccr}
+\hline\hline
+\input{sunspot.tex}
+\hline
+\end{tabular}
+\end{table}
+%------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------
+\begin{figure*}
+\centering
+\includegraphics[width=\textwidth]{maptrack1.png}
+\caption{Two active regions passing the visible disk as the Sun rotates.}
+\label{maptrack1}
+\end{figure*}
+%------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------
+\begin{figure} \centering \includegraphics[width=8.8cm]{maptrack2.png} \caption{Tracked regions are shown with red 
+ellipses for bright regions and with blue ellipses for dim regions. Based on earlier and later sunmaps, we can often 
+expect a weak region to be visible at known heliographic coordinates. When the region nevertheless is found on this map, 
+we show it with a dashed ellipse. The active regions 346 and 356 are clearly visible in Fig.~\ref{maptrack1}.} 
+\label{maptrack2} \end{figure}
+%------------------------------------------------------------------------------
+
+%------------------------------------------------------------------------------
+\section{Discussion}\label{sect:discussion}
+
+We have featured a software package for processing solar maps. The radio observations reproduce the butterfly diagram 
+observed on sunspot data, and are able to see the extended cycle at high latitudes. We automatically detect bright and 
+dim features from the maps and track them from map to map. This allows us to analyze their migration on heliographic 
+surface. We also obtain various structural information from these regions.
+
+  \subsection{Determining radius by limb intensity} \label{sect:radius_method1}
+
+  The first method is performed using the all MRO solar maps of the cycle $24$, combining c.a. $75800$ maps. For each 
+  map, we perform the calibration procedure described in Section~\ref{sect:source} and concatenate the samples into a 
+  big list of c.a. $2 \times 10^8$ samples. The next step in the analysis involves five data fields per sample:
+  \begin{itemize}
+  \item Time (on solar cycle 24): $t_j$.
+  \item Heliographic latitude: $l_j$.
+  \item Distance from the center of disk, relative to the apparent radius of the disk: $r_j$.
+  \item Altitude of observation, angle with respect to horizon at MRO: $a_j$.
+  \item Normalised intensity: $v_j$.
+  \end{itemize}
+
+  Here the index $j$ is mapped to some sample $s_i$ on some map $S$, and $j$ runs over all the maps of cycle $24$. The 
+  distance $r_j$ is zero at the center and unity at the boundary of the disk.
+    The polynomial $A$ should compensate for the butterfly diagram of cycle $24$, which is intensity vs. time and heliographic latitude. Meanwhile, the polynomial $B$ should compensate any limb effects.
+  We emphasize the boundary at $r=1$ by transforming to $\rho$ as:
+  \eqnl{physical_radius_trans}{
+  \rho_j := \arctan \left( \kappa \left( r_j - 1 \right)\right) \; \text{with} \; \kappa = 8.8 \text{.}
+  }
+  We then perform an optimization to 
+  minimize a target function:
+  \eqnl{physical_radius_target}{
+  U(\bm{x}) = \sum \limits_{j=1}^{N} \left( A(\bm{x},t_j,l_j) B(\bm{x},\rho_j,a_j) - v_j \right)^2 \text{.}
+  }
+  Here the functions $A$ and $B$ are two-dimensional polynomials of $(t,l)$ and $(\rho,a)$, respectively, with coefficients obtained from individual elements of the vector $\bm{x}$. We write the polynomials as:
+  \eqnl{physical_radius_polynomials}{
+  A(\bm{x},t,l) = \sum \limits_{g=0}^{4} \sum \limits_{h=0}^{4-g} c_{g,h} t^g l^h \; \text{and} \;
+  B(\bm{x},\rho,a) = \sum \limits_{g=0}^{6} \sum \limits_{h=0}^{6-g} d_{g,h} \rho^g a^h \text{.}
+  }
+  The vector $\bm{x}$ is constructed from coefficients $c_{g,h}$ and $d_{g,h}$. With current selection of degrees $4$ 
+  and $6$ for polynomials $A$ and $B$, respectively, we will have $6*5/2 + 8*7/2 = 43$ elements in $\bm{x}$. The element 
+  $\bm{x}^{(0)}$ refers to $c_{0,0}$, and $\bm{x}^{(15)}$ refers to $d_{0,0}$.
+
+  The optimization is performed iteratively. We start with an initial vector $\bm{x}_0$, where each element 
+  $\bm{x}_0^{(g)}$ will be a small random value, except for $g=0,15$where we start with $\bm{x}^{(g)} = 1$, thus 
+  setting $c_{0,0} = d_{0,0} = 1$ and giving a flat solar cycle and flat disk with some noise. We proceed with iterative 
+  steps of quadratic optimization. At each step $m$ we calculate the gradient $\bm{g}_m := \nabla U(\bm{x}_m)$ and the Hessian of $U(\bm{x_m}$, which should be $H_m$. Basically we search for the point of zero gradient iteratively, starting from $m=0$:
+  \eqnl{physical_radius_step}{
+  \bm{x}_{m+1} := \bm{x}_m - H_m^{-1} \bm{g}_m \text{.}
+  }
+
+  However, this naive approach will easily run into trouble when we are far from the actual minimum of $U(\bm{x})$. For 
+  this reason, we have a developed a more rebust scheme which first diagonalizes $H_m$. The algorithm tries to choose 
+  how much to advance along each eigenvector of $H_m$. The algorithm tries to avoid the eigenvectors accociated with 
+  negative eigenvalues, but will eventually descend away from possible saddle points.
+  
+  We force the disk to be flat at the center, thus $\frac{\partial B}{\partial r}\big|_{r=0} = 0$. This limits the 
+  subspace allowed for $\bm{x}$ and reduces the amount of degrees of freedom in the setting to $37$. The optimization stops successfully (converges) at step $m$ when we observe that:
+  \begin{itemize}
+  \item $H_m$ is positively definite in the allowed subspace.
+  \item The next step $\bm{x}_{m+1} - \bm{x}_{m}$is comparable to numerical precision.
+  \item $U(\bm{x}_{m+1})$ is equal or slightly greater than $U(\bm{x}_m)$ due to limits in the numerical precision.
+  \end{itemize}
+
+  Having optimized $U(\bm{x}_{m})$ at sufficient amount of steps ($m$), we define the limb profile $L(r)$ for a given altitude $a = 30^{\circ}$ as:
+  \eqnl{physical_radius_limb}{
+  L(r) := \frac{B(\bm{x}_m, \rho(r), a)}{B(\bm{x}_m, \rho(1/3), 30^{\circ})} \text{.}
+  }
+  We thus state that the reference Sun is observed on altitude $30^{\circ}$ above horizon. The function $L(r)$ is a $6$:th degree polynomial of $\rho(r)$. We search for the value $\s{r}{limb}$ where:
+  \eqnl{physical_radius_limb2}{
+  L(\s{r}{limb}) = 0.5 \text{.}
+  }
+  We start the above process using a reasonable value for the physical radius of the Sun, namely, $R_{\astrosun}^{(0)}$. 
+  Starting from $q=0$, the process gives a value of $\s{r}{limb}^{(q)} \approx 1$. When there is a slight deviation from 
+  unity, we correct that into the physical Sun radius by setting:
+  \eqnl{physical_radius_iteration}{
+  R_{\astrosun}^{(q+1)} := Q_{\astrosun}^{(q)} * \s{r}{limb}^{(q)}
+  }
+  After a few steps, the radius $R_{\astrosun}^{(q+1)}$no longer evolves. So far we have obtained a convergent value of $R_{\astrosun}^{(\infty)} \approx 7.176 \times 10^8 \mathrm{m}$.
+
+  \subsection{Determining radius by inversion model} \label{sect:radius_method2}
+
+  We start with a predefined $R_{\astrosun}$ and sweep the reasonable interval $[6.90, 7.25] \times 10^8 \mathrm{m}$. 
+  Currently the model works on a few $n \approx 14$ maps at once. This does not analyze a full solar cycle but rather a 
+  single day of observations. The model involves a centering scheme similar to that in described fully in 
+  Section~\ref{sect:s_curve}, \ref{sect:initial_centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
+  scheme involves solving the inversion problem several times and constructing the limb model for each map individually 
+  each time the inversion problem is solved. This approach tackles not only the different altitude of observation 
+  depending on time of day, but also varying weather and atmospheric conditions which affect the telescope beam. The 
+  model omits outlier samples using a similar recursive scheme as described completely in 
+  Section~\ref{sect:outliers_limb} and~\ref{sect:disk_outliers}.
+
+  Each sample constitutes of four values: $s_j = (t_j, x_j, y_j, v_j)$, where $t_j$ is time, $v_j$ is calibrated intensity, 
+  and $(x_j,y_j)$ describe the position of the sample on the calibrated disk as right ascension and declination 
+  relative to the center of the Sun. We parametrize the telescope beam $B(z^2)$with a polynomial times a gaussian function of known width $\sigma$:
+  \eqnl{inversion_beam}{
+  B(z^2) = e^{-\frac{z^2}{2 \sigma^2}} \sum \limits_{g=0}^{4} b_g z^{2g} \text{.}
+  }
+  Here $z$ refers to the relative angle between a source element and the observed sample. We only need even powers of $z$ in the polynomial factor since the beam is radially symmetric. We produce an estimate $e_j$for each sample $s_j$ through integrating over the telescope beam:
+  \eqnl{inversion_beam2}{
+  e_j = \intef{x^{\prime}}{-\infty}{+\infty}{ \intef{y^{\prime}}{-\infty}{+\infty}{ f(x^{\prime}, y^{\prime}) B \left( \left( x - x^{\prime} \right)^2 + \left( y - y^{\prime} \right)^2 \right)}}
+  }
+
+  The integral in Equation~\ref{inversion_beam2} is evaluated numerically using Gaussian quadratures. There are 
+  $7$cocentric rings of quadrature points around the sample $(x_j,y_j)$. The radii of the rings come from a quadrature 
+  rule with gaussian weight function. Each ring contains $6$ quadrature points, and the placement of the points along the ring comes from a linear 
+  quadrature rule. Various ad hoc solutions are implemented in order to handle singularities and discontinuities at the 
+  disk boundary as well as to maintain sufficient numerical stability.
+
+  Once the quadratures are implemented, we arrive into a linear summation formula for each sample $s_j$. The coefficients $\xi_{j,i}$ are calculated as a products of the corresponding ring and point quadrature coefficients.
+  \eqnl{inversion_beam3}{
+  \epsilon_j = \sum \limits_{i=1}^{42} \xi_{j,i} f(x^{\prime}_{j,i}, y^{\prime}_{j,i} \approx e_j \text{.}
+  }
+
+   We project each of the sky coordinates $((x^{\prime}_{j,i}, y^{\prime}_{j,i})$ at time $t_j$ on the spherical solar 
+   surface with radius $R_{\astrosun}$. This gives us the heliographic latitude $l^{\prime}_{j,i}$ of the point where the line of sight is incident with the solar surface. We denote by $\alpha_{j,i}$ the angle of incidence.
+   
+  We have a polynomial $A$ for describing the current phase of the solar 
+   cycle.
+   
+  
+%------------------------------------------------------------------------------
+\subsection{The big picture}
+
+The radio samples in solar maps can be divided into three categories: \begin{itemize} \item Quiet Sun background \item 
+Bright features \item Dim features. \end{itemize} Bright and dim features are a signal of activity. Our intention is to 
+study the development and lifetime of this activity, for which we have developed algorithms for extracting these 
+features from the maps. We also need to understand how the quiet Sun behaves, and for this purpose, any activity is 
+excluded. The brightness of these quiet areas supposedly depend on heliographic latitude and the solar cycle. When these 
+regions are observed, the ap:qparent brightness also depends on the distance from the visual center, due to atmospheric 
+and antenna beam convolution effects. We want to measure these effects in order to properly compensate for them. We do 
+not want any activity to affect these measurements, so we will benefit if we already know where the active and dim 
+regions are. The compensation model consists of an implicit butterfly as well as a radial model for the brightness, and 
+the expected brightness of a quiet region is taken as a product of these two.
+
+Accurately understanding the radial effects in observations benefits the centering algorithm. Also, we benefit from 
+prior knowledge of active regions since they can be excluded in the statistics which we feed into the centering 
+algorithm. Otherwise the features at the limb would bias the center of the map.
+
+Radial model also increases the dynamic radius of the map, and we are able to detect bright and dim features at the 
+limb, although with increased noise. Each part of the model will benefit other parts and result in a data model of progressive accuracy, as outlined in Fig.~\ref{roadmap}.
+
+Ultimately, all these three aspects, quiet, bright, and dim features, have a known physical origin, and their 
+statistical appearance and characteristics can be reproduced in appropriate simulations.
+
+%\begin{figure*} 
+%\centering \scalebox{0.75}{\begin{tikzpicture}
+%\node[textarea] (maps) {Mets\"ahovi solar intensity maps};
+%\node[largeblock, right=5mm of maps] (calib) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{15mm}} Disk fitting and intensity calibration & \includegraphics[width=15mm]{calib.png} \end{tabular}};
+%\node[block, below right=15mm and -25mm of calib] (estimate) {Solar disk estimate from least squares approach};
+%\node[largeblock2, above right=10mm and -50mm of calib] (dbase) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Bright and dim region database & \includegraphics[width=25mm]{dbase.png} \end{tabular}};
+%\node[largetextarea2, above right=-8mm and 5mm of estimate] (ibutterfly) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Implicit model for quiet sun butterfly & \includegraphics[width=25mm]{ibutterfly.png} \end{tabular}};
+%\node[largetextarea2, below right=-8mm and 5mm of estimate] (lmodel) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Limb brightening and beam convolution model & \includegraphics[width=25mm]{lmodel.png} \end{tabular}};
+%\node[largetextarea, right=6mm of calib] (qbutterfly) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Quiet sun butterfly & \includegraphics[width=25mm]{qbutterfly.png} \end{tabular}};
+%\node[largetextarea, below right=-8mm and 5mm of dbase] (hbutterfly) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Bright region butterfly & \includegraphics[width=25mm]{hbutterfly.png} \end{tabular}};
+%\node[largetextarea, above right=-8mm and 5mm of dbase] (cbutterfly) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Dim region butterfly & \includegraphics[width=25mm]{cbutterfly.png} \end{tabular}};
+%\node[textarea2, right=10mm of hbutterfly] (compu) {Comparison with solar simulations};
+%\node[dummy, left=4mm of calib.north] (calib_n1) {};
+%\node[dummy, right=4mm of calib.north] (calib_n2) {};
+%\node[dummy, left=4mm of calib.south] (calib_s1) {};
+%\node[dummy, right=4mm of calib.south] (calib_s2) {};
+%\node[dummy, left=4mm of dbase.south] (dbase_s1) {};
+%\node[dummy, right=4mm of dbase.south] (dbase_s2) {};
+%\node[dummy, left=4mm of estimate.north] (estimate_n1) {};
+%\node[dummy, right=4mm of estimate.north] (estimate_n2) {};
+%\draw[myarrow] (maps.east) -- (calib.west);
+%\draw[myarrow] (calib_s1) -- (estimate_n1);
+%\draw[myarrow] (estimate_n2) -- (calib_s2);
+%\draw[myarrow] (calib_n1) -- (dbase_s1);
+%\draw[myarrow] (dbase_s2) -- (calib_n2);
+%\node[dummy, above=4mm of dbase.east] (dbase_e1) {};
+%\node[dummy, below=4mm of dbase.east] (dbase_e2) {};
+%\draw[myarrow] (dbase_e1) -- (cbutterfly.west);
+%\draw[myarrow] (dbase_e2) -- (hbutterfly.west);
+%\draw[myarrow] (calib.east) -- (qbutterfly.west);
+%\node[dummy, above=6mm of estimate.east] (estimate_e1) {};
+%\node[dummy, above=2mm of estimate.east] (estimate_e2) {};
+%\node[dummy, below=2mm of estimate.east] (estimate_e3) {};
+%\node[dummy, below=6mm of estimate.east] (estimate_e4) {};
+%\node[dummy, above=2mm of ibutterfly.west] (ibutterfly_w1) {};
+%\node[dummy, below=2mm of ibutterfly.west] (ibutterfly_w2) {};
+%\node[dummy, above=2mm of lmodel.west] (lmodel_w1) {};
+%\node[dummy, below=2mm of lmodel.west] (lmodel_w2) {};
+%\draw[myarrow] (estimate_e1) -- (ibutterfly_w1);
+%\draw[myarrow] (ibutterfly_w2) -- (estimate_e2);
+%\draw[myarrow] (estimate_e3) -- (lmodel_w1);
+%\draw[myarrow] (lmodel_w2) -- (estimate_e4);
+%\node[dummy, above=4mm of compu.west] (compu_w1) {};
+%\node[dummy, above=0mm of compu.west] (compu_w2) {};
+%\node[dummy, below=4mm of compu.west] (compu_w3) {};
+%\draw[myarrow] (cbutterfly.east) -- (compu_w1);
+%\draw[myarrow] (hbutterfly.east) -- (compu_w2);
+%\draw[myarrow] (qbutterfly.east) -- (compu_w3);
+%\end{tikzpicture}} \caption{Roadmap for extracting valuable information from the solar maps.} \label{roadmap} \end{figure*}
+%
+
+\FloatBarrier
+
+\section{List of symbols} \label{sect:sym}
+
+\skk{At least I need this list in order to keep track of reserved letters. I tried using 'longtable' to automatically 
+wrap the table along many pages, but it complains about two column mode. I also tried 'supertabular' but it didn't work 
+either. Maybe it is best to manually split the table as I did in my mastersthesis. It is anyway good to assign the 
+symbols into groups by relevance.}
+\setlength{\extrarowheight}{3pt}
+\def\tabularxcolumn#1{m{#1}}
+\newcommand{\symtable}[2]{\begin{table*} \caption{#1} \begin{tabularx}{\textwidth}{lX} #2 \end{tabularx} \end{table*}}
+\input{sym.tex}
+
+\FloatBarrier
+
+\section{Appendices}
+
   %FAG: trying to disembiguate use of 'sample'
   %Each sample observation yields an intensity map with coordinates right 
   %Each observation scan yields an intensity map with coordinates right 
@@ -1124,508 +1629,6 @@ observations within the range $\varphi_i\in[7\deg,52\deg]$, and in
 Fig.\,\ref{limb_brightening}(b) the corresponding correction profiles, which 
 are applied near the limb to compensate.
 
-%FAG: moving to results where creating the butterfly maps will now be discussed
-%Each sample also has weight $w_i$, which is set as to balance the target set. 
-%There are more 
-%observations starting from year $2015$, while only a few maps for year $1989$. 
-%%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weigth is lower because of that time interval in more uncertain. Please expand on the logic here.
-%Thus we will put more weight on the old 
-%maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
-%
-%We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
-%compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
-%from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
-%Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
-%separate polynomials $P_n$ and $Q_m$ should reduce these risks. 
-%%MJK Good idea, but sounds like a task not necessary to undertake now? If the referee asks us to verify this risk, then we should do it. But, I comment it out for now...
-%%I suggest testing the optimization code with simulated 
-%%data.
-%
-%%MJK The active region tracking tool is not yet described here. You are still planning to include that, right?
-%
-%Limb intensity profiles showing brightening. 
-
-%------------------------------------------------------------------------------
-\subsection{Heliographic coordinates from radio data}\label{sect:helio}
-
-
-
-
-%A particular radio data sample $s_i$ contains time $t_i$, relative position on the sky $(\delta \mathrm{RA}_i, \delta 
-%\mathrm{dec}_i$), and measured intensity $u_i$in arbitrary linear units. For convenience, we use two equivalent 
-%conventions for sample notation:
-%
-%%MJK Introducing line break to fit the equations on a single line
-%%\eqnl{radio_sample}{
-%%s_i = \left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) = \left( t(s_i),\delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
-%%}
-%\eqnl{radio_sample}{
-%s_i &=& 
-%\left( t_i, \delta \mathrm{RA}_i, \delta \mathrm{dec}_i, u_i \right) \\ \nonumber
-%&=& \left( t(s_i),\delta \mathrm{RA}(s_i), \delta \mathrm{dec}(s_i), u(s_i) \right) \text{.}
-%}
-%%Observation is done at time $t_i$ and from geographic location 
-%%$(\phi_{\earth}, \lambda_{\earth}) = \left( +60.217797339^{\circ}, +24.393084663 \right)$, which is 
-%%Metsähovi Radio Observatory.
-%Each scan $S = \left\{ s_i \right\}_{i=\s{i}{min}}^{\s{i}{max}}$ consists of maps taken 
-%during $\s{t}{min}(S) \le s_i \le \s{t}{max}(S), \; s_i \in S$.
-%The equatorial coordinates used are relative to the expected position of the central point
-%of the Sun at $t_i$ and they are cosine corrected to have unit aspect ratio:
-%\eqnl{relative_radec}{
-%\delta \mathrm{RA}_i  &=& \frac{\mathrm{RA}_i - \mathrm{RA}^{\astrosun}(t_i)}{\cos \left( \mathrm{dec}^{\astrosun}(t_i) \right)} \\
-%\delta \mathrm{dec}_i &=& \mathrm{dec}_i - \mathrm{dec}^{\astrosun}(t_i) \text{.}
-%}
-%In this work, we study only samples taken on $\SI{37}{GHz}$.
-%The raw intensity $u_i$ is measured in arbitrary units.
-Our solar maps are not sensitive to small systematic pointing errors or inter map variations in signal levels, since we calibrate each scan individually.
-% determine the position and size of the solar disk as well as signal levels in the background and within the quiet sun area.
-%MJK not to confuse the reader, refer already forward
-We apply algorithm $F_j$,
-%MJK
-defined in detail in Sect.~\ref{sect:disk},
-%MJK
-for the scan $S$ in order to produce a disk model:
-\eqnl{disk_model}{
-F_j(S) = \left( \delta \mathrm{RA}_S, \delta \mathrm{dec}_S, r_S, \s{u}{background}(S), \s{u}{QSL}(S) \right) \text{.}
-}
-%The disk fitting model in $F_j$ is used for correcting small tracking errors and calibrating the intensity levels.
-We then obtain calibrated position and intensity for each sample. Signal levels are scaled so that zero is for the background and unity for the 
-%MJK OK, defined here, hence:
-%Quiet Sun Level (QSL):
-QSL:
-%\eqnl{calibrated_samples}{
-%c_i = F(S)(s_i) = \left( t_i, x_i, y_i, v_i \right) \text{,}
-%}
-%such that:
-\eqnl{calibration}{
-x_i &=& \frac{r^{\astrosun} \left( \s{t}{mid}(S) \right)}{r_S} \left( \mathrm{RA}_i -  \mathrm{RA}_S  \right) \\
-y_i &=& \frac{r^{\astrosun} \left( \s{t}{mid}(S) \right)}{r_S} \left( \mathrm{dec}_i - \mathrm{dec}_S \right) \\
-v_i &=& \frac{u_i - \s{u}{background}(S)}{\s{u}{QSL}(S) - \s{u}{background}(S)} \text{.}
-}
-We get the visible solar radius $r^{\astrosun}$ from our astronomical model $A$, using the middle time $\s{t}{mid}(S) = 
-\frac{\s{t}{min}(S) + \s{t}{max}(S)}{2}$ for simplicity. We then use $A$ to project our refined Sun-relative equatorial coordinates $(x_i,y_i)$ 
-from the observer's geolocation (Metsähovi Radio Observatory):
-\eqnl{mro_geolocation}{
-(\phi^{\earth}, \lambda^{\earth}) = \left( +60.217797339^{\circ}, +24.393084663^{\circ} 
-%MJK , in wrong place
-%\right)} \text{,}
-\right) \text{,}}
-into an idealized heliographic surface 
-in order to obtain Carrington coordinates:
-\eqnl{carrington_coordinates}{
-&\left( \phi^{\astrosun}_i, 
-%MJK Making equation fit one line
-%\lambda^{\astrosun}_i \right) = A_{\rm surf}
-\lambda^{\astrosun}_i \right) = A_{\rm surf} \times& \\
-&\left( \arrc{\s{t}{mid}(S), \phi^{\earth}, \lambda^{\earth}
-%MJK Removing some commas
-%, 
-\\
-\mathrm{RA}^{\astrosun} \left( \s{t}{mid}(S) \right) + x_i / \cos \left( \mathrm{dec}^{\astrosun} \left( \s{t}{mid}(S) \right) \right)&
-%, 
-\\
-\mathrm{dec}^{\astrosun} \left( \s{t}{mid}(S) \right) + y_i} \right) \nonumber 
-%MJK Reforming
-%\text{.}
-\text{,}
-}
-where $\left( \mathrm{RA}^{\astrosun}(t), \mathrm{dec}^{\astrosun}(t) \right)$ is the equatorial position of the Sun. This quantity, as well as $r^{\astrosun}$, are calculated using the same astronomical model $A$:
-%MJK I would modify the presentation here.
-%The equatorial position of the Sun, $\left( \mathrm{RA}^{\astrosun}(t), \mathrm{dec}^{\astrosun}(t) \right)$,needed in Equation \ref{carrington_coordinates} as well as the visual size $r^{\astrosun}$needed in Equation \ref{calibration} is calculated using the same astronomical model $A$:
-\eqnl{astromodel}{
-\left( \mathrm{RA}^{\astrosun}, \mathrm{dec}^{\astrosun}, r^{\astrosun} \right) = \s{A}{pos} \left( \s{t}{mid}(S), \phi_{\earth}, \lambda_{\earth} \right) \text{.}
-}
-The choice of $A$ is not critical, since the antenna beam radius is large ($2.4^\prime$) compared to the accuracy of any 
-reasonable model.
-%Only a very large inaccuracy in $A$ would appear as incorrect location of the solar pole in the visible 
-%solar disk and thus as inaccurate heliographic coordinates.
-
-%FAG: commented out - may be old remarks?  
-%\fag{Add the equation for calculating the best fit and variance and iteration to exclude outliers.}\\
-  %\fag{Describe in outline the procedure for deriving butterfly fits.
-  %}
-When the disk fitting is done, every radio sample can be projected into rotating heliographic surface. We use the 
-Carrington coordinates for this. As every sample now has time, heliographic latitude, and intensity relative to QSL, we 
-can average them on a two-dimensional grid in order to obtain a butterfly diagram. The sunspot data is already in a 
-format that has latitude and time bins, so simple interpolation is needed to convert it into the same domain as our 
-butterfly. For radio data, the measurable quantity is the intensity, while for the sunspot data it is the fraction of 
-area covered by sunspot, between two arcs of constant latitude.
-
-Having obtained the butterfly 
-%MJK diagram?
-diagrams, we 
-%MJK We should imply that more analysis is to come later.
-%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Section BLAA2."
-perform feature detection in order to get quantified information on the wing 
-shapes. 
-%MJK Again, introduction might not be the best place to describe the workflow, but the methods section.
-This is done iteratively, starting with the each hemisphere and predefined solar cycle start and end times 
-(later: wing). For each wing, we give the high intensity cells a considerable weight and fit a polynomial of a desired 
-degree to the time-latitude domain. This gives the wing shape and root. Statistical variance with respect to the root 
-gives us the wing thickness, which can be assumed a constant or a polynomial function of desired degree. We fit the 
-third polynomial in the time,intensity domain, where the intensity is averaged over the wing latitudes for each time 
-cell. The relevant roots or local minima of this intensity polynomial give the begin and end times for each wing. Having 
-now quantified the shape and dimensions of each wing, we can neglect any outlier cells from the grid and perform several 
-iteration steps to refine the shape. In the last stage, all the wings will coexist in the same grid, which now contains 
-all the 40 years of data from both hemispheres. We will set the weights to zero for those cells which would have 
-overlapping wings, in order to encourage the algorithm to produce non-overlapping wings. We tried several sets of 
-parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
-intensity profile.
-
-%\begin{figure}
-%\centering
-%\includegraphics[width=8.5cm]{limbmodel_butterfly1.png}
-%\caption{Idealized butterfly diagram showing cyclic behaviour at high %latitudes.}
-%\label{limb_butterfly1}
-%\end{figure}
-
-
-%\subsection{Limb correction model}
-%\begin{figure}
-%\centering
-%\includegraphics[width=8.5cm]{limbmodel_butterfly2.png}
-%\caption{Idealized butterfly diagram with emphasis on the low %latitudes.}
-%\label{limb_butterfly2}
-%\end{figure}
-
-
-%-------------------------------------- Two column figure (place early!)
-
-
-
-
-%------------------------------------------------------------------------------
-\section{Results}\label{sect:results}
-\fag{To do: identify other observations/publications on polar magnetic cycles to compare with
-Fig.~\ref{butterfly_clear_corr}. MJK: The Srivastava et al., 2018 paper should give plenty of refences. And perhaps more references can be found from those papers. Check Potsdam publications.}\\
-
-%FAG added
-From the series of specimen maps as processed using methods in 
-Section\,\ref{sect:methods}, but without applying the limb correction model
-(Section\,\ref{sect:limb}), we construct the radio butterfly diagram  
-displayed in Fig.\,\ref{butterfly_clear_raw}
-
-%------------------------------------------------------------------------------
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{butterfly_clear_raw.png}
-\caption{Solar intensity at all heliographic latitudes on $\si{37}{GHz}$ over cycles 21 to 24. Averaged over samples for which $r_i \le 0.9$ to avoid beam mixing with the background.
-}
-\label{butterfly_clear_raw}
-\end{figure}
-%------------------------------------------------------------------------------
-%FAG. i think this has now been done
-%\fag{(later) obtain same period of photospheric sunspot numbers
-%Tabulate the timespans and line fits for all eight.}\\
-
-%FAG moved from above
-Each specimen map has weight $w_i$, which is set as to balance the target set. 
-There are more 
-observations starting from year $2015$, while only a few maps for year $1989$. 
-%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weigth is lower because of that time interval in more uncertain. Please expand on the logic here.
-Thus we will put more weight on the old 
-maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
-
-We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
-compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
-from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
-Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
-separate polynomials $P_n$ and $Q_m$ should reduce these risks. 
-%MJK Good idea, but sounds like a task not necessary to undertake now? If the referee asks us to verify this risk, then we should do it. But, I comment it out for now...
-%I suggest testing the optimization code with simulated 
-%data.
-%------------------------------------------------------------------------------
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{butterfly_clear_limb.png}
-\caption{Solar intensity at all heliographic latitudes on $\si{37}{GHz}$ over cycles 21 to 24. Averaged over samples for which $r_i \le 1.0$ so that each sample intensity is corrected for beam mixing and limb brightening. This increases the available latitude range, bringing the polar magnetic cycle clearly visible.}
-\label{butterfly_clear_corr}
-\end{figure}
-%------------------------------------------------------------------------------
-
-%MJK The active region tracking tool is not yet described here. You are still planning to include that, right?
-%------------------------------------------------------------------------------
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{butterfly_wingfit_raw.png}
-\caption{Butterfly wing patterns automatically fitted on top of Mets\"ahovi $\SI{37}{GHz}$ data (cf. Fig.~\ref{butterfly_clear_corr}).} 
-\label{butterfly_wingfit_raw}
-\end{figure}
-%------------------------------------------------------------------------------
-
-%------------------------------------------------------------------------------
-\begin{figure}
-\centering
-\includegraphics[width=8.5cm]{butterfly_wingfit_sunspot.png}
-%FAG replace citation with url
-%\caption{Butterfly wing patterns automatically fitted on sunspot data \cite{SUNSPOTDATA:1}. The sunspot cycle coincides with the radio cycle seen in Fig.. \ref{butterfly_wingfit_raw}. Comment: fix 21st cycle fitting.}
-\caption{Butterfly wing patterns automatically fitted on sunspot data, for
-cycles coinciding with the radio cycles in Fig.\,\ref{butterfly_wingfit_raw}.
-Sunspot data courtesy Hathaway \& Upton, Solar Cycle Science,
-Discover the Sun}
-%\href{http://solarcyclescience.com/AR_Database/bflydata.txt}{http://solarcyclescience.com/AR_Database/bflydata.txt}.
-\label{butterfly_wingfit_sunspot}
-\end{figure}
-%------------------------------------------------------------------------------
-
-%------------------------------------------------------------------------------
-\begin{table}
-\caption{\label{tab:cycles}
-Heliographic solar intensity butterfly fits for cycles 21 -- 24, by hemisphere.
-Latitude Lat$_0$ and time $t_0$ at the start of each cycle, the slope of transition
-towards the Equator, the time $t_{\rm end}$ at which each cycle is considered to have
-ceased and the length of each cycle $\tau_{\rm cycle}$.
-}
-\begin{tabular}{l|ccccr}
-\hline\hline
-\input{raw.tex}
-\hline
-\end{tabular}
-\end{table}
-%------------------------------------------------------------------------------
-
-%------------------------------------------------------------------------------
-\begin{table}
-\caption{\label{tab:cycles_sunspot}
-Sunspot data fits for cycles 21 -- 24, by hemisphere.
-Latitude Lat$_0$ and time $t_0$ at the start of each cycle, the slope of transition
-towards the Equator, the time $t_{\rm end}$ at which each cycle is considered to have
-ceased and the length of each cycle $\tau_{\rm cycle}$.
-}
-\begin{tabular}{l|ccccr}
-\hline\hline
-\input{sunspot.tex}
-\hline
-\end{tabular}
-\end{table}
-%------------------------------------------------------------------------------
-
-%------------------------------------------------------------------------------
-\begin{figure*}
-\centering
-\includegraphics[width=\textwidth]{maptrack1.png}
-\caption{Two active regions passing the visible disk as the Sun rotates.}
-\label{maptrack1}
-\end{figure*}
-%------------------------------------------------------------------------------
-
-%------------------------------------------------------------------------------
-\begin{figure} \centering \includegraphics[width=8.8cm]{maptrack2.png} \caption{Tracked regions are shown with red 
-ellipses for bright regions and with blue ellipses for dim regions. Based on earlier and later sunmaps, we can often 
-expect a weak region to be visible at known heliographic coordinates. When the region nevertheless is found on this map, 
-we show it with a dashed ellipse. The active regions 346 and 356 are clearly visible in Fig.~\ref{maptrack1}.} 
-\label{maptrack2} \end{figure}
-%------------------------------------------------------------------------------
-
-%------------------------------------------------------------------------------
-\section{Discussion}\label{sect:discussion}
-
-We have featured a software package for processing solar maps. The radio observations reproduce the butterfly diagram 
-observed on sunspot data, and are able to see the extended cycle at high latitudes. We automatically detect bright and 
-dim features from the maps and track them from map to map. This allows us to analyze their migration on heliographic 
-surface. We also obtain various structural information from these regions.
-
-  \subsection{Determining radius by limb intensity} \label{sect:radius_method1}
-
-  The first method is performed using the all MRO solar maps of the cycle $24$, combining c.a. $75800$ maps. For each 
-  map, we perform the calibration procedure described in Section~\ref{sect:source} and concatenate the samples into a 
-  big list of c.a. $2 \times 10^8$ samples. The next step in the analysis involves five data fields per sample:
-  \begin{itemize}
-  \item Time (on solar cycle 24): $t_j$.
-  \item Heliographic latitude: $l_j$.
-  \item Distance from the center of disk, relative to the apparent radius of the disk: $r_j$.
-  \item Altitude of observation, angle with respect to horizon at MRO: $a_j$.
-  \item Normalised intensity: $v_j$.
-  \end{itemize}
-
-  Here the index $j$ is mapped to some sample $s_i$ on some map $S$, and $j$ runs over all the maps of cycle $24$. The 
-  distance $r_j$ is zero at the center and unity at the boundary of the disk.
-    The polynomial $A$ should compensate for the butterfly diagram of cycle $24$, which is intensity vs. time and heliographic latitude. Meanwhile, the polynomial $B$ should compensate any limb effects.
-  We emphasize the boundary at $r=1$ by transforming to $\rho$ as:
-  \eqnl{physical_radius_trans}{
-  \rho_j := \arctan \left( \kappa \left( r_j - 1 \right)\right) \; \text{with} \; \kappa = 8.8 \text{.}
-  }
-  We then perform an optimization to 
-  minimize a target function:
-  \eqnl{physical_radius_target}{
-  U(\bm{x}) = \sum \limits_{j=1}^{N} \left( A(\bm{x},t_j,l_j) B(\bm{x},\rho_j,a_j) - v_j \right)^2 \text{.}
-  }
-  Here the functions $A$ and $B$ are two-dimensional polynomials of $(t,l)$ and $(\rho,a)$, respectively, with coefficients obtained from individual elements of the vector $\bm{x}$. We write the polynomials as:
-  \eqnl{physical_radius_polynomials}{
-  A(\bm{x},t,l) = \sum \limits_{g=0}^{4} \sum \limits_{h=0}^{4-g} c_{g,h} t^g l^h \; \text{and} \;
-  B(\bm{x},\rho,a) = \sum \limits_{g=0}^{6} \sum \limits_{h=0}^{6-g} d_{g,h} \rho^g a^h \text{.}
-  }
-  The vector $\bm{x}$ is constructed from coefficients $c_{g,h}$ and $d_{g,h}$. With current selection of degrees $4$ 
-  and $6$ for polynomials $A$ and $B$, respectively, we will have $6*5/2 + 8*7/2 = 43$ elements in $\bm{x}$. The element 
-  $\bm{x}^{(0)}$ refers to $c_{0,0}$, and $\bm{x}^{(15)}$ refers to $d_{0,0}$.
-
-  The optimization is performed iteratively. We start with an initial vector $\bm{x}_0$, where each element 
-  $\bm{x}_0^{(g)}$ will be a small random value, except for $g=0,15$where we start with $\bm{x}^{(g)} = 1$, thus 
-  setting $c_{0,0} = d_{0,0} = 1$ and giving a flat solar cycle and flat disk with some noise. We proceed with iterative 
-  steps of quadratic optimization. At each step $m$ we calculate the gradient $\bm{g}_m := \nabla U(\bm{x}_m)$ and the Hessian of $U(\bm{x_m}$, which should be $H_m$. Basically we search for the point of zero gradient iteratively, starting from $m=0$:
-  \eqnl{physical_radius_step}{
-  \bm{x}_{m+1} := \bm{x}_m - H_m^{-1} \bm{g}_m \text{.}
-  }
-
-  However, this naive approach will easily run into trouble when we are far from the actual minimum of $U(\bm{x})$. For 
-  this reason, we have a developed a more rebust scheme which first diagonalizes $H_m$. The algorithm tries to choose 
-  how much to advance along each eigenvector of $H_m$. The algorithm tries to avoid the eigenvectors accociated with 
-  negative eigenvalues, but will eventually descend away from possible saddle points.
-  
-  We force the disk to be flat at the center, thus $\frac{\partial B}{\partial r}\big|_{r=0} = 0$. This limits the 
-  subspace allowed for $\bm{x}$ and reduces the amount of degrees of freedom in the setting to $37$. The optimization stops successfully (converges) at step $m$ when we observe that:
-  \begin{itemize}
-  \item $H_m$ is positively definite in the allowed subspace.
-  \item The next step $\bm{x}_{m+1} - \bm{x}_{m}$is comparable to numerical precision.
-  \item $U(\bm{x}_{m+1})$ is equal or slightly greater than $U(\bm{x}_m)$ due to limits in the numerical precision.
-  \end{itemize}
-
-  Having optimized $U(\bm{x}_{m})$ at sufficient amount of steps ($m$), we define the limb profile $L(r)$ for a given altitude $a = 30^{\circ}$ as:
-  \eqnl{physical_radius_limb}{
-  L(r) := \frac{B(\bm{x}_m, \rho(r), a)}{B(\bm{x}_m, \rho(1/3), 30^{\circ})} \text{.}
-  }
-  We thus state that the reference Sun is observed on altitude $30^{\circ}$ above horizon. The function $L(r)$ is a $6$:th degree polynomial of $\rho(r)$. We search for the value $\s{r}{limb}$ where:
-  \eqnl{physical_radius_limb2}{
-  L(\s{r}{limb}) = 0.5 \text{.}
-  }
-  We start the above process using a reasonable value for the physical radius of the Sun, namely, $R_{\astrosun}^{(0)}$. 
-  Starting from $q=0$, the process gives a value of $\s{r}{limb}^{(q)} \approx 1$. When there is a slight deviation from 
-  unity, we correct that into the physical Sun radius by setting:
-  \eqnl{physical_radius_iteration}{
-  R_{\astrosun}^{(q+1)} := Q_{\astrosun}^{(q)} * \s{r}{limb}^{(q)}
-  }
-  After a few steps, the radius $R_{\astrosun}^{(q+1)}$no longer evolves. So far we have obtained a convergent value of $R_{\astrosun}^{(\infty)} \approx 7.176 \times 10^8 \mathrm{m}$.
-
-  \subsection{Determining radius by inversion model} \label{sect:radius_method2}
-
-  We start with a predefined $R_{\astrosun}$ and sweep the reasonable interval $[6.90, 7.25] \times 10^8 \mathrm{m}$. 
-  Currently the model works on a few $n \approx 14$ maps at once. This does not analyze a full solar cycle but rather a 
-  single day of observations. The model involves a centering scheme similar to that in described fully in 
-  Section~\ref{sect:s_curve}, \ref{sect:initial_centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
-  scheme involves solving the inversion problem several times and constructing the limb model for each map individually 
-  each time the inversion problem is solved. This approach tackles not only the different altitude of observation 
-  depending on time of day, but also varying weather and atmospheric conditions which affect the telescope beam. The 
-  model omits outlier samples using a similar recursive scheme as described completely in 
-  Section~\ref{sect:outliers_limb} and~\ref{sect:disk_outliers}.
-
-  Each sample constitutes of four values: $s_j = (t_j, x_j, y_j, v_j)$, where $t_j$ is time, $v_j$ is calibrated intensity, 
-  and $(x_j,y_j)$ describe the position of the sample on the calibrated disk as right ascension and declination 
-  relative to the center of the Sun. We parametrize the telescope beam $B(z^2)$with a polynomial times a gaussian function of known width $\sigma$:
-  \eqnl{inversion_beam}{
-  B(z^2) = e^{-\frac{z^2}{2 \sigma^2}} \sum \limits_{g=0}^{4} b_g z^{2g} \text{.}
-  }
-  Here $z$ refers to the relative angle between a source element and the observed sample. We only need even powers of $z$ in the polynomial factor since the beam is radially symmetric. We produce an estimate $e_j$for each sample $s_j$ through integrating over the telescope beam:
-  \eqnl{inversion_beam2}{
-  e_j = \intef{x^{\prime}}{-\infty}{+\infty}{ \intef{y^{\prime}}{-\infty}{+\infty}{ f(x^{\prime}, y^{\prime}) B \left( \left( x - x^{\prime} \right)^2 + \left( y - y^{\prime} \right)^2 \right)}}
-  }
-
-  The integral in Equation~\ref{inversion_beam2} is evaluated numerically using Gaussian quadratures. There are 
-  $7$cocentric rings of quadrature points around the sample $(x_j,y_j)$. The radii of the rings come from a quadrature 
-  rule with gaussian weight function. Each ring contains $6$ quadrature points, and the placement of the points along the ring comes from a linear 
-  quadrature rule. Various ad hoc solutions are implemented in order to handle singularities and discontinuities at the 
-  disk boundary as well as to maintain sufficient numerical stability.
-
-  Once the quadratures are implemented, we arrive into a linear summation formula for each sample $s_j$. The coefficients $\xi_{j,i}$ are calculated as a products of the corresponding ring and point quadrature coefficients.
-  \eqnl{inversion_beam3}{
-  \epsilon_j = \sum \limits_{i=1}^{42} \xi_{j,i} f(x^{\prime}_{j,i}, y^{\prime}_{j,i} \approx e_j \text{.}
-  }
-
-   We project each of the sky coordinates $((x^{\prime}_{j,i}, y^{\prime}_{j,i})$ at time $t_j$ on the spherical solar 
-   surface with radius $R_{\astrosun}$. This gives us the heliographic latitude $l^{\prime}_{j,i}$ of the point where the line of sight is incident with the solar surface. We denote by $\alpha_{j,i}$ the angle of incidence.
-   
-  We have a polynomial $A$ for describing the current phase of the solar 
-   cycle.
-   
-  
-%------------------------------------------------------------------------------
-\subsection{The big picture}
-
-The radio samples in solar maps can be divided into three categories: \begin{itemize} \item Quiet Sun background \item 
-Bright features \item Dim features. \end{itemize} Bright and dim features are a signal of activity. Our intention is to 
-study the development and lifetime of this activity, for which we have developed algorithms for extracting these 
-features from the maps. We also need to understand how the quiet Sun behaves, and for this purpose, any activity is 
-excluded. The brightness of these quiet areas supposedly depend on heliographic latitude and the solar cycle. When these 
-regions are observed, the ap:qparent brightness also depends on the distance from the visual center, due to atmospheric 
-and antenna beam convolution effects. We want to measure these effects in order to properly compensate for them. We do 
-not want any activity to affect these measurements, so we will benefit if we already know where the active and dim 
-regions are. The compensation model consists of an implicit butterfly as well as a radial model for the brightness, and 
-the expected brightness of a quiet region is taken as a product of these two.
-
-Accurately understanding the radial effects in observations benefits the centering algorithm. Also, we benefit from 
-prior knowledge of active regions since they can be excluded in the statistics which we feed into the centering 
-algorithm. Otherwise the features at the limb would bias the center of the map.
-
-Radial model also increases the dynamic radius of the map, and we are able to detect bright and dim features at the 
-limb, although with increased noise. Each part of the model will benefit other parts and result in a data model of progressive accuracy, as outlined in Fig.~\ref{roadmap}.
-
-Ultimately, all these three aspects, quiet, bright, and dim features, have a known physical origin, and their 
-statistical appearance and characteristics can be reproduced in appropriate simulations.
-
-%\begin{figure*} 
-%\centering \scalebox{0.75}{\begin{tikzpicture}
-%\node[textarea] (maps) {Mets\"ahovi solar intensity maps};
-%\node[largeblock, right=5mm of maps] (calib) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{15mm}} Disk fitting and intensity calibration & \includegraphics[width=15mm]{calib.png} \end{tabular}};
-%\node[block, below right=15mm and -25mm of calib] (estimate) {Solar disk estimate from least squares approach};
-%\node[largeblock2, above right=10mm and -50mm of calib] (dbase) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Bright and dim region database & \includegraphics[width=25mm]{dbase.png} \end{tabular}};
-%\node[largetextarea2, above right=-8mm and 5mm of estimate] (ibutterfly) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Implicit model for quiet sun butterfly & \includegraphics[width=25mm]{ibutterfly.png} \end{tabular}};
-%\node[largetextarea2, below right=-8mm and 5mm of estimate] (lmodel) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Limb brightening and beam convolution model & \includegraphics[width=25mm]{lmodel.png} \end{tabular}};
-%\node[largetextarea, right=6mm of calib] (qbutterfly) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Quiet sun butterfly & \includegraphics[width=25mm]{qbutterfly.png} \end{tabular}};
-%\node[largetextarea, below right=-8mm and 5mm of dbase] (hbutterfly) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Bright region butterfly & \includegraphics[width=25mm]{hbutterfly.png} \end{tabular}};
-%\node[largetextarea, above right=-8mm and 5mm of dbase] (cbutterfly) {\setlength\tabcolsep{0pt} \begin{tabular}{m{23mm}m{25mm}} Dim region butterfly & \includegraphics[width=25mm]{cbutterfly.png} \end{tabular}};
-%\node[textarea2, right=10mm of hbutterfly] (compu) {Comparison with solar simulations};
-%\node[dummy, left=4mm of calib.north] (calib_n1) {};
-%\node[dummy, right=4mm of calib.north] (calib_n2) {};
-%\node[dummy, left=4mm of calib.south] (calib_s1) {};
-%\node[dummy, right=4mm of calib.south] (calib_s2) {};
-%\node[dummy, left=4mm of dbase.south] (dbase_s1) {};
-%\node[dummy, right=4mm of dbase.south] (dbase_s2) {};
-%\node[dummy, left=4mm of estimate.north] (estimate_n1) {};
-%\node[dummy, right=4mm of estimate.north] (estimate_n2) {};
-%\draw[myarrow] (maps.east) -- (calib.west);
-%\draw[myarrow] (calib_s1) -- (estimate_n1);
-%\draw[myarrow] (estimate_n2) -- (calib_s2);
-%\draw[myarrow] (calib_n1) -- (dbase_s1);
-%\draw[myarrow] (dbase_s2) -- (calib_n2);
-%\node[dummy, above=4mm of dbase.east] (dbase_e1) {};
-%\node[dummy, below=4mm of dbase.east] (dbase_e2) {};
-%\draw[myarrow] (dbase_e1) -- (cbutterfly.west);
-%\draw[myarrow] (dbase_e2) -- (hbutterfly.west);
-%\draw[myarrow] (calib.east) -- (qbutterfly.west);
-%\node[dummy, above=6mm of estimate.east] (estimate_e1) {};
-%\node[dummy, above=2mm of estimate.east] (estimate_e2) {};
-%\node[dummy, below=2mm of estimate.east] (estimate_e3) {};
-%\node[dummy, below=6mm of estimate.east] (estimate_e4) {};
-%\node[dummy, above=2mm of ibutterfly.west] (ibutterfly_w1) {};
-%\node[dummy, below=2mm of ibutterfly.west] (ibutterfly_w2) {};
-%\node[dummy, above=2mm of lmodel.west] (lmodel_w1) {};
-%\node[dummy, below=2mm of lmodel.west] (lmodel_w2) {};
-%\draw[myarrow] (estimate_e1) -- (ibutterfly_w1);
-%\draw[myarrow] (ibutterfly_w2) -- (estimate_e2);
-%\draw[myarrow] (estimate_e3) -- (lmodel_w1);
-%\draw[myarrow] (lmodel_w2) -- (estimate_e4);
-%\node[dummy, above=4mm of compu.west] (compu_w1) {};
-%\node[dummy, above=0mm of compu.west] (compu_w2) {};
-%\node[dummy, below=4mm of compu.west] (compu_w3) {};
-%\draw[myarrow] (cbutterfly.east) -- (compu_w1);
-%\draw[myarrow] (hbutterfly.east) -- (compu_w2);
-%\draw[myarrow] (qbutterfly.east) -- (compu_w3);
-%\end{tikzpicture}} \caption{Roadmap for extracting valuable information from the solar maps.} \label{roadmap} \end{figure*}
-%
-
-\FloatBarrier
-
-\section{List of symbols} \label{sect:sym}
-
-\skk{At least I need this list in order to keep track of reserved letters. I tried using 'longtable' to automatically 
-wrap the table along many pages, but it complains about two column mode. I also tried 'supertabular' but it didn't work 
-either. Maybe it is best to manually split the table as I did in my mastersthesis. It is anyway good to assign the 
-symbols into groups by relevance.}
-\setlength{\extrarowheight}{3pt}
-\def\tabularxcolumn#1{m{#1}}
-\newcommand{\symtable}[2]{\begin{table*} \caption{#1} \begin{tabularx}{\textwidth}{lX} #2 \end{tabularx} \end{table*}}
-\input{sym.tex}
-
-\FloatBarrier
 
 
 \begin{acknowledgements}
