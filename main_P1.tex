@@ -848,117 +848,6 @@ observed on sunspot data, and are able to see the extended cycle at high latitud
 dim features from the maps and track them from map to map. This allows us to analyze their migration on heliographic 
 surface. We also obtain various structural information from these regions.
 
-  \subsection{Determining radius by limb intensity} \label{sect:radius_method1}
-
-  The first method is performed using the all MRO solar maps of the cycle $24$, combining c.a. $75800$ maps. For each 
-  map, we perform the calibration procedure described in Section~\ref{sect:source} and concatenate the samples into a 
-  big list of c.a. $2 \times 10^8$ samples. The next step in the analysis involves five data fields per sample:
-  \begin{itemize}
-  \item Time (on solar cycle 24): $t_j$.
-  \item Heliographic latitude: $l_j$.
-  \item Distance from the center of disk, relative to the apparent radius of the disk: $r_j$.
-  \item Altitude of observation, angle with respect to horizon at MRO: $a_j$.
-  \item Normalised intensity: $v_j$.
-  \end{itemize}
-
-  Here the index $j$ is mapped to some sample $s_i$ on some map $S$, and $j$ runs over all the maps of cycle $24$. The 
-  distance $r_j$ is zero at the center and unity at the boundary of the disk.
-    The polynomial $A$ should compensate for the butterfly diagram of cycle $24$, which is intensity vs. time and heliographic latitude. Meanwhile, the polynomial $B$ should compensate any limb effects.
-  We emphasize the boundary at $r=1$ by transforming to $\rho$ as:
-  \eqnl{physical_radius_trans}{
-  \rho_j := \arctan \left( \kappa \left( r_j - 1 \right)\right) \; \text{with} \; \kappa = 8.8 \text{.}
-  }
-  We then perform an optimization to 
-  minimize a target function:
-  \eqnl{physical_radius_target}{
-  U(\bm{x}) = \sum \limits_{j=1}^{N} \left( A(\bm{x},t_j,l_j) B(\bm{x},\rho_j,a_j) - v_j \right)^2 \text{.}
-  }
-  Here the functions $A$ and $B$ are two-dimensional polynomials of $(t,l)$ and $(\rho,a)$, respectively, with coefficients obtained from individual elements of the vector $\bm{x}$. We write the polynomials as:
-  \eqnl{physical_radius_polynomials}{
-  A(\bm{x},t,l) = \sum \limits_{g=0}^{4} \sum \limits_{h=0}^{4-g} c_{g,h} t^g l^h \; \text{and} \;
-  B(\bm{x},\rho,a) = \sum \limits_{g=0}^{6} \sum \limits_{h=0}^{6-g} d_{g,h} \rho^g a^h \text{.}
-  }
-  The vector $\bm{x}$ is constructed from coefficients $c_{g,h}$ and $d_{g,h}$. With current selection of degrees $4$ 
-  and $6$ for polynomials $A$ and $B$, respectively, we will have $6*5/2 + 8*7/2 = 43$ elements in $\bm{x}$. The element 
-  $\bm{x}^{(0)}$ refers to $c_{0,0}$, and $\bm{x}^{(15)}$ refers to $d_{0,0}$.
-
-  The optimization is performed iteratively. We start with an initial vector $\bm{x}_0$, where each element 
-  $\bm{x}_0^{(g)}$ will be a small random value, except for $g=0,15$where we start with $\bm{x}^{(g)} = 1$, thus 
-  setting $c_{0,0} = d_{0,0} = 1$ and giving a flat solar cycle and flat disk with some noise. We proceed with iterative 
-  steps of quadratic optimization. At each step $m$ we calculate the gradient $\bm{g}_m := \nabla U(\bm{x}_m)$ and the Hessian of $U(\bm{x_m}$, which should be $H_m$. Basically we search for the point of zero gradient iteratively, starting from $m=0$:
-  \eqnl{physical_radius_step}{
-  \bm{x}_{m+1} := \bm{x}_m - H_m^{-1} \bm{g}_m \text{.}
-  }
-
-  However, this naive approach will easily run into trouble when we are far from the actual minimum of $U(\bm{x})$. For 
-  this reason, we have a developed a more rebust scheme which first diagonalizes $H_m$. The algorithm tries to choose 
-  how much to advance along each eigenvector of $H_m$. The algorithm tries to avoid the eigenvectors accociated with 
-  negative eigenvalues, but will eventually descend away from possible saddle points.
-  
-  We force the disk to be flat at the center, thus $\frac{\partial B}{\partial r}\big|_{r=0} = 0$. This limits the 
-  subspace allowed for $\bm{x}$ and reduces the amount of degrees of freedom in the setting to $37$. The optimization stops successfully (converges) at step $m$ when we observe that:
-  \begin{itemize}
-  \item $H_m$ is positively definite in the allowed subspace.
-  \item The next step $\bm{x}_{m+1} - \bm{x}_{m}$is comparable to numerical precision.
-  \item $U(\bm{x}_{m+1})$ is equal or slightly greater than $U(\bm{x}_m)$ due to limits in the numerical precision.
-  \end{itemize}
-
-  Having optimized $U(\bm{x}_{m})$ at sufficient amount of steps ($m$), we define the limb profile $L(r)$ for a given altitude $a = 30^{\circ}$ as:
-  \eqnl{physical_radius_limb}{
-  L(r) := \frac{B(\bm{x}_m, \rho(r), a)}{B(\bm{x}_m, \rho(1/3), 30^{\circ})} \text{.}
-  }
-  We thus state that the reference Sun is observed on altitude $30^{\circ}$ above horizon. The function $L(r)$ is a $6$:th degree polynomial of $\rho(r)$. We search for the value $\s{r}{limb}$ where:
-  \eqnl{physical_radius_limb2}{
-  L(\s{r}{limb}) = 0.5 \text{.}
-  }
-  We start the above process using a reasonable value for the physical radius of the Sun, namely, $R_{\astrosun}^{(0)}$. 
-  Starting from $q=0$, the process gives a value of $\s{r}{limb}^{(q)} \approx 1$. When there is a slight deviation from 
-  unity, we correct that into the physical Sun radius by setting:
-  \eqnl{physical_radius_iteration}{
-  R_{\astrosun}^{(q+1)} := Q_{\astrosun}^{(q)} * \s{r}{limb}^{(q)}
-  }
-  After a few steps, the radius $R_{\astrosun}^{(q+1)}$no longer evolves. So far we have obtained a convergent value of $R_{\astrosun}^{(\infty)} \approx 7.176 \times 10^8 \mathrm{m}$.
-
-  \subsection{Determining radius by inversion model} \label{sect:radius_method2}
-
-  We start with a predefined $R_{\astrosun}$ and sweep the reasonable interval $[6.90, 7.25] \times 10^8 \mathrm{m}$. 
-  Currently the model works on a few $n \approx 14$ maps at once. This does not analyze a full solar cycle but rather a 
-  single day of observations. The model involves a centering scheme similar to that in described fully in 
-  Section~\ref{sect:s_curve}, \ref{sect:initial_centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
-  scheme involves solving the inversion problem several times and constructing the limb model for each map individually 
-  each time the inversion problem is solved. This approach tackles not only the different altitude of observation 
-  depending on time of day, but also varying weather and atmospheric conditions which affect the telescope beam. The 
-  model omits outlier samples using a similar recursive scheme as described completely in 
-  Section~\ref{sect:outliers_limb} and~\ref{sect:disk_outliers}.
-
-  Each sample constitutes of four values: $s_j = (t_j, x_j, y_j, v_j)$, where $t_j$ is time, $v_j$ is calibrated intensity, 
-  and $(x_j,y_j)$ describe the position of the sample on the calibrated disk as right ascension and declination 
-  relative to the center of the Sun. We parametrize the telescope beam $B(z^2)$with a polynomial times a gaussian function of known width $\sigma$:
-  \eqnl{inversion_beam}{
-  B(z^2) = e^{-\frac{z^2}{2 \sigma^2}} \sum \limits_{g=0}^{4} b_g z^{2g} \text{.}
-  }
-  Here $z$ refers to the relative angle between a source element and the observed sample. We only need even powers of $z$ in the polynomial factor since the beam is radially symmetric. We produce an estimate $e_j$for each sample $s_j$ through integrating over the telescope beam:
-  \eqnl{inversion_beam2}{
-  e_j = \intef{x^{\prime}}{-\infty}{+\infty}{ \intef{y^{\prime}}{-\infty}{+\infty}{ f(x^{\prime}, y^{\prime}) B \left( \left( x - x^{\prime} \right)^2 + \left( y - y^{\prime} \right)^2 \right)}}
-  }
-
-  The integral in Equation~\ref{inversion_beam2} is evaluated numerically using Gaussian quadratures. There are 
-  $7$cocentric rings of quadrature points around the sample $(x_j,y_j)$. The radii of the rings come from a quadrature 
-  rule with gaussian weight function. Each ring contains $6$ quadrature points, and the placement of the points along the ring comes from a linear 
-  quadrature rule. Various ad hoc solutions are implemented in order to handle singularities and discontinuities at the 
-  disk boundary as well as to maintain sufficient numerical stability.
-
-  Once the quadratures are implemented, we arrive into a linear summation formula for each sample $s_j$. The coefficients $\xi_{j,i}$ are calculated as a products of the corresponding ring and point quadrature coefficients.
-  \eqnl{inversion_beam3}{
-  \epsilon_j = \sum \limits_{i=1}^{42} \xi_{j,i} f(x^{\prime}_{j,i}, y^{\prime}_{j,i} \approx e_j \text{.}
-  }
-
-   We project each of the sky coordinates $((x^{\prime}_{j,i}, y^{\prime}_{j,i})$ at time $t_j$ on the spherical solar 
-   surface with radius $R_{\astrosun}$. This gives us the heliographic latitude $l^{\prime}_{j,i}$ of the point where the line of sight is incident with the solar surface. We denote by $\alpha_{j,i}$ the angle of incidence.
-   
-  We have a polynomial $A$ for describing the current phase of the solar 
-   cycle.
-   
   
 %------------------------------------------------------------------------------
 \subsection{The big picture}
@@ -1629,6 +1518,117 @@ observations within the range $\varphi_i\in[7\deg,52\deg]$, and in
 Fig.\,\ref{limb_brightening}(b) the corresponding correction profiles, which 
 are applied near the limb to compensate.
 
+  \subsection{Determining radius by limb intensity} \label{sect:radius_method1}
+
+  The first method is performed using the all MRO solar maps of the cycle $24$, combining c.a. $75800$ maps. For each 
+  map, we perform the calibration procedure described in Section~\ref{sect:source} and concatenate the samples into a 
+  big list of c.a. $2 \times 10^8$ samples. The next step in the analysis involves five data fields per sample:
+  \begin{itemize}
+  \item Time (on solar cycle 24): $t_j$.
+  \item Heliographic latitude: $l_j$.
+  \item Distance from the center of disk, relative to the apparent radius of the disk: $r_j$.
+  \item Altitude of observation, angle with respect to horizon at MRO: $a_j$.
+  \item Normalised intensity: $v_j$.
+  \end{itemize}
+
+  Here the index $j$ is mapped to some sample $s_i$ on some map $S$, and $j$ runs over all the maps of cycle $24$. The 
+  distance $r_j$ is zero at the center and unity at the boundary of the disk.
+    The polynomial $A$ should compensate for the butterfly diagram of cycle $24$, which is intensity vs. time and heliographic latitude. Meanwhile, the polynomial $B$ should compensate any limb effects.
+  We emphasize the boundary at $r=1$ by transforming to $\rho$ as:
+  \eqnl{physical_radius_trans}{
+  \rho_j := \arctan \left( \kappa \left( r_j - 1 \right)\right) \; \text{with} \; \kappa = 8.8 \text{.}
+  }
+  We then perform an optimization to 
+  minimize a target function:
+  \eqnl{physical_radius_target}{
+  U(\bm{x}) = \sum \limits_{j=1}^{N} \left( A(\bm{x},t_j,l_j) B(\bm{x},\rho_j,a_j) - v_j \right)^2 \text{.}
+  }
+  Here the functions $A$ and $B$ are two-dimensional polynomials of $(t,l)$ and $(\rho,a)$, respectively, with coefficients obtained from individual elements of the vector $\bm{x}$. We write the polynomials as:
+  \eqnl{physical_radius_polynomials}{
+  A(\bm{x},t,l) = \sum \limits_{g=0}^{4} \sum \limits_{h=0}^{4-g} c_{g,h} t^g l^h \; \text{and} \;
+  B(\bm{x},\rho,a) = \sum \limits_{g=0}^{6} \sum \limits_{h=0}^{6-g} d_{g,h} \rho^g a^h \text{.}
+  }
+  The vector $\bm{x}$ is constructed from coefficients $c_{g,h}$ and $d_{g,h}$. With current selection of degrees $4$ 
+  and $6$ for polynomials $A$ and $B$, respectively, we will have $6*5/2 + 8*7/2 = 43$ elements in $\bm{x}$. The element 
+  $\bm{x}^{(0)}$ refers to $c_{0,0}$, and $\bm{x}^{(15)}$ refers to $d_{0,0}$.
+
+  The optimization is performed iteratively. We start with an initial vector $\bm{x}_0$, where each element 
+  $\bm{x}_0^{(g)}$ will be a small random value, except for $g=0,15$where we start with $\bm{x}^{(g)} = 1$, thus 
+  setting $c_{0,0} = d_{0,0} = 1$ and giving a flat solar cycle and flat disk with some noise. We proceed with iterative 
+  steps of quadratic optimization. At each step $m$ we calculate the gradient $\bm{g}_m := \nabla U(\bm{x}_m)$ and the Hessian of $U(\bm{x_m}$, which should be $H_m$. Basically we search for the point of zero gradient iteratively, starting from $m=0$:
+  \eqnl{physical_radius_step}{
+  \bm{x}_{m+1} := \bm{x}_m - H_m^{-1} \bm{g}_m \text{.}
+  }
+
+  However, this naive approach will easily run into trouble when we are far from the actual minimum of $U(\bm{x})$. For 
+  this reason, we have a developed a more rebust scheme which first diagonalizes $H_m$. The algorithm tries to choose 
+  how much to advance along each eigenvector of $H_m$. The algorithm tries to avoid the eigenvectors accociated with 
+  negative eigenvalues, but will eventually descend away from possible saddle points.
+  
+  We force the disk to be flat at the center, thus $\frac{\partial B}{\partial r}\big|_{r=0} = 0$. This limits the 
+  subspace allowed for $\bm{x}$ and reduces the amount of degrees of freedom in the setting to $37$. The optimization stops successfully (converges) at step $m$ when we observe that:
+  \begin{itemize}
+  \item $H_m$ is positively definite in the allowed subspace.
+  \item The next step $\bm{x}_{m+1} - \bm{x}_{m}$is comparable to numerical precision.
+  \item $U(\bm{x}_{m+1})$ is equal or slightly greater than $U(\bm{x}_m)$ due to limits in the numerical precision.
+  \end{itemize}
+
+  Having optimized $U(\bm{x}_{m})$ at sufficient amount of steps ($m$), we define the limb profile $L(r)$ for a given altitude $a = 30^{\circ}$ as:
+  \eqnl{physical_radius_limb}{
+  L(r) := \frac{B(\bm{x}_m, \rho(r), a)}{B(\bm{x}_m, \rho(1/3), 30^{\circ})} \text{.}
+  }
+  We thus state that the reference Sun is observed on altitude $30^{\circ}$ above horizon. The function $L(r)$ is a $6$:th degree polynomial of $\rho(r)$. We search for the value $\s{r}{limb}$ where:
+  \eqnl{physical_radius_limb2}{
+  L(\s{r}{limb}) = 0.5 \text{.}
+  }
+  We start the above process using a reasonable value for the physical radius of the Sun, namely, $R_{\astrosun}^{(0)}$. 
+  Starting from $q=0$, the process gives a value of $\s{r}{limb}^{(q)} \approx 1$. When there is a slight deviation from 
+  unity, we correct that into the physical Sun radius by setting:
+  \eqnl{physical_radius_iteration}{
+  R_{\astrosun}^{(q+1)} := Q_{\astrosun}^{(q)} * \s{r}{limb}^{(q)}
+  }
+  After a few steps, the radius $R_{\astrosun}^{(q+1)}$no longer evolves. So far we have obtained a convergent value of $R_{\astrosun}^{(\infty)} \approx 7.176 \times 10^8 \mathrm{m}$.
+
+  \subsection{Determining radius by inversion model} \label{sect:radius_method2}
+
+  We start with a predefined $R_{\astrosun}$ and sweep the reasonable interval $[6.90, 7.25] \times 10^8 \mathrm{m}$. 
+  Currently the model works on a few $n \approx 14$ maps at once. This does not analyze a full solar cycle but rather a 
+  single day of observations. The model involves a centering scheme similar to that in described fully in 
+  Section~\ref{sect:s_curve}, \ref{sect:initial_centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
+  scheme involves solving the inversion problem several times and constructing the limb model for each map individually 
+  each time the inversion problem is solved. This approach tackles not only the different altitude of observation 
+  depending on time of day, but also varying weather and atmospheric conditions which affect the telescope beam. The 
+  model omits outlier samples using a similar recursive scheme as described completely in 
+  Section~\ref{sect:outliers_limb} and~\ref{sect:disk_outliers}.
+
+  Each sample constitutes of four values: $s_j = (t_j, x_j, y_j, v_j)$, where $t_j$ is time, $v_j$ is calibrated intensity, 
+  and $(x_j,y_j)$ describe the position of the sample on the calibrated disk as right ascension and declination 
+  relative to the center of the Sun. We parametrize the telescope beam $B(z^2)$with a polynomial times a gaussian function of known width $\sigma$:
+  \eqnl{inversion_beam}{
+  B(z^2) = e^{-\frac{z^2}{2 \sigma^2}} \sum \limits_{g=0}^{4} b_g z^{2g} \text{.}
+  }
+  Here $z$ refers to the relative angle between a source element and the observed sample. We only need even powers of $z$ in the polynomial factor since the beam is radially symmetric. We produce an estimate $e_j$for each sample $s_j$ through integrating over the telescope beam:
+  \eqnl{inversion_beam2}{
+  e_j = \intef{x^{\prime}}{-\infty}{+\infty}{ \intef{y^{\prime}}{-\infty}{+\infty}{ f(x^{\prime}, y^{\prime}) B \left( \left( x - x^{\prime} \right)^2 + \left( y - y^{\prime} \right)^2 \right)}}
+  }
+
+  The integral in Equation~\ref{inversion_beam2} is evaluated numerically using Gaussian quadratures. There are 
+  $7$cocentric rings of quadrature points around the sample $(x_j,y_j)$. The radii of the rings come from a quadrature 
+  rule with gaussian weight function. Each ring contains $6$ quadrature points, and the placement of the points along the ring comes from a linear 
+  quadrature rule. Various ad hoc solutions are implemented in order to handle singularities and discontinuities at the 
+  disk boundary as well as to maintain sufficient numerical stability.
+
+  Once the quadratures are implemented, we arrive into a linear summation formula for each sample $s_j$. The coefficients $\xi_{j,i}$ are calculated as a products of the corresponding ring and point quadrature coefficients.
+  \eqnl{inversion_beam3}{
+  \epsilon_j = \sum \limits_{i=1}^{42} \xi_{j,i} f(x^{\prime}_{j,i}, y^{\prime}_{j,i} \approx e_j \text{.}
+  }
+
+   We project each of the sky coordinates $((x^{\prime}_{j,i}, y^{\prime}_{j,i})$ at time $t_j$ on the spherical solar 
+   surface with radius $R_{\astrosun}$. This gives us the heliographic latitude $l^{\prime}_{j,i}$ of the point where the line of sight is incident with the solar surface. We denote by $\alpha_{j,i}$ the angle of incidence.
+   
+  We have a polynomial $A$ for describing the current phase of the solar 
+   cycle.
+   
 
 
 \begin{acknowledgements}
