@@ -457,9 +457,23 @@ model, and estimate radius of the radio data, etc.
 \subsection{The solar maps}\label{sect:source}
 
 
-  During a typical measurement, the antenna beam makes a sweep across the
-  visible solar disk (Fig.~\ref{typicalmap}). There are three major sets of conventions during the history the record.
+  During a typical measurement, the antenna beam makes a sweep across the visible solar disk (Fig.~\ref{typicalmap}). 
+  There are three major sets of conventions during the history the record. The earliest of these maps feature the solar 
+  cycle 21 and have not been available until appropriate digital processing tools were implemented in \cite{masterthesis}.
   \begin{enumerate}[A]
+    \item
+    After June 2015 the sweeps have been horizontal, with shifting altitude
+    between sweeps, as shown in Fig.~\ref{typicalmap}{\bf(b)}.
+    These modern maps respect the true path of the antenna, typically recorded
+    with $25$ samples per second for two minutes.
+    %MJK The final map in solar coordinates is presented in Fig.1(c)...
+    %The final map in solar coordinates is presented in Fig\ref{typicalmap}{\bf(c)}.
+    %SKK: Currently we have no carrington maps planned to be shown on the paper
+    \item
+    Until the end of May 2015 the maps were scanned in the equatorial direction,
+    so that declination is shifted between adjacent sweeps, as displayed in
+    Fig.~\ref{typicalmap}{\bf(a)}.
+    The maps assume linear antenna tracks with constant speed and sample rate.
     \item
     The solar maps from 1978 to 1987 were originally recorded on magnetic
     tapes, from which the data was rendered onto paper contour maps using a
@@ -470,19 +484,6 @@ model, and estimate radius of the radio data, etc.
     %FAG: reworded as suggested
     a digital format, which is compatible new maps.
     The solar disk position as well as the rotational axis was already marked on these paper maps using a compass and a ruler.
-    \item
-    Until the end of May 2015 the maps were scanned in the equatorial direction,
-    so that declination is shifted between adjacent sweeps, as displayed in
-    Fig.~\ref{typicalmap}{\bf(a)}.
-    The maps assume linear antenna tracks with constant speed and sample rate.
-    \item
-    After June 2015 the sweeps have been horizontal, with shifting altitude
-    between sweeps, as shown in Fig.~\ref{typicalmap}{\bf(b)}.
-    These modern maps respect the true path of the antenna, typically recorded
-    with $25$ samples per second for two minutes.
-    %MJK The final map in solar coordinates is presented in Fig.1(c)...
-    %The final map in solar coordinates is presented in Fig\ref{typicalmap}{\bf(c)}.
-    %SKK: Currently we have no carrington maps planned to be shown on the paper
   \end{enumerate}
 
 %--------------------------------------------------------------------
@@ -515,7 +516,7 @@ paper, we focus on the linear scale. However, the logarithmic scale is more sens
 intensities and also avoids saturation during flare events, thus offering prospects for future 
 research.
 
-We use the word \emph{calibration} for describing the combined effort of normaliseing and centering a map. The applicable 
+We use the word \emph{calibration} for describing the combined effort of normalising and centering a map. The applicable 
 methods are described in Section\,\ref{sect:disk}. The raw intensities of a scan have an arbitrary scale, as in Fig.~\ref{typicalmap}{\bf(a-c)}. We 
 need to normalise the signal levels and also correct for any minor offsets in the sample coordinates in order to have a 
 properly centered map. The purpose of normalisation is to have zero intensity at the background and unit intensity for 
@@ -527,7 +528,25 @@ and then clarify the distinction. What is new and how is our treatment new. C-B-
 %------------------------------------------------------------------------------
   \subsection{Disk fitting and signal levels} \label{sect:disk}
 
-    
+In order to extract heliographic information from the solar scans, we need the accurate position of the visible solar disk superimposed on the set of antenna samples. This is done by analysing the intensity distribution. The intensity is high at the solar disk, and it drops drastically as we go to the background area. There are two factors that affect the shape of this transition:
+\begin{enumerate}
+\item Shape and width of the beam produced by the $\SI{14}{m}$ disk at MRO. At the limb regions, the solar disk is convoluted with the black sky, thus resulting in lower intensity.
+\item Optical depth of the chromosphere. At the limb region, we probe higher altitudes and would expect higher temperature readings. We call this the limb brightening.
+\item Latitude dependency of the chromosphere temperature, as measured on $\SI{37}{GHz}$.
+\end{enumerate}
+
+We assume that the antenna beam is spherically symmetric. The actual accuracy of this approximation is subject to 
+further study in the future. Also, the item 3. in the above list is not as significant as the others. Latitude 
+dependency is also a function of the solar cycle phase. So far, we ignore the effects of latitude dependency in order to 
+produce biasless butterfly diagrams. We have, however, implemented tools for taking the latitude dependency into account 
+in order to measure certain chromosphere parameters.
+
+As a result of the above considerations, we can except a relatively radially symmetric intensity profile at the limb 
+region. We use a straightforward approach to first identify the limb region, which is c.a. $0.9 .. 1.1$ radii from the 
+disk center. This already produces a fairly good centering, but we seek to further improve it. The limb sample 
+brightness gives a hint of how far from the center it should be, supposed the general limb intensity profile is known. 
+Utilising this information, we can perform a circle fitting and more sophisticated centering.
+
   %FAG: trying to disembiguate use of 'sample'
   %Each sample observation yields an intensity map with coordinates right 
   %Each observation scan yields an intensity map with coordinates right 
