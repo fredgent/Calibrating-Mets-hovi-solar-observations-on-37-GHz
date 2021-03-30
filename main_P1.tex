@@ -575,7 +575,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \eqnl{map_normalisation}{
   v_i^{(0)} := \frac{u_i - \s{u}{background})}{\s{u}{disk} - \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
   }
-  The normalized intensities are then used for initial centering of the map in Section~\ref{sect:initial-centering}. 
+  The normalized intensities are then used for initial centering of the map in Section~\ref{sect:initial_centering}. 
   This allows us to refine the equatorial coordinates of the samples as:
   \eqnl{map_centering}{
   \left( x_i^{(0)}, y_i^{(0)} \right) := \left( x_i, y_i \right) - \left( x^{(0)}, y^{(0)} \right) \text{.}
@@ -601,7 +601,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \subsubsection{Initial normalisation}\label{sect:s_curve}
 
   %FAG: rephrased
-  %Sections~\ref{sect:s_curve} and~\ref{sect:initial-centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
+  %Sections~\ref{sect:s_curve} and~\ref{sect:initial_centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
   %given by Juha Aatrokoski at MRO, and a similar calibration method is commonly used at MRO.
   The initial normalisation and centering methods described here and in Section~\ref{sect:initial_centering} derive from 
   an oral outline given by Juha Aatrokoski at MRO of the calibration method commonly used at MRO, including 
@@ -1051,7 +1051,7 @@ size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in
   \eqnl{subsequent_centering5}{
   \left( x^{(c)}, y^{(c)}, r^{(c)} \right)^T := \lim \limits_{\zeta \to \infty} \bm{z}_{\zeta} \text{.}
   }
-  We will now loop back to Section~\ref{sect:outliers_disk} unless we have reached $c = \s{c}{max} := 5$. \skk{Hey, natural language is also a programming language.}
+  We will now loop back to Section~\ref{sect:disk_outliers} unless we have reached $c = \s{c}{max} := 5$. \skk{Hey, natural language is also a programming language.}
   In subsequent sections, we will use the fully calibrated values $x_i^{(\s{c}{max})}$, $y_i^{(\s{c}{max})}$, and $r_i^{(\s{c}{max})}$ for each sample $s_i \in S$.
 
 \skk{Moved the convex hull stuff into a separate file, probably not to be included in the paper.}
@@ -1482,12 +1482,12 @@ surface. We also obtain various structural information from these regions.
   We start with a predefined $R_{\astrosun}$ and sweep the reasonable interval $[6.90, 7.25] \times 10^8 \mathrm{m}$. 
   Currently the model works on a few $n \approx 14$ maps at once. This does not analyze a full solar cycle but rather a 
   single day of observations. The model involves a centering scheme similar to that in described fully in 
-  Section~\ref{sect:s_curve}, \ref{sect:initial-centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
+  Section~\ref{sect:s_curve}, \ref{sect:initial_centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
   scheme involves solving the inversion problem several times and constructing the limb model for each map individually 
   each time the inversion problem is solved. This approach tackles not only the different altitude of observation 
   depending on time of day, but also varying weather and atmospheric conditions which affect the telescope beam. The 
   model omits outlier samples using a similar recursive scheme as described completely in 
-  Section~\ref{sect:outliers_limb} and~\ref{sect:outliers_disk}.
+  Section~\ref{sect:outliers_limb} and~\ref{sect:disk_outliers}.
 
   Each sample constitutes of four values: $s_j = (t_j, x_j, y_j, v_j)$, where $t_j$ is time, $v_j$ is calibrated intensity, 
   and $(x_j,y_j)$ describe the position of the sample on the calibrated disk as right ascension and declination 
