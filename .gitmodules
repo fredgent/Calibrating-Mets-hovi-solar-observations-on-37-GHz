@@ -1,3 +1,6 @@
 [submodule "latexGoodPractices"]
 	path = latexGoodPractices
 	url = https://github.com/norlab-ulaval/latexGoodPractices.git
+[submodule "5cc6f7d4257a6d16010a6203"]
+	path = 5cc6f7d4257a6d16010a6203
+	url = https://git.overleaf.com/5cc6f7d4257a6d16010a6203
