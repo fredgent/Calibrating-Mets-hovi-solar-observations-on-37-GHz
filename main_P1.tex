@@ -365,7 +365,7 @@
   We also introduce tools we have prepared for automatic tracking of active 
   regions, which are suitable for any magnetograms or similar maps, and which
   we shall apply in detail in future publication.
-  This is described in Section\,\ref{sect:methods}.
+  This is described in Sect.~\ref{sect:methods}.
 
   %MJK 'From this' does not sound understandable. 
   %From this we present a time-latitude histogram of the radio intensity,
@@ -377,9 +377,9 @@
   spanning almost completely the last four sunspot cycles.
   We compare our butterfly diagram with one constructed from the sunspot 
   counts during the same epoch.
-  These are presented in Section\,\ref{sect:results} together with some 
+  These are presented in Sect.~\ref{sect:results} together with some 
   examples of our active region tracking.
-  Finally, we discuss in Section\,\ref{sect:discussion} 
+  Finally, we discuss in Sect.~\ref{sect:discussion} 
   %%MJK some 
   %how the radio 
   %observations differ from other solar observations, 
@@ -427,7 +427,7 @@
   %%MJK diagram?
   %diagrams, we 
   %%MJK We should imply that more analysis is to come later.
-  %%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Section BLAA2."
+  %%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Sect. BLAA2."
   %perform feature detection in order to get quantified information on the wing 
   %shapes. 
   %%MJK Again, introduction might not be the best place to describe the workflow, but the methods section.
@@ -444,7 +444,7 @@
   %parameters, while the most promising fits were produced with first order wing shape and thickness and fourth order 
   %intensity profile.
   %
-  %%MJK So, to summarize my comments to the intro: expand significantly on Kallunki earlier paper(s), and pinpoint in detail what was there, and what is new in here, and why this work was necessary. Expand on the relevance of the dataset: what does 37GHz data describe, why is it relevant, what else has been done before in the frequency band? Move the parts describing the workflow to Section 2.
+  %%MJK So, to summarize my comments to the intro: expand significantly on Kallunki earlier paper(s), and pinpoint in detail what was there, and what is new in here, and why this work was necessary. Expand on the relevance of the dataset: what does 37GHz data describe, why is it relevant, what else has been done before in the frequency band? Move the parts describing the workflow to Sect. 2.
   %
 \section{Methods}\label{sect:methods}
 
@@ -517,7 +517,7 @@ intensities and also avoids saturation during flare events, thus offering prospe
 research.
 
 We use the word \emph{calibration} for describing the combined effort of normalising and centering a map. The applicable 
-methods are described in Section\,\ref{sect:disk}. The raw intensities of a scan have an arbitrary scale, as in Fig.~\ref{typicalmap}{\bf(a-c)}. We 
+methods are described in Sect.~\ref{sect:disk}. The raw intensities of a scan have an arbitrary scale, as in Fig.~\ref{typicalmap}{\bf(a-c)}. We 
 need to normalise the signal levels and also correct for any minor offsets in the sample coordinates in order to have a 
 properly centered map. The purpose of normalisation is to have zero intensity at the background and unit intensity for 
 the QSL. For the contour maps up to year 1987, we trust the graphical markings and no calibration is needed.
@@ -545,7 +545,8 @@ As a result of the above considerations, we can except a relatively radially sym
 region. We use a straightforward approach to first identify the limb region, which is c.a. $0.9 .. 1.1$ radii from the 
 disk center. This already produces a fairly good centering, but we seek to further improve it. The limb sample 
 brightness gives a hint of how far from the center it should be, supposed the general limb intensity profile is known. 
-Utilising this information, we can perform a circle fitting and more sophisticated centering.
+Utilising this information, we can perform a circle fitting and more sophisticated centering. This process is described 
+in detail in Sect.~\ref{sect:centering_normalization}.
 
 %FAG: moving to results where creating the butterfly maps will now be discussed
 %Each sample also has weight $w_i$, which is set as to balance the target set. 
@@ -678,7 +679,7 @@ Having obtained the butterfly
 %MJK diagram?
 diagrams, we 
 %MJK We should imply that more analysis is to come later.
-%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Section BLAA2."
+%MJK "We also perform a preliminary analysis of the obtained butterfly diagram, by performing feature detection algorithm ... that is discussed in section BLAA. Our preliminary findings are presented in Sect. BLAA2."
 perform feature detection in order to get quantified information on the wing 
 shapes. 
 %MJK Again, introduction might not be the best place to describe the workflow, but the methods section.
@@ -724,9 +725,9 @@ Fig.~\ref{butterfly_clear_corr}. MJK: The Srivastava et al., 2018 paper should g
 
 %FAG added
 From the series of specimen maps as processed using methods in 
-Section\,\ref{sect:methods}, but without applying the limb correction model
-(Section\,\ref{sect:limb}), we construct the radio butterfly diagram  
-displayed in Fig.\,\ref{butterfly_clear_raw}
+Sect.~\ref{sect:methods}, but without applying the limb correction model
+(Sect.~\ref{sect:limb}), we construct the radio butterfly diagram  
+displayed in Fig.~\ref{butterfly_clear_raw}
 
 %------------------------------------------------------------------------------
 \begin{figure}
@@ -783,7 +784,7 @@ separate polynomials $P_n$ and $Q_m$ should reduce these risks.
 %FAG replace citation with url
 %\caption{Butterfly wing patterns automatically fitted on sunspot data \cite{SUNSPOTDATA:1}. The sunspot cycle coincides with the radio cycle seen in Fig.. \ref{butterfly_wingfit_raw}. Comment: fix 21st cycle fitting.}
 \caption{Butterfly wing patterns automatically fitted on sunspot data, for
-cycles coinciding with the radio cycles in Fig.\,\ref{butterfly_wingfit_raw}.
+cycles coinciding with the radio cycles in Fig.~\ref{butterfly_wingfit_raw}.
 Sunspot data courtesy Hathaway \& Upton, Solar Cycle Science,
 Discover the Sun}
 %\href{http://solarcyclescience.com/AR_Database/bflydata.txt}{http://solarcyclescience.com/AR_Database/bflydata.txt}.
@@ -955,7 +956,7 @@ symbols into groups by relevance.}
 
 \FloatBarrier
 
-\section{Appendices}
+\section{Solar map centering and normalisation} \label{sect:centering_normalization}
 
   %FAG: trying to disembiguate use of 'sample'
   %Each sample observation yields an intensity map with coordinates right 
@@ -964,6 +965,7 @@ symbols into groups by relevance.}
   %Each scan, denoted $S$ and spanning a couple of minutes, comprises a set of beam-size specimens. For $s_i \in S$:
   %FAG: trying to disembiguate use of 'sample'
   %SKK: maybe it could be clearer:
+  Solar maps are generated by sweeping the beam of the radio telescope at the proximity of the solar disk while recording signal intensity.
   Each solar map $S$ consists of $N_S$ samples $s_i$:
   \eqnl{radio_sample}{
     S &=& \left\{ s_i \;:\; i = 1, 2, ..., N_S \right\}\,\text{ and}\nonumber\\
@@ -998,13 +1000,13 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \item Disk: The beam probes chromosphere with varying incident angle. High intensity compared to background. Features, such as dim and bright regions, are visible.
   \end{itemize}
 
-  For a map $S$, we will perform a preliminary statistical analysis (see Section~\ref{sect:s_curve}) in order to extract 
+  For a map $S$, we will perform a preliminary statistical analysis (see Sect.~\ref{sect:s_curve}) in order to extract 
   two representative intensity values, $\s{u}{background}$ and $\s{u}{disk}$. We will then perform a linear 
   transformation for the raw intensity values $u_i$ and obtain the first normalized intensities $v_i^{(0)}$ as
   \eqnl{map_normalisation}{
   v_i^{(0)} := \frac{u_i - \s{u}{background})}{\s{u}{disk} - \s{u}{background}} \; \text{with} \; s_i \in S \text{.}
   }
-  The normalized intensities are then used for initial centering of the map in Section~\ref{sect:initial_centering}. 
+  The normalized intensities are then used for initial centering of the map in Sect.~\ref{sect:initial_centering}. 
   This allows us to refine the equatorial coordinates of the samples as:
   \eqnl{map_centering}{
   \left( x_i^{(0)}, y_i^{(0)} \right) := \left( x_i, y_i \right) - \left( x^{(0)}, y^{(0)} \right) \text{.}
@@ -1012,15 +1014,15 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   If the radius of the solar disk is not fixed, we can optionally also measure it. This finishes the initial calibration 
   round, for which we use a superscript $\cdot^{(c)}$ with $c=0$, also in Equations~\ref{map_normalisation} 
   and~\ref{map_centering}. This will be followed by additional calibration rounds, starting from 
-  Section~\ref{sect:further_optimization}. Each calibration round produces a new normalized intensity value 
-  $v^{(c+1)}$(Section~\ref{sect:disk_outliers}) for each sample. Using these new values $v^{(c+1)}$, the center for the 
-  disk is further optimized as $(x^{(c+1)}, y^{(c+1)})$ in Section~\ref{sect:disk_outliers}.
+  Sect.~\ref{sect:further_optimization}. Each calibration round produces a new normalized intensity value 
+  $v^{(c+1)}$(Sect.~\ref{sect:disk_outliers}) for each sample. Using these new values $v^{(c+1)}$, the center for the 
+  disk is further optimized as $(x^{(c+1)}, y^{(c+1)})$ in Sect.~\ref{sect:disk_outliers}.
 
   %FAG added
-  %from which the initial radius of the disk, $r^(0)$, is estimated (Section~\ref{sect:initial_radius}). 
+  %from which the initial radius of the disk, $r^(0)$, is estimated (Sect.~\ref{sect:initial_radius}). 
   %The superscript, 
   %(0), is used to indicate the initial values, which are then refined by an iterative process described in 
-  %Sections~\ref{sect:iterative_calibration}, \ref{sect:outliers_disk} and \ref{sect:outliers_limb}. Following sufficient 
+  %Sect.~\ref{sect:iterative_calibration}, \ref{sect:outliers_disk} and \ref{sect:outliers_limb}. Following sufficient 
   %iterations we obtain calibrated maps $S^{(k)}$, from which we proceed to analyze and map the data onto heliographic 
   %coordinates and time series.
   %FAG: ended
@@ -1032,7 +1034,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   %FAG: rephrased
   %Sections~\ref{sect:s_curve} and~\ref{sect:initial_centering} describe the initial calibration step performed for the solar maps. This is based on an oral description 
   %given by Juha Aatrokoski at MRO, and a similar calibration method is commonly used at MRO.
-  The initial normalisation and centering methods described here and in Section~\ref{sect:initial_centering} derive from 
+  The initial normalisation and centering methods described here and in Sect.~\ref{sect:initial_centering} derive from 
   an oral outline given by Juha Aatrokoski at MRO of the calibration method commonly used at MRO, including 
   \citet{metsahovi40}.
   %\skk{Thanks Fred!}
@@ -1186,7 +1188,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \eqnl{centering-center-of-mass}{
   \left( x^{(0)}, y^{(0)} \right) := \frac{\sum \limits_{i=1}^{N_S} b_i^{(0)} \left( x_i^{(0)}, y_i^{(0)} \right)}{\sum \limits_{i=1}^{N_S} b_i^{(0)}} \text{.}
   }
-  This defines the initial center of the solar disk for the map, but it is further optimized below, starting from Section~\ref{sect:further_optimization}.
+  This defines the initial center of the solar disk for the map, but it is further optimized below, starting from Sect.~\ref{sect:further_optimization}.
 
   \skk{Currenly, the code is not measuring the radius for each map. I implemented the functionality for 
   that, but probably we don't need it. If it turns out that the relative scale is inaccurate and varies between maps, we 
@@ -1268,7 +1270,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   outliers in a series of iterative rounds.
 
   The beam pointing may be slightly 
-  irregular due to oscillations in pointing. See Figure~\ref{typicalmap}{\bf(b)} for a typical antenna path. In 
+  irregular due to oscillations in pointing. See Fig.~\ref{typicalmap}{\bf(b)} for a typical antenna path. In 
   practice, the sweeps are moderately regular except for antenna wiggling, but our code does not expect uniform sample 
   density. We create a rectangular grid ($\Lambda$) of lattice points $\lambda_h \in \Lambda$. The lattice points are indexed via a set $I_{\Lambda}$:
   
@@ -1340,7 +1342,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \eqnl{calib_inner_disk6}{
   v_i^{(c+1)} := \frac{u_i - \s{u}{background}}{\s{u}{QSL}^{(c+1)} - \s{u}{background}} \text{.}
   }
-  The first time we run the above substitions (Section~\ref{sect:disk_outliers}) is for $c=0$.
+  The first time we run the above substitions (Sect.~\ref{sect:disk_outliers}) is for $c=0$.
 
   \subsubsection{Bright and dim features} \label{sect:bright_dim_features}
 
@@ -1404,7 +1406,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   We thus want to avoid any known chromospheric features when they are close to the limb, since they would produce 
   exceptional values there and interfere with proper centering. Having obtained $L^{(c)}$, we calculate a radial 
   estimate: $r_i^{\prime(c)}$, for each $s_i \in L^{(c)}$. This is based on a known limb profile $l_{p,S}(r)$. For details on how the 
-  limb model is obtained, please refer to Section \ref{sect:radius_method1}. Initially, we had no forehand details of 
+  limb model is obtained, please refer to Sect.~\ref{sect:radius_method1}. Initially, we had no forehand details of 
   the limb and the model had to be constructed using more rudimentary methods. Another option for bootstrapping is to assume a simple linear function for the first limb model round $p=0$:
   \eqnl{calib_limbmodel1}{
   l_{0,S}(r) = \frac{1.04 - r}{1.04 - 0.96} \text{.}
@@ -1417,7 +1419,7 @@ With right ascension cosine corrected, such that maps have unit aspect ratio, we
   \eqnl{calib_limbmodel2}{
   l_{p,S}(r) = \frac{B(\bm{x}_m^{(p)}, \rho(r), a_S)}{B(\bm{x}_m^{(p)}, \rho(1/3), a_S)} \text{.}
   }
-  The parameter set $\bm{x}_m^{(p)}$ is optimized for round $p$ and with sufficiently large $m$. Figure~\ref{limb_brightening} illustrates the optimized limb profiles of cycle 24 for the applicable range of altitudes.
+  The parameter set $\bm{x}_m^{(p)}$ is optimized for round $p$ and with sufficiently large $m$. Fig.~\ref{limb_brightening} illustrates the optimized limb profiles of cycle 24 for the applicable range of altitudes.
   The radial estimate is obtained from the inverse of $l_{p,S}(r)$ as:
   \eqnl{calib_limbmodel3}{
   l_{p,S}(r_i^{\prime(c)}) = v_i^{(k)} \implies r_i^{\prime(c)} := l_{p,S}^{-1}(v_i^{(c)}) \text{.}
@@ -1463,7 +1465,7 @@ size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in
   }
   Here the vector $\bm{z} = \left( x, y, r \right)^T$.
   The radius $r$ is optionally a free parameter, otherwise we fix $r := r^{(c)} = r^{(0)}$ (see 
-  Section~\ref{sect:initial_radius}). We search of optimal values $\bm{z}_{\zeta}^{(c)}$ which minimize $T_c$, starting with $\zeta=0$:
+  Sect.~\ref{sect:initial_radius}). We search of optimal values $\bm{z}_{\zeta}^{(c)}$ which minimize $T_c$, starting with $\zeta=0$:
   \eqnl{subsequent_centering2}{
   \bm{z}_0^{(c)} := \left( x^{(c-1)}, y^{(c-1)}, r^{(c-1)} \right)^T \text{.}
   }
@@ -1480,7 +1482,7 @@ size of $2.4^\prime$ mixes the solar limb with the dark background, resulting in
   \eqnl{subsequent_centering5}{
   \left( x^{(c)}, y^{(c)}, r^{(c)} \right)^T := \lim \limits_{\zeta \to \infty} \bm{z}_{\zeta} \text{.}
   }
-  We will now loop back to Section~\ref{sect:disk_outliers} unless we have reached $c = \s{c}{max} := 5$. \skk{Hey, natural language is also a programming language.}
+  We will now loop back to Sect.~\ref{sect:disk_outliers} unless we have reached $c = \s{c}{max} := 5$. \skk{Hey, natural language is also a programming language.}
   In subsequent sections, we will use the fully calibrated values $x_i^{(\s{c}{max})}$, $y_i^{(\s{c}{max})}$, and $r_i^{(\s{c}{max})}$ for each sample $s_i \in S$.
 
 \skk{Moved the convex hull stuff into a separate file, probably not to be included in the paper.}
@@ -1529,15 +1531,15 @@ to observers horizon. It is measured in radians, and in practice samples will ha
 }
 %FAG added reference to Fig 3 and para break. Sami is this correct and an
 %FAG appropriate place to mention the Fig?
-In Fig.\,\ref{limb_brightening}(a), we show the effect of limb brightening for
+In Fig.~\ref{limb_brightening}(a), we show the effect of limb brightening for
 observations within the range $\varphi_i\in[7\deg,52\deg]$, and in
-Fig.\,\ref{limb_brightening}(b) the corresponding correction profiles, which 
+Fig.~\ref{limb_brightening}(b) the corresponding correction profiles, which 
 are applied near the limb to compensate.
 
   \subsection{Determining radius by limb intensity} \label{sect:radius_method1}
 
   The first method is performed using the all MRO solar maps of the cycle $24$, combining c.a. $75800$ maps. For each 
-  map, we perform the calibration procedure described in Section~\ref{sect:source} and concatenate the samples into a 
+  map, we perform the calibration procedure described in Sect.~\ref{sect:source} and concatenate the samples into a 
   big list of c.a. $2 \times 10^8$ samples. The next step in the analysis involves five data fields per sample:
   \begin{itemize}
   \item Time (on solar cycle 24): $t_j$.
@@ -1610,12 +1612,12 @@ are applied near the limb to compensate.
   We start with a predefined $R_{\astrosun}$ and sweep the reasonable interval $[6.90, 7.25] \times 10^8 \mathrm{m}$. 
   Currently the model works on a few $n \approx 14$ maps at once. This does not analyze a full solar cycle but rather a 
   single day of observations. The model involves a centering scheme similar to that in described fully in 
-  Section~\ref{sect:s_curve}, \ref{sect:initial_centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
+  Sect.~\ref{sect:s_curve}, \ref{sect:initial_centering}, \ref{sect:further_optimization}, and~\ref{sect:outliers_limb}. However, this 
   scheme involves solving the inversion problem several times and constructing the limb model for each map individually 
   each time the inversion problem is solved. This approach tackles not only the different altitude of observation 
   depending on time of day, but also varying weather and atmospheric conditions which affect the telescope beam. The 
   model omits outlier samples using a similar recursive scheme as described completely in 
-  Section~\ref{sect:outliers_limb} and~\ref{sect:disk_outliers}.
+  Sect.~\ref{sect:outliers_limb} and~\ref{sect:disk_outliers}.
 
   Each sample constitutes of four values: $s_j = (t_j, x_j, y_j, v_j)$, where $t_j$ is time, $v_j$ is calibrated intensity, 
   and $(x_j,y_j)$ describe the position of the sample on the calibrated disk as right ascension and declination 
