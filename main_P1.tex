@@ -526,7 +526,7 @@ the QSL. For the contour maps up to year 1987, we trust the graphical markings a
 and then clarify the distinction. What is new and how is our treatment new. C-B-A.}
 
 %------------------------------------------------------------------------------
-  \subsection{Disk fitting and signal levels} \label{sect:disk}
+  \subsection{Solar map centering and normalisation} \label{sect:disk}
 
 In order to extract heliographic information from the solar scans, we need the accurate position of the visible solar disk superimposed on the set of antenna samples. This is done by analysing the intensity distribution. The intensity is high at the solar disk, and it drops drastically as we go to the background area. There are two factors that affect the shape of this transition:
 \begin{enumerate}
@@ -546,7 +546,15 @@ region. We use a straightforward approach to first identify the limb region, whi
 disk center. This already produces a fairly good centering, but we seek to further improve it. The limb sample 
 brightness gives a hint of how far from the center it should be, supposed the general limb intensity profile is known. 
 Utilising this information, we can perform a circle fitting and more sophisticated centering. This process is described 
-in detail in Sect.~\ref{sect:centering_normalization}.
+in detail in Sect.~\ref{sect:detailed_calib}.
+
+The samples are originally in arbitrary units, so we study the intensity value statistics in order to fix reference 
+values background and disk intensities. The samples is one map are sorter by absolute intensity, as described by Juha 
+Aatrokoski at MRO. We observe two plateau regions in the intensity vs. sample index plot in 
+Fig.~\ref{S-curve_example}{\bf(a)}. Between these regions the curvature of the plot changes sign, where we place the 
+pivot point of the normalisation (Fig.~\ref{S-curve_example}){\bf(b)}. Out of the samples with higher intensity compared 
+to the pivot, we take the median as a representative of the inner disk. Similar choice is done for the samples of lower 
+intensity. We take the lowest intensity tertile as a representative for the background, now having fixed the signal range from background to QSL.
 
 %------------------------------------------------------------------------------
   \begin{figure}
@@ -1055,7 +1063,7 @@ symbols into groups by relevance.}
 \FloatBarrier
 
 %------------------------------------------------------------------------------
-\section{Solar map centering and normalisation} \label{sect:centering_normalization}
+\section{Detailed description of the map calibration process} \label{sect:detailed_calib}
 %------------------------------------------------------------------------------
 
   %FAG: trying to disembiguate use of 'sample'
@@ -1077,7 +1085,7 @@ symbols into groups by relevance.}
   %values included in the bundles $s_i\in S$.}
   
 %------------------------------------------------------------------------------
-  \subsubsection{Initial normalisation}\label{sect:s_curve}
+  \subsection{Initial normalisation}\label{sect:s_curve}
 %------------------------------------------------------------------------------
 
   \fg{Perhaps most of the following details could be moved to an appendix and 
@@ -1189,7 +1197,7 @@ symbols into groups by relevance.}
   \fg{Summarise the above and move the details to an appendix?}
   The initial normalised intensities $v_i^{(0)}$ can now be assigned using Equation~\ref{map_normalisation}.
   
-  \subsubsection{Initial centering}\label{sect:initial_centering}
+  \subsection{Initial centering}\label{sect:initial_centering}
   
 Most samples belong either to the background or the disk. Both of these regimes constitute a narrow range of intensity 
   values and are observed as high slopes on $w(u)$. The limb region, however, contains more diverse intensity values and 
@@ -1241,7 +1249,7 @@ Most samples belong either to the background or the disk. Both of these regimes 
     \mathrm{m}$, which is pretty close. By using cycle 24 and a different definition for the radius, I arrive at $7.18 
     \times 10^8 \mathrm{m}$. I am currently reprosessing the data based on the later value of the radius.}
     
-  \subsubsection{Initial radius}\label{sect:initial_radius}
+  \subsection{Initial radius}\label{sect:initial_radius}
 
   It is possible to calculate the radius of the disk as well. We start by calculating area integrals of a function $f(x,y) = x^2+y^2 = r^2$ over a disk of radius $R$, $\mathcal{B}(\bm{0},R)$. This gives:
   \eqnl{initial_radius}{
@@ -1262,7 +1270,7 @@ Most samples belong either to the background or the disk. Both of these regimes 
   t_S = \frac{\min{t_i :\; s_i \in S} + \max{ t_i :\; s_i \in S}}{2} \text{.}
   }
 
-  \subsubsection{Physical radius of the Sun}\label{sect:physical_radius}
+  \subsection{Physical radius of the Sun}\label{sect:physical_radius}
   
   In this paper, we have assumed that the scale of the relative right ascension and declination are correct and thus the 
   radius of the disk is based on geometry. Let $R_{\astrosun}$ be the physical radius of the Sun and $d(t)$ be the distance 
@@ -1280,7 +1288,7 @@ Most samples belong either to the background or the disk. Both of these regimes 
   Sections~\ref{sect:radius_method1} and~\ref{sect:radius_method2}. As for this paper we use the experimental value 
   $R_{\astrosun} = 7.176 \times 10^8 \mathrm{m}$ because it provides $0.5$ QSL intensity at the disk boundary.
 
-  \subsubsection{Iterative calibration} \label{sect:further_optimization}
+  \subsection{Iterative calibration} \label{sect:further_optimization}
 
   Having obtained the initial ($c=0$) center of the disk as $(x^{(c)}, y^{(c)})$, and optionally, its radius $r^{(c)}$, we 
   proceed iteratively for $c:=c+1$. We accept the background intensity $\s{u}{background}$ from the initial calibration while perform 
@@ -1288,7 +1296,7 @@ Most samples belong either to the background or the disk. Both of these regimes 
   deviation, while outliers within the disk are neglected. Between each QSL determination loop, we refine the centering 
   of the disk.
   
-  \subsubsection{Inner disk outliers} \label{sect:disk_outliers}
+  \subsection{Inner disk outliers} \label{sect:disk_outliers}
 
   We aim to calculate the average intensity within the disk. However, we do not use the whole inner disk for measuring 
   QSL, since it typically contains bright and dim features such as active regions. These features will be neglected as 
@@ -1369,7 +1377,7 @@ Most samples belong either to the background or the disk. Both of these regimes 
   }
   The first time we run the above substitions (Sect.~\ref{sect:disk_outliers}) is for $c=0$.
 
-  \subsubsection{Bright and dim features} \label{sect:bright_dim_features}
+  \subsection{Bright and dim features} \label{sect:bright_dim_features}
 
   From now on, the first round is for $c=1$. We separate the inner disk of the previous centering round, $I_{c-1}$, into three subsets, 
   $I_c^{(\mathrm{dim})}$, $I_c^{(\mathrm{QSL})} = I_{c-1}^{(\s{q}{max}+1)}$, and $I_c^{(\mathrm{bright})}$ based on 
@@ -1406,7 +1414,7 @@ Most samples belong either to the background or the disk. Both of these regimes 
   z(F) := \left( x(F), y(F) \right) = \frac{\sum \limits_{\lambda_h \in F} \left( x_h, y_h \right) \left| u_h - \s{u}{QSL}^{(c)} \right|}{\sum \limits_{\lambda_h \in F} \left| u_h - \s{u}{QSL}^{(c)} \right|} - \left( x^{(c-1)}, y^{(c-1)} \right) \text{.}
   }
 
-  \subsubsection{Limb outliers} \label{sect:outliers_limb}
+  \subsection{Limb outliers} \label{sect:outliers_limb}
 
   In the next step of this algorithm, we will neglect those antenna samples which are too close to any known feature. We form a set $L^{(c)}_1 \subset S$ based on Equation~\ref{calib_features5}.
   \eqnl{calib_features6}{
@@ -1466,7 +1474,7 @@ Most samples belong either to the background or the disk. Both of these regimes 
   }
   After a couple of steps we have neglected any outliers with good reliability. We can use the limb set $L^{(c)}_{\s{g}{out}}$ with $\s{g}{out} := 10$for this.
 
-  \subsubsection{Subsequent centering} \label{sect:subsequent_centering}
+  \subsection{Subsequent centering} \label{sect:subsequent_centering}
 
   We will fit a circle into the set $L^{(c)}_{\s{g}{out}}$. The quality of fitting is evaluated as $T_c$:
   \eqnl{subsequent_centering1}{
