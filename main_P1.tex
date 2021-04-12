@@ -166,6 +166,7 @@
     Bright features favour center fitting towards the feature,
     while dim features repel the center.
     We should thus exclude a specimen from the target set of the circle fitting
+\fag{We should define what we mean by the target set, why we need it, what is its use.}
     by proximity of any pre-determined bright or dim radio feature, since these
     features affect the apparent shape of the disk.
    
@@ -858,6 +859,8 @@ Sect.~\ref{sect:methods}, but without applying the limb correction model
 (Sect.~\ref{sect:limb}), we construct the radio butterfly diagram  
 displayed in Fig.~\ref{butterfly_clear_raw}
 
+
+
 %------------------------------------------------------------------------------
 \begin{figure}
 \centering
@@ -871,18 +874,35 @@ displayed in Fig.~\ref{butterfly_clear_raw}
 %\fag{(later) obtain same period of photospheric sunspot numbers
 %Tabulate the timespans and line fits for all eight.}\\
 
+%FAG added emphasis of what is new
+Our time series now extends the previously published data to include the 
+observations digitally recovered from the historical maps covering cycle 21.
+There is an imbalance in the statistics available across the time span, firstly
+due to the more sparse observations during earlier epochs, and also due to the 
+seasonal variation in quantity and quality of the specimens.
 %FAG moved from above
+\fag{We should define what we mean by the target set, why we need it, what is its use.}
 Each specimen map has weight $w_i$, which is set as to balance the target set. 
 There are more 
 observations starting from year $2015$, while only a few maps for year $1989$. 
-%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weigth is lower because of that time interval in more uncertain. Please expand on the logic here.
+%MJK Often we do just the opposite: if there are less data for a certain epoch, then the weight is lower because that time interval is more uncertain. Please expand on the logic here.
+%FAG What is the purpose of the weighting - is it an issue of pixels for plotting 
+%FAG purposes? Is it a visualisation issue to ensure the data is visible, averaging over so many days?
 Thus we will put more weight on the old 
-maps. Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
+maps.
 
-We get more samples from the low heliographic latitudes, since a greater length of the solar equator is visible, 
-compared to high latitude arcs. During summer, the solar north pole is visible to Earth, while we also get observations 
-from high altitudes. During winter, we only observe the Sun at low altitude, and the solar south pole is visible. 
-Further investigations are needed to exclude any bias effects arising from the unbalanced target set. However, having 
+%FAG moved para break from below
+Summer days typically have dozens of maps as the observational day is long, while on winter there are only a few maps per day.
+%Moved para break up
+We get more samples from the low heliographic latitudes, since a greater length
+of the solar equator is visible, compared to high latitude arcs.
+During summer, the solar north pole is visible to Earth, while we also get
+observations from high altitudes.
+During winter, we only observe the Sun at low altitude, and the solar south
+pole is visible. 
+Further investigations are needed to exclude any bias effects arising from the
+unbalanced target set.
+However, having 
 separate polynomials $P_n$ and $Q_m$ should reduce these risks. 
 %MJK Good idea, but sounds like a task not necessary to undertake now? If the referee asks us to verify this risk, then we should do it. But, I comment it out for now...
 %I suggest testing the optimization code with simulated 
@@ -969,6 +989,17 @@ expect a weak region to be visible at known heliographic coordinates. When the r
 we show it with a dashed ellipse. The active regions 346 and 356 are clearly visible in Fig.~\ref{maptrack1}.} 
 \label{maptrack2} \end{figure}
 %------------------------------------------------------------------------------
+
+%FAG added
+Without making adjustments for limb brightening effects of the telescope, there is a lack of data about the poles.
+When the lim brightening is considered (Section\,\ref{sect:limb}) for the 
+modern specimens, for which the raw data is available, pole activity becomes
+visible, as displayed in Figure\,\ref{butterfly_clear_corr}.
+The data near the poles has more statistical noise, but the increased intensity
+is consistent across multiple specimens, and consistent with previous 
+observations of polar activity in radio by \citet{SCGVPS14}.
+
+
 
 %------------------------------------------------------------------------------
 \section{Discussion}\label{sect:discussion}
